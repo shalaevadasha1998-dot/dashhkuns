@@ -1147,3 +1147,74 @@ main>section{margin-left:auto;margin-right:auto}
     min-height:0!important
   }
 }
+
+
+/* typography + header anchor polish */
+#experience,#services,#about,#contact{scroll-margin-top:92px}
+
+h1,h2,h3,
+.mega,
+.service-card h3,
+.case-info h2,
+.case-punch strong,
+.media-editorial strong,
+.btn,
+.top-cta,
+.nav a,
+.mobile-menu a{
+  text-wrap:balance
+}
+p,li,.desc,.small,.hero-lead,.role,.project-role,.case-punch p,.media-editorial em{
+  text-wrap:pretty
+}
+
+.btn,.top-cta{
+  line-height:1.15;
+  text-align:center;
+  white-space:normal
+}
+.btn{
+  min-height:52px;
+  padding:12px 22px
+}
+.button-row{
+  gap:12px;
+  align-items:stretch
+}
+
+.home-anchor-nav a{
+  padding:9px 11px;
+  border-radius:999px
+}
+.home-anchor-nav a:hover{
+  background:var(--soft)
+}
+
+/* h only alternates between pink and green */
+@keyframes dash-h-pulse{
+  0%,100%{color:var(--hot)}
+  50%{color:var(--acid)}
+}
+.brand span,
+.photo-brand span{
+  animation:dash-h-pulse 3.6s ease-in-out infinite!important;
+  will-change:color
+}
+@media(prefers-reduced-motion:reduce){
+  .brand span,.photo-brand span{
+    animation:none!important;
+    color:var(--hot)!important
+  }
+}
+
+@media(max-width:600px){
+  .btn{
+    min-height:56px;
+    padding:14px 20px;
+    line-height:1.12
+  }
+  .button-row{
+    gap:10px
+  }
+  .nav{display:none}
+}
