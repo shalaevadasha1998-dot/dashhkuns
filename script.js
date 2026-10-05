@@ -8,8 +8,8 @@ const setMenu=open=>{
   mobileMenu.classList.toggle('open',open);
   mobileMenu.setAttribute('aria-hidden',String(!open));
   menuBtn.setAttribute('aria-expanded',String(open));
-  menuBtn.setAttribute('aria-label',open?'закрыть меню':'открыть меню');
-  menuBtn.textContent=open?'закрыть':'меню';
+  menuBtn.setAttribute('aria-label',open?'закрыть меню':'открыть навигацию');
+  menuBtn.textContent=open?'закрыть':'открыть';
   document.body.classList.toggle('menu-open',open);
 };
 
@@ -50,4 +50,24 @@ form?.addEventListener('submit',e=>{
     data.get('about')||''
   ].join('\n'));
   window.location.href='mailto:shalaevadasha1998@gmail.com?subject='+subject+'&body='+body;
+});
+
+
+document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
+  const photos=[...gallery.querySelectorAll('img')];
+  const count=gallery.querySelector('.tap-count');
+  if(photos.length<2)return;
+  let index=Math.max(0,photos.findIndex(img=>img.classList.contains('active')));
+  const show=next=>{
+    photos[index]?.classList.remove('active');
+    index=(next+photos.length)%photos.length;
+    photos[index]?.classList.add('active');
+    if(count)count.textContent=String(index+1).padStart(2,'0')+' / '+String(photos.length).padStart(2,'0');
+  };
+  gallery.addEventListener('click',()=>show(index+1));
+  gallery.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();show(index+1)}
+    if(e.key==='ArrowRight')show(index+1);
+    if(e.key==='ArrowLeft')show(index-1);
+  });
 });
