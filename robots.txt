@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
+Host: dashhkuns.com
 Sitemap: https://dashhkuns.com/sitemap.xml
