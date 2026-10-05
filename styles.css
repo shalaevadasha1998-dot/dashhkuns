@@ -1742,3 +1742,56 @@ p,li,.role,.project-role,.project-meta,.site-footer{
     font-size:14px!important
   }
 }
+
+
+/* 2026-10-06 career cards spacing fix */
+.career-grid article{
+  padding:clamp(30px,3vw,44px)!important;
+  min-height:390px!important;
+  display:grid!important;
+  grid-template-rows:auto minmax(92px,1fr) auto!important;
+  align-items:stretch!important
+}
+.career-grid article>span{
+  display:block!important;
+  margin:0!important;
+  padding:2px 0 0!important;
+  align-self:start!important
+}
+.career-grid article>h3{
+  align-self:end!important;
+  margin:0 0 20px!important;
+  padding-top:56px!important
+}
+.career-grid article>p{
+  margin:0!important;
+  padding-top:18px!important;
+  border-top:1px solid rgba(27,7,20,.18);
+  align-self:start!important
+}
+@media(max-width:600px){
+  .career-grid{
+    gap:14px!important
+  }
+  .career-grid article{
+    padding:25px 22px 26px!important;
+    min-height:350px!important;
+    grid-template-rows:auto minmax(116px,1fr) auto!important
+  }
+  .career-grid article>span{
+    padding-top:1px!important;
+    font-size:10px!important;
+    line-height:1.2!important
+  }
+  .career-grid article>h3{
+    margin:0 0 18px!important;
+    padding-top:58px!important;
+    font-size:clamp(31px,8.6vw,40px)!important;
+    line-height:.98!important
+  }
+  .career-grid article>p{
+    padding-top:17px!important;
+    font-size:13px!important;
+    line-height:1.52!important
+  }
+}
