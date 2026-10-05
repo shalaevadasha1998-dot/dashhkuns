@@ -848,3 +848,176 @@ a,button,select{cursor:pointer}
 .geography-list b{color:inherit!important}
 @media(max-width:980px){.about-gallery{position:relative;top:auto}}
 @media(max-width:600px){.hero-photo-card{min-height:520px}.tap-gallery{min-height:520px;border-radius:24px;box-shadow:6px 6px 0 var(--pink)}.about-tap-gallery{min-height:590px}.photo-brand{left:16px;bottom:16px;font-size:16vw}.tap-gallery-top{left:16px;right:16px;top:14px}.media-editorial{height:250px!important;padding:22px!important}.media-editorial>strong{font-size:10.5vw!important}.case-punch{min-height:350px!important;padding:54px 24px 28px!important}.case-punch>span{top:20px}.case-punch>strong{font-size:13vw}.case-punch>p{font-size:13px;max-width:88%}}
+
+
+/* 2026-10-05 mobile centering + h pulse + obvious photo tap */
+@keyframes dash-h-pulse{
+  0%,42%{color:var(--hot)}
+  58%,92%{color:var(--acid)}
+  100%{color:var(--hot)}
+}
+.brand span,
+.photo-brand span{
+  animation:dash-h-pulse 3.4s ease-in-out infinite;
+  will-change:color
+}
+@media(prefers-reduced-motion:reduce){
+  .brand span,.photo-brand span{animation:none;color:var(--hot)}
+}
+
+.tap-cue{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 16px;
+  border:1px solid var(--deep);
+  border-radius:999px;
+  background:var(--acid);
+  color:var(--deep)!important;
+  font-weight:800;
+  letter-spacing:0!important;
+  text-shadow:none!important;
+  box-shadow:0 4px 0 var(--hot);
+  animation:tap-cue-breathe 2.8s ease-in-out infinite
+}
+@keyframes tap-cue-breathe{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(2px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .tap-cue{animation:none}
+}
+
+html,body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden
+}
+body{margin:0}
+main,
+main>section,
+.topbar,
+.mobile-menu,
+.site-footer{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box
+}
+main>section{margin-left:auto;margin-right:auto}
+
+@media(max-width:600px){
+  :root{--mobile-gutter:20px}
+
+  .topbar{
+    left:0!important;
+    right:0!important;
+    margin:0!important;
+    padding-left:var(--mobile-gutter)!important;
+    padding-right:var(--mobile-gutter)!important
+  }
+
+  .hero,
+  .credentials,
+  .home-statement,
+  .expertise,
+  .service-tease,
+  .projects-tease,
+  .about-strip,
+  .page-hero,
+  .about-page,
+  .career,
+  .proof-band,
+  .services-page,
+  .projects-page,
+  .contact-page,
+  .process,
+  .cta-band,
+  .site-footer{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    box-sizing:border-box!important
+  }
+
+  .hero,
+  .credentials,
+  .home-statement,
+  .expertise,
+  .service-tease,
+  .projects-tease,
+  .about-strip,
+  .page-hero,
+  .about-page,
+  .career,
+  .proof-band,
+  .services-page,
+  .projects-page,
+  .contact-page,
+  .process,
+  .cta-band{
+    padding-left:var(--mobile-gutter)!important;
+    padding-right:var(--mobile-gutter)!important
+  }
+
+  .credential-grid,
+  .expertise-grid,
+  .service-grid,
+  .project-stack,
+  .about-grid,
+  .career-grid,
+  .process-grid{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:auto!important;
+    margin-right:auto!important
+  }
+
+  .credential-grid article,
+  .expertise-grid article,
+  .service-card,
+  .project-row,
+  .about-copy,
+  .editorial-visual,
+  .tap-gallery,
+  .career-grid article,
+  .service-detail,
+  .case-page,
+  .project-form,
+  .people-card{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    box-sizing:border-box!important
+  }
+
+  .service-card,
+  .project-row,
+  .editorial-visual,
+  .tap-gallery,
+  .career-grid article,
+  .project-form{
+    box-shadow:0 6px 0 var(--deep)!important
+  }
+  .photo-slide{box-shadow:0 6px 0 var(--pink)!important}
+
+  .tap-gallery-top{
+    left:14px!important;
+    right:14px!important;
+    align-items:flex-start
+  }
+  .tap-cue{
+    min-height:42px;
+    padding:0 15px;
+    font-size:11px!important
+  }
+
+  .case-page,
+  .service-card,
+  .project-row{
+    overflow:hidden
+  }
+}
