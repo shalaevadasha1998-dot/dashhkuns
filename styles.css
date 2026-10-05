@@ -1057,7 +1057,7 @@ main>section{margin-left:auto;margin-right:auto}
 .home-photo-strip{
   padding:clamp(40px,7vw,100px) var(--pad);
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
   background:var(--deep);
   overflow:hidden
