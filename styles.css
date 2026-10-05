@@ -1021,3 +1021,208 @@ main>section{margin-left:auto;margin-right:auto}
     overflow:hidden
   }
 }
+
+
+/* 2026-10-06 minimal polish: booking, centering, small green accents */
+.hero-categories span{
+  border-color:var(--deep)!important
+}
+.hero-categories span:nth-child(2),
+.hero-categories span:nth-child(5){
+  border-color:var(--acid)!important
+}
+.booking-inline{
+  box-shadow:0 5px 0 var(--acid)
+}
+.booking-inline:hover{
+  box-shadow:0 5px 0 var(--hot)
+}
+.calendly-card{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin:28px 0 10px;
+  padding:22px;
+  border:1px solid var(--deep);
+  border-radius:22px;
+  background:var(--milk);
+  box-shadow:6px 6px 0 var(--acid);
+  color:var(--deep);
+  transition:transform .2s ease,box-shadow .2s ease
+}
+.calendly-card:hover{
+  transform:translateY(-2px);
+  box-shadow:8px 8px 0 var(--acid)
+}
+.calendly-card span{
+  font-size:10px;
+  letter-spacing:.1em;
+  opacity:.55
+}
+.calendly-card strong{
+  font-size:clamp(28px,3vw,42px);
+  line-height:1;
+  letter-spacing:-.045em
+}
+.calendly-card small{
+  max-width:46ch;
+  font-size:12px;
+  line-height:1.45;
+  opacity:.65
+}
+
+/* actually seamless ticker */
+.marquee-track{
+  gap:0!important;
+  animation:marquee-center-fix 22s linear infinite!important
+}
+.marquee-track span{
+  flex:none!important;
+  padding-right:0!important;
+  margin:0!important;
+  white-space:nowrap
+}
+@keyframes marquee-center-fix{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+@media(max-width:600px){
+  /* Center mobile content consistently. Forms stay left-aligned. */
+  .hero-copy,
+  .credential-head,
+  .credential-grid article,
+  .home-statement,
+  .section-title,
+  .expertise-grid article,
+  .service-card-body,
+  .project-copy,
+  .projects-tease>.button-row,
+  .about-copy,
+  .page-hero,
+  .about-text,
+  .career,
+  .proof-band,
+  .service-detail,
+  .case-info,
+  .process,
+  .cta-band,
+  .contact-copy{
+    text-align:center!important
+  }
+
+  .hero-copy h1,
+  .hero-copy p,
+  .credential-head h2,
+  .credential-grid article p,
+  .home-statement h2,
+  .home-statement p,
+  .section-title h2,
+  .expertise-grid article p,
+  .service-card-body h3,
+  .service-card-body p,
+  .project-copy h3,
+  .project-copy p,
+  .about-copy h2,
+  .about-copy p,
+  .page-hero h1,
+  .page-hero>p,
+  .about-text .mega,
+  .about-text>p,
+  .career h2,
+  .proof-band h2,
+  .service-detail h2,
+  .service-detail .desc,
+  .case-info h2,
+  .case-info p,
+  .process h2,
+  .process-grid p,
+  .cta-band h2,
+  .contact-copy h1,
+  .contact-copy>p{
+    margin-left:auto!important;
+    margin-right:auto!important
+  }
+
+  .hero-categories,
+  .button-row,
+  .projects-tease>.button-row{
+    justify-content:center!important
+  }
+
+  .hero-categories{
+    max-width:100%;
+  }
+
+  .credential-grid article strong,
+  .credential-grid article span,
+  .service-card .num,
+  .project-meta,
+  .project-role,
+  .case-kicker,
+  .role,
+  .kicker{
+    text-align:center!important
+  }
+
+  .manifesto-row{
+    text-align:center!important
+  }
+
+  .manifesto-row span{
+    display:block;
+    margin:0 auto 8px!important
+  }
+
+  .service-detail .no{
+    text-align:center!important
+  }
+
+  .service-detail ul{
+    text-align:center!important
+  }
+
+  .service-detail li:before{
+    content:"";
+  }
+
+  .case-info .role{
+    text-align:center!important
+  }
+
+  .contact-links{
+    text-align:center!important
+  }
+
+  .contact-link{
+    text-align:center!important
+  }
+
+  .calendly-card{
+    align-items:center;
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+    padding:20px;
+    box-shadow:0 6px 0 var(--acid)
+  }
+  .calendly-card:hover{
+    transform:none;
+    box-shadow:0 6px 0 var(--acid)
+  }
+
+  .project-form,
+  .project-form h2,
+  .project-form .field,
+  .project-form label,
+  .project-form input,
+  .project-form select,
+  .project-form textarea,
+  .project-form .form-note{
+    text-align:left!important
+  }
+
+  .site-footer{
+    text-align:center!important
+  }
+}
