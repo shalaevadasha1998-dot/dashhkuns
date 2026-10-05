@@ -650,7 +650,7 @@ a,button,select{cursor:pointer}
 .geography-card{color:var(--deep)}
 .geography-list b:nth-child(odd){color:var(--deep)}
 .geography-list b:nth-child(2),
-.geography-list b:nth-child(5){color:#0d8f45}
+.geography-list b:nth-child(5){color:var(--green)}
 
 .stats-poster{
   display:flex;
@@ -1130,4 +1130,312 @@ main>section{margin-left:auto;margin-right:auto}
 .market-card{
   background:linear-gradient(145deg,#f2dde9 0 42%,#b989a4 42% 78%,#d7abc2 78% 100%)!important;
   color:var(--deep)!important
+}
+
+
+/* 2026-10-06 full mobile + visual system audit */
+:root{
+  --green:#24e86b;
+  --acid:var(--green);
+  --pink-strong:#ff3fad;
+  --pink-main:#ff72c5;
+  --pink-soft:#ffc8e7
+}
+
+/* one accent rhythm across the whole identity */
+@keyframes dash-h-pulse{
+  0%,100%{color:var(--pink-strong)}
+  25%{color:var(--deep)}
+  50%{color:var(--green)}
+  75%{color:var(--pink-main)}
+}
+.brand span,
+.photo-brand span{
+  animation:dash-h-pulse 7.2s steps(1,end) infinite!important
+}
+
+@keyframes outline-pill-cycle{
+  0%,100%{box-shadow:inset 0 0 0 1.5px var(--pink-strong)}
+  25%{box-shadow:inset 0 0 0 1.5px var(--deep)}
+  50%{box-shadow:inset 0 0 0 1.5px var(--green)}
+  75%{box-shadow:inset 0 0 0 1.5px var(--pink-main)}
+}
+body .hero-categories span:nth-child(n),
+.proof-chips span,
+.btn.ghost{
+  border-color:transparent!important;
+  animation:outline-pill-cycle 7.2s steps(1,end) infinite
+}
+.hero-categories span:nth-child(2),
+.proof-chips span:nth-child(2){animation-delay:-1.8s}
+.hero-categories span:nth-child(3),
+.proof-chips span:nth-child(3){animation-delay:-3.6s}
+.hero-categories span:nth-child(4),
+.proof-chips span:nth-child(4){animation-delay:-5.4s}
+.hero-categories span:nth-child(5),
+.proof-chips span:nth-child(5){animation-delay:-2.7s}
+.proof-chips span{
+  background:var(--milk);
+  color:var(--deep)
+}
+
+@keyframes frame-border-cycle{
+  0%,100%{border-color:var(--pink-strong)}
+  25%{border-color:var(--deep)}
+  50%{border-color:var(--green)}
+  75%{border-color:var(--pink-main)}
+}
+.service-card,
+.project-row,
+.case-page,
+.career-grid article,
+.detail-image,
+.people-card,
+.calendly-card,
+.project-form,
+.tap-gallery{
+  animation:frame-border-cycle 11.5s steps(1,end) infinite
+}
+.service-card:nth-child(2),
+.project-row:nth-child(2),
+.case-page:nth-child(2),
+.career-grid article:nth-child(2){animation-delay:-2.9s}
+.service-card:nth-child(3),
+.case-page:nth-child(3),
+.career-grid article:nth-child(3){animation-delay:-5.8s}
+.service-card:nth-child(4),
+.case-page:nth-child(4),
+.career-grid article:nth-child(4){animation-delay:-8.6s}
+.case-page:nth-child(5){animation-delay:-1.4s}
+.case-page:nth-child(6){animation-delay:-4.3s}
+.case-page:nth-child(7){animation-delay:-7.2s}
+.case-page:nth-child(8){animation-delay:-10.1s}
+.case-page:nth-child(9){animation-delay:-3.3s}
+
+/* grid children must be allowed to shrink, otherwise mobile drifts to the right */
+.hero-copy,
+.hero-art,
+.project-copy,
+.project-cover,
+.case-info,
+.case-cover,
+.about-text,
+.about-copy,
+.proof-copy,
+.contact-copy,
+.service-detail>div,
+.section-title>div,
+.credential-head>div{
+  min-width:0;
+  max-width:100%
+}
+
+/* keep text readable instead of clipping or forcing the grid wider */
+h1,h2,h3,
+.about-text .mega,
+.case-punch>strong,
+.media-editorial>strong,
+.detail-poster>span,
+.people-card h3,
+.stats-label{
+  max-width:100%;
+  overflow-wrap:break-word;
+  text-wrap:balance
+}
+p,li,.role,.project-role,.project-meta,.site-footer{
+  text-wrap:pretty
+}
+
+@media(max-width:600px){
+  :root{
+    --mobile-gutter:max(20px, env(safe-area-inset-left), env(safe-area-inset-right))
+  }
+
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  main{width:100%;max-width:100%;overflow:clip}
+
+  .hero,
+  .home-statement,
+  .section-title,
+  .credential-head,
+  .about-strip,
+  .page-hero,
+  .projects-intro,
+  .about-grid,
+  .contact-page,
+  .proof-band{
+    grid-template-columns:minmax(0,1fr)!important
+  }
+
+  .hero,
+  .credentials,
+  .home-statement,
+  .expertise,
+  .service-tease,
+  .projects-tease,
+  .about-strip,
+  .page-hero,
+  .about-page,
+  .career,
+  .proof-band,
+  .services-page,
+  .projects-page,
+  .contact-page,
+  .process,
+  .cta-band{
+    padding-left:var(--mobile-gutter)!important;
+    padding-right:var(--mobile-gutter)!important
+  }
+
+  .hero-copy,
+  .hero-categories,
+  .button-row,
+  .project-stack,
+  .service-grid,
+  .credential-grid,
+  .career-grid,
+  .about-grid,
+  .process-grid{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important
+  }
+
+  .button-row{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important
+  }
+  .btn{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-left:0!important;
+    margin-right:0!important
+  }
+
+  .hero h1{
+    width:100%;
+    max-width:100%!important;
+    font-size:clamp(54px,14.2vw,68px)!important;
+    line-height:.89;
+    letter-spacing:-.072em
+  }
+  .hero-lead{
+    width:100%;
+    max-width:100%!important;
+    font-size:clamp(16px,4.25vw,18px);
+    line-height:1.42
+  }
+  .hero-categories{
+    gap:9px 8px
+  }
+  .hero-categories span{
+    max-width:100%;
+    padding:9px 12px;
+    font-size:10px;
+    line-height:1.15
+  }
+
+  .page-hero h1{
+    font-size:clamp(50px,13.8vw,66px)!important;
+    max-width:100%!important
+  }
+  .contact-copy h1{
+    font-size:clamp(52px,14vw,68px)!important;
+    max-width:100%!important
+  }
+
+  .service-detail,
+  .case-page,
+  .project-row,
+  .service-card,
+  .career-grid article,
+  .people-card,
+  .project-form,
+  .tap-gallery{
+    max-width:100%!important;
+    min-width:0!important
+  }
+
+  .service-detail{
+    grid-template-columns:28px minmax(0,1fr)!important
+  }
+  .service-detail>div:last-child{
+    min-width:0
+  }
+  .service-detail h2{
+    font-size:clamp(38px,10vw,48px)!important;
+    line-height:.95
+  }
+
+  .case-info{
+    min-height:0!important;
+    padding:22px!important
+  }
+  .case-info h2{
+    font-size:clamp(38px,10.2vw,49px)!important;
+    line-height:.95
+  }
+  .case-info p{
+    font-size:15px;
+    line-height:1.52
+  }
+  .case-punch{
+    min-height:330px!important
+  }
+  .case-punch>strong{
+    max-width:11.5ch!important;
+    font-size:clamp(40px,11.2vw,54px)!important;
+    line-height:.88
+  }
+  .case-punch>p{
+    max-width:30ch!important
+  }
+
+  .media-editorial>strong{
+    font-size:clamp(34px,9.3vw,44px)!important;
+    max-width:88%!important
+  }
+  .media-editorial>em{
+    width:84%!important;
+    max-width:84%!important
+  }
+  .detail-poster>span{
+    font-size:clamp(32px,8.7vw,42px)!important;
+    max-width:88%!important
+  }
+
+  .people-card h3{
+    font-size:clamp(38px,9.8vw,48px)!important;
+    max-width:10ch!important;
+    line-height:.94
+  }
+
+  .manifesto-row{
+    grid-template-columns:34px minmax(0,1fr)!important
+  }
+  .manifesto-row strong{
+    min-width:0;
+    overflow-wrap:break-word
+  }
+
+  .site-footer{
+    padding-left:var(--mobile-gutter)!important;
+    padding-right:var(--mobile-gutter)!important;
+    gap:12px
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .brand span,.photo-brand span,
+  .hero-categories span,.proof-chips span,.btn.ghost,
+  .service-card,.project-row,.case-page,.career-grid article,
+  .detail-image,.people-card,.calendly-card,.project-form,.tap-gallery{
+    animation:none!important
+  }
+  body .hero-categories span:nth-child(n),
+  .proof-chips span,
+  .btn.ghost{
+    box-shadow:inset 0 0 0 1.5px var(--deep)
+  }
 }
