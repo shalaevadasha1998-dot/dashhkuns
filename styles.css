@@ -180,3 +180,39 @@ a,button,select{cursor:pointer}
   .values-big{font-size:31vw}
   .values-line{left:18px;top:18px;max-width:190px}
 }
+
+.portrait-photo{
+  position:absolute;
+  z-index:4;
+  width:min(46%,260px);
+  right:6%;
+  top:9%;
+  margin:0;
+  padding:7px 7px 30px;
+  background:var(--milk);
+  border:1px solid var(--deep);
+  border-radius:18px;
+  box-shadow:9px 9px 0 var(--pink);
+  transform:rotate(3.2deg)
+}
+.portrait-photo img{
+  display:block;
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  border-radius:11px;
+  filter:contrast(1.04) saturate(.94)
+}
+.portrait-photo figcaption{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:9px;
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.08em;
+  color:var(--deep)
+}
+@media(max-width:600px){
+  .portrait-photo{width:44%;right:5%;top:8%;box-shadow:6px 6px 0 var(--pink)}
+}
