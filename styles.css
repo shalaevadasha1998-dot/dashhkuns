@@ -1668,3 +1668,60 @@ p,li,.role,.project-role,.project-meta,.site-footer{
     box-shadow:0 7px 0 var(--pink)!important
   }
 }
+
+
+/* 2026-10-06 playful CTA labels + mobile menu actions */
+.mobile-menu .mobile-book,
+.mobile-menu .mobile-tg{
+  border-bottom:0!important;
+  border-radius:999px;
+  min-height:54px;
+  padding:0 18px!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-weight:800;
+  letter-spacing:-.02em
+}
+.mobile-menu .mobile-book{
+  margin-top:12px;
+  animation:cta-color-cycle 8.4s steps(1,end) infinite!important;
+  border:1px solid var(--deep)!important
+}
+.mobile-menu .mobile-tg{
+  margin-top:2px;
+  background:var(--milk);
+  color:var(--deep);
+  border:1px solid transparent!important;
+  animation:outline-pill-cycle 8.4s steps(1,end) infinite!important
+}
+.menu-btn{
+  font-weight:800;
+  letter-spacing:-.02em;
+  white-space:nowrap
+}
+
+@media(max-width:600px){
+  .mobile-menu .mobile-book,
+  .mobile-menu .mobile-tg{
+    width:100%;
+    max-width:100%;
+    font-size:14px
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .mobile-menu .mobile-book,
+  .mobile-menu .mobile-tg{
+    animation:none!important
+  }
+  .mobile-menu .mobile-book{
+    background:var(--deep)!important;
+    color:var(--milk)!important;
+    box-shadow:0 7px 0 var(--pink)!important
+  }
+  .mobile-menu .mobile-tg{
+    box-shadow:inset 0 0 0 1.5px var(--hot)!important
+  }
+}
