@@ -1,0 +1,50 @@
+name: import highres portfolio photos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/import-highres-photos.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: github.event.head_commit.message == 'Import high-resolution portfolio photos'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download original photos
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl -L --fail --retry 3 "https://cdn.openart.ai/openart-uploads/production/attachment-transfers/60ce932e149c35da722ab80fe3a5d65bf43ec98440564a81e719df0c1b90a922.jpg" -o assets/red.jpg
+          curl -L --fail --retry 3 "https://cdn.openart.ai/openart-uploads/production/attachment-transfers/6160d1443229ae622e2fe083e425343753f6fc3fdab1937b5cf73e21101d0ab1.jpg" -o assets/white.jpg
+          curl -L --fail --retry 3 "https://cdn.openart.ai/openart-uploads/production/attachment-transfers/8601729e05afb1d990893dec87cc0b94413d40ad4e63ab396c3a57c64c92584a.jpg" -o assets/fashionweek.jpg
+          test "$(stat -c%s assets/red.jpg)" -gt 100000
+          test "$(stat -c%s assets/white.jpg)" -gt 100000
+          test "$(stat -c%s assets/fashionweek.jpg)" -gt 100000
+
+      - name: Switch gallery to originals
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("about.html")
+          s = p.read_text()
+          s = s.replace("assets/red.webp", "assets/red.jpg")
+          s = s.replace("assets/white.webp", "assets/white.jpg")
+          s = s.replace("assets/fashionweek.webp", "assets/fashionweek.jpg")
+          p.write_text(s)
+          PY
+
+      - name: Commit originals
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/red.jpg assets/white.jpg assets/fashionweek.jpg about.html
+          git commit -m "Use original-resolution portfolio photos" || exit 0
+          git push
