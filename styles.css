@@ -1124,3 +1124,10 @@ main>section{margin-left:auto;margin-right:auto}
 @media(min-width:981px){
   .about-gallery{max-width:620px}
 }
+
+
+/* 2026-10-06 editorial cleanup */
+.market-card{
+  background:linear-gradient(145deg,#f2dde9 0 42%,#b989a4 42% 78%,#d7abc2 78% 100%)!important;
+  color:var(--deep)!important
+}
