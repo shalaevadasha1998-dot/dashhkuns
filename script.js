@@ -71,3 +71,42 @@ document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
     if(e.key==='ArrowLeft')show(index-1);
   });
 });
+
+
+/* russian typography: no hanging short words and fewer one-word last lines */
+const typographyTargets=document.querySelectorAll(
+  'h1,h2,h3,p,li,.btn,.top-cta,.nav a,.mobile-menu a,.desc,.small,.role,.project-role,.stats-label,.media-editorial em,.media-editorial strong,.case-punch strong,.case-punch p'
+);
+
+const shortWordRe=/\b(а|и|но|да|в|во|на|к|ко|с|со|о|об|обо|от|до|из|изо|за|у|по|под|над|при|для|без|про|не)\s+/gi;
+
+const textNodesOf=el=>{
+  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      if(!node.nodeValue?.trim())return NodeFilter.FILTER_REJECT;
+      const parent=node.parentElement;
+      if(parent?.closest('.marquee,[data-photo-cycle] .tap-count'))return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  return nodes;
+};
+
+typographyTargets.forEach(el=>{
+  const nodes=textNodesOf(el);
+  nodes.forEach(node=>{
+    node.nodeValue=node.nodeValue.replace(shortWordRe,'$1\u00a0');
+  });
+
+  for(let i=nodes.length-1;i>=0;i--){
+    const node=nodes[i];
+    const value=node.nodeValue;
+    const match=value.match(/(\S+)\s+(\S+)(\s*)$/);
+    if(match){
+      node.nodeValue=value.slice(0,match.index)+match[1]+'\u00a0'+match[2]+match[3];
+      break;
+    }
+  }
+});
