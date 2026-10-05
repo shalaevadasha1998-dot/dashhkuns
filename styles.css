@@ -1109,3 +1109,41 @@ main>section{margin-left:auto;margin-right:auto}
     object-position:center center!important
   }
 }
+
+
+/* hero gallery portrait fix */
+.hero{
+  align-items:center
+}
+.hero-photo-card{
+  width:min(100%,720px);
+  min-height:0!important;
+  aspect-ratio:4/5;
+  justify-self:end
+}
+.hero-photo-card .tap-gallery{
+  min-height:0!important;
+  height:100%!important;
+  aspect-ratio:4/5
+}
+.hero-photo-card .tap-gallery img{
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:var(--deep)
+}
+@media(max-width:980px){
+  .hero-photo-card{
+    width:100%;
+    aspect-ratio:4/5;
+    justify-self:stretch
+  }
+}
+@media(max-width:600px){
+  .hero-photo-card{
+    aspect-ratio:3/4
+  }
+  .hero-photo-card .tap-gallery{
+    aspect-ratio:3/4;
+    min-height:0!important
+  }
+}
