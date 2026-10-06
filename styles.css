@@ -2133,3 +2133,92 @@ p,li,.role,.project-role,.project-meta,.site-footer{
     transition:none!important
   }
 }
+
+
+/* 2026-10-06 mobile hotfix v3 */
+@media(max-width:600px){
+  .hero{
+    padding-top:94px!important;
+    row-gap:28px!important
+  }
+  .hero-first-line{
+    font-size:clamp(26px,7.9vw,31px)!important;
+    line-height:1.04!important;
+    letter-spacing:-.055em!important;
+    white-space:nowrap!important
+  }
+  .hero-art.hero-photo-card{
+    height:52svh!important;
+    min-height:390px!important;
+    max-height:480px!important
+  }
+  .hero-photo-card .tap-gallery{
+    height:100%!important;
+    min-height:0!important
+  }
+  .about-gallery{
+    height:auto!important;
+    min-height:0!important
+  }
+  .about-tap-gallery{
+    height:68svh!important;
+    min-height:500px!important;
+    max-height:620px!important
+  }
+  .about-visual.people-card{
+    height:auto!important;
+    min-height:520px!important;
+    padding:24px 20px!important
+  }
+  .people-card h3{
+    max-width:100%!important;
+    font-size:clamp(34px,9.6vw,44px)!important;
+    line-height:.95!important
+  }
+  .people-card-list span{
+    padding:12px 14px!important
+  }
+  .contact-link{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:5px!important;
+    align-items:start!important
+  }
+  .contact-link strong{
+    text-align:left!important;
+    font-size:14px!important;
+    line-height:1.25!important;
+    overflow-wrap:anywhere
+  }
+  .calendly-card{
+    padding:20px!important
+  }
+  .calendly-card strong{
+    font-size:clamp(27px,8.2vw,34px)!important
+  }
+  .project-form{
+    border-radius:20px!important
+  }
+  .project-form h2{
+    font-size:clamp(36px,10.5vw,44px)!important
+  }
+  .site-footer{
+    grid-template-columns:1fr auto!important
+  }
+}
+
+@media(max-width:420px){
+  .hero-first-line{
+    font-size:clamp(25px,7.55vw,29px)!important
+  }
+  .hero h1{
+    font-size:clamp(50px,13.7vw,58px)!important
+  }
+  .page-hero h1,
+  .contact-copy h1{
+    font-size:clamp(48px,13vw,58px)!important
+  }
+  .case-punch>strong{
+    font-size:clamp(36px,10.4vw,44px)!important
+  }
+}
