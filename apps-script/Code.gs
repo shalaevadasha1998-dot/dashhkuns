@@ -53,45 +53,54 @@ function doPost(e) {
         return json_({ ok: false, error: 'slot_unavailable' });
       }
 
-      const event = {
-        summary: 'созвон / ' + name,
-        description: [
-          'заявка с dashhkuns.com',
-          '',
-          'имя: ' + name,
-          'email: ' + email,
-          'контакт: ' + (contact || 'не указан'),
-          'lead id: ' + (leadId || 'нет'),
-          '',
-          'задача:',
-          details
-        ].join('\n'),
-        start: { dateTime: start.toISOString(), timeZone: CONFIG.timezone },
-        end: { dateTime: end.toISOString(), timeZone: CONFIG.timezone },
-        attendees: [{ email }],
-        conferenceData: {
-          createRequest: {
-            requestId: Utilities.getUuid(),
-            conferenceSolutionKey: { type: 'hangoutsMeet' }
-          }
-        },
-        reminders: { useDefault: true }
-      };
+      const description = [
+        'заявка с dashhkuns.com',
+        '',
+        'имя: ' + name,
+        'email: ' + email,
+        'контакт: ' + (contact || 'не указан'),
+        'lead id: ' + (leadId || 'нет'),
+        '',
+        'задача:',
+        details
+      ].join('\n');
 
-      const url = 'https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1&sendUpdates=all';
-      const response = UrlFetchApp.fetch(url, {
-        method: 'post',
-        contentType: 'application/json',
-        payload: JSON.stringify(event),
-        headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
-        muteHttpExceptions: true
+      const created = createCalendarEvent_({
+        name,
+        email,
+        description,
+        start,
+        end
       });
 
-      const status = response.getResponseCode();
-      const created = JSON.parse(response.getContentText() || '{}');
-      if (status < 200 || status >= 300 || !created.id) {
-        console.error('calendar insert failed', status, created);
+      if (!created || !created.eventId) {
         return json_({ ok: false, error: 'calendar_create_failed' });
+      }
+
+      try {
+        MailApp.sendEmail({
+          to: CONFIG.notifyEmail,
+          subject: 'новый созвон / ' + name,
+          body: [
+            'новый созвон с dashhkuns.com',
+            '',
+            'имя: ' + name,
+            'email: ' + email,
+            'контакт: ' + (contact || 'не указан'),
+            'когда: ' + formatMoscow_(start) + ' мск',
+            '',
+            'задача:',
+            details,
+            '',
+            'meet: ' + (created.meetUrl || 'ссылка будет в событии календаря'),
+            'calendar: ' + (created.eventUrl || '')
+          ].join('\n')
+        });
+      } catch (mailError) {
+        console.error('notification failed', mailError);
+      }
+
+      return json_({ ok: false, error: 'calendar_create_failed' });
       }
 
       try {
@@ -119,9 +128,9 @@ function doPost(e) {
 
       return json_({
         ok: true,
-        eventId: created.id,
-        eventUrl: created.htmlLink || '',
-        meetUrl: created.hangoutLink || '',
+        eventId: created.eventId,
+        eventUrl: created.eventUrl || '',
+        meetUrl: created.meetUrl || '',
         start: start.toISOString(),
         end: end.toISOString(),
         display: formatMoscow_(start)
@@ -132,6 +141,66 @@ function doPost(e) {
   } catch (error) {
     console.error(error);
     return json_({ ok: false, error: 'booking_failed' });
+  }
+}
+
+function createCalendarEvent_(input) {
+  const resource = {
+    summary: 'созвон / ' + input.name,
+    description: input.description,
+    start: { dateTime: input.start.toISOString(), timeZone: CONFIG.timezone },
+    end: { dateTime: input.end.toISOString(), timeZone: CONFIG.timezone },
+    attendees: [{ email: input.email }],
+    conferenceData: {
+      createRequest: {
+        requestId: Utilities.getUuid(),
+        conferenceSolutionKey: { type: 'hangoutsMeet' }
+      }
+    },
+    reminders: { useDefault: true }
+  };
+
+  try {
+    const created = Calendar.Events.insert(resource, 'primary', {
+      conferenceDataVersion: 1,
+      sendUpdates: 'all'
+    });
+
+    let fresh = created;
+    if (!fresh.hangoutLink && fresh.id) {
+      Utilities.sleep(700);
+      fresh = Calendar.Events.get('primary', fresh.id);
+    }
+
+    return {
+      eventId: fresh.id || created.id,
+      eventUrl: fresh.htmlLink || created.htmlLink || '',
+      meetUrl: fresh.hangoutLink || created.hangoutLink || ''
+    };
+  } catch (advancedError) {
+    console.error('advanced calendar insert failed', advancedError);
+  }
+
+  try {
+    const calendar = CalendarApp.getDefaultCalendar();
+    const event = calendar.createEvent(
+      'созвон / ' + input.name,
+      input.start,
+      input.end,
+      {
+        description: input.description,
+        guests: input.email,
+        sendInvites: true
+      }
+    );
+    return {
+      eventId: event.getId(),
+      eventUrl: '',
+      meetUrl: ''
+    };
+  } catch (fallbackError) {
+    console.error('calendar fallback failed', fallbackError);
+    return null;
   }
 }
 
