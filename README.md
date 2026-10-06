@@ -45,3 +45,11 @@ production использует clean urls:
 - `/contact`
 
 также есть `robots.txt`, `sitemap.xml`, canonical, open graph и отдельная social preview картинка `assets/og-card.png`.
+
+## публичные ссылки
+
+- [креативный продюсер в москве](https://dashhkuns.com/)
+- [продюсирование проектов под ключ](https://dashhkuns.com/services)
+- [кейсы и запуски](https://dashhkuns.com/projects)
+- [разбор: что делает креативный продюсер](https://dashhkuns.com/creative-producer)
+
