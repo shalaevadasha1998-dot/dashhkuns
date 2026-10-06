@@ -2546,3 +2546,119 @@ body .hero-categories span:nth-child(n),
   .booking-widget-shell{border-radius:20px;box-shadow:5px 5px 0 var(--acid)}
   .booking-widget-shell .calendly-inline-widget{height:900px!important}
 }
+
+
+/* 2026-10-06 clarity pass: two actions only, native booking */
+.hero-categories span,
+.proof-chips span,
+.service-card,
+.project-row,
+.case-page,
+.career-grid article,
+.detail-image,
+.people-card,
+.calendly-card,
+.project-form,
+.tap-gallery,
+.editorial-visual{
+  animation:none!important
+}
+.contact-page-clean{
+  align-items:start
+}
+.contact-page-clean .contact-copy{
+  align-self:start
+}
+.contact-choice-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:30px 0 32px
+}
+.contact-choice{
+  min-width:0;
+  min-height:190px;
+  padding:22px;
+  border:1px solid var(--deep);
+  border-radius:24px;
+  background:var(--milk);
+  color:var(--deep);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:16px;
+  box-shadow:6px 6px 0 var(--acid);
+  transition:transform .2s ease,box-shadow .2s ease
+}
+.contact-choice:hover{
+  transform:translateY(-3px);
+  box-shadow:9px 9px 0 var(--acid)
+}
+.contact-choice-primary{
+  background:var(--deep);
+  color:var(--milk);
+  box-shadow:6px 6px 0 var(--hot)
+}
+.contact-choice span{
+  font-size:10px;
+  letter-spacing:.1em;
+  opacity:.62
+}
+.contact-choice strong{
+  font-size:clamp(27px,3vw,42px);
+  line-height:.94;
+  letter-spacing:-.045em
+}
+.contact-choice small{
+  font-size:12px;
+  line-height:1.45;
+  opacity:.68
+}
+.booking-widget-shell{
+  padding:clamp(24px,4vw,48px)
+}
+.booking-form{
+  display:grid
+}
+.booking-form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px
+}
+.booking-form textarea{
+  min-height:110px
+}
+.booking-success{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:14px
+}
+.booking-success[hidden]{
+  display:none
+}
+.booking-success span{
+  font-size:10px;
+  letter-spacing:.12em;
+  opacity:.5
+}
+.booking-success h3{
+  font-size:clamp(36px,4vw,58px)
+}
+.booking-success p{
+  max-width:34ch;
+  line-height:1.5
+}
+@media(max-width:700px){
+  .contact-choice-grid,
+  .booking-form-grid{
+    grid-template-columns:1fr
+  }
+  .contact-choice{
+    min-height:160px
+  }
+  .booking-widget-shell{
+    padding:24px 20px
+  }
+}

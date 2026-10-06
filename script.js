@@ -87,9 +87,7 @@ const pageEvents={
 };
 if(pageEvents[path])track(pageEvents[path]);
 
-document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname})));
-document.querySelectorAll('a[href*="calendly.com"]').forEach(el=>el.addEventListener('click',()=>track('calendly_click',{label:(el.textContent||'').trim()})));
-document.querySelectorAll('a[href*="t.me/"]').forEach(el=>el.addEventListener('click',()=>track('telegram_click',{label:(el.textContent||'').trim()})));
+document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'application'})));\ndocument.querySelectorAll('.js-booking-cta, a[href=\"/contact#booking\"], a[href=\"#booking\"]').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'booking'})));
 document.querySelectorAll('a[href^="mailto:"]').forEach(el=>el.addEventListener('click',()=>track('email_click',{label:(el.textContent||'').trim()})));
 
 const menuBtn=document.querySelector('.menu-btn');
@@ -230,4 +228,66 @@ document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
     if(e.key==='ArrowRight')show(index+1);
     if(e.key==='ArrowLeft')show(index-1);
   });
+});
+
+
+const bookingForm=document.querySelector('#booking-form');
+const bookingSuccess=document.querySelector('#booking-success');
+const bookingError=document.querySelector('#booking-error');
+const bookingDate=document.querySelector('#booking-date');
+
+if(bookingDate){
+  const isoLocal=date=>{
+    const y=date.getFullYear();
+    const m=String(date.getMonth()+1).padStart(2,'0');
+    const d=String(date.getDate()).padStart(2,'0');
+    return `${y}-${m}-${d}`;
+  };
+  const today=new Date();
+  const maxDate=new Date(today);
+  maxDate.setDate(maxDate.getDate()+60);
+  bookingDate.min=isoLocal(today);
+  bookingDate.max=isoLocal(maxDate);
+}
+
+bookingForm?.addEventListener('submit',async e=>{
+  e.preventDefault();
+  bookingError?.setAttribute('hidden','');
+  if(!bookingForm.checkValidity()){bookingForm.reportValidity();return}
+  const button=bookingForm.querySelector('button[type="submit"]');
+  const original=button?.textContent||'забронировать встречу';
+  if(button){button.disabled=true;button.textContent='отправляю…'}
+  const data=new FormData(bookingForm);
+  const date=String(data.get('date')||'');
+  const time=String(data.get('time')||'');
+  const note=String(data.get('note')||'').trim();
+  const details=[
+    'запрос на встречу / 30 минут',
+    'дата: '+date,
+    'время: '+time+' мск',
+    note?'тема: '+note:'тема: не указана'
+  ].join('\n');
+  try{
+    await postIntake({
+      kind:'lead',
+      name:data.get('name')||'',
+      contact:data.get('contact')||'',
+      projectType:'встреча / 30 минут',
+      projectStage:'запрос на встречу',
+      budgetRange:'не указан',
+      launchDate:date,
+      details,
+      companyWebsite:'',
+      context:getContext()
+    });
+    bookingForm.reset();
+    bookingForm.hidden=true;
+    bookingSuccess?.removeAttribute('hidden');
+    bookingSuccess?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+  }catch(error){
+    console.error(error);
+    bookingError?.removeAttribute('hidden');
+  }finally{
+    if(button){button.disabled=false;button.textContent=original}
+  }
 });
