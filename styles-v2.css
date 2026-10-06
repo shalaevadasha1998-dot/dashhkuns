@@ -1662,3 +1662,21 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     font-size:clamp(58px,16vw,82px)
   }
 }
+
+
+/* v2 mobile Safari type safety */
+@media(max-width:760px){
+  h1{line-height:.98;overflow:visible}
+  h2{line-height:.98;overflow:visible}
+  h3{line-height:1;overflow:visible}
+  .hero-first-line{line-height:1.06}
+  .hero-second-line{line-height:.96;overflow:visible}
+  .project-cover>strong{line-height:1;overflow:visible}
+  .trust-grid strong{line-height:.96;overflow:visible}
+  .service-card-media strong{line-height:1;overflow:visible}
+  .service-card-body h3{line-height:1;overflow:visible}
+  .expertise-grid h3{line-height:1;overflow:visible}
+  .portfolio-main{line-height:1.08;overflow:visible}
+  .portfolio-serif{line-height:1.08;overflow:visible}
+  .portfolio-acid{line-height:1.06;overflow:visible}
+}
