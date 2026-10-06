@@ -7,7 +7,7 @@
     <p class="contact-lead">если задача уже понятна, оставь заявку<br>если проще сначала поговорить, забронируй 30 минут</p>
     <div class="contact-choice-grid">
       <a class="contact-choice contact-choice-pink js-project-cta" href="#project-form"><span>01</span><strong>оставить заявку</strong><small>имя / контакт / задача</small></a>
-      <a class="contact-choice contact-choice-acid" href="#booking"><span>02</span><strong>забронировать встречу</strong><small>свободный слот / 30 минут / google meet</small></a>
+      <a class="contact-choice contact-choice-acid" href="#booking"><span>02</span><strong>забронировать встречу</strong><small>дата / время / 30 минут</small></a>
     </div>
     <div class="contact-budget"><span>ориентир</span><strong>продюсирование от 70 000 ₽</strong><small>концепцию и план можно взять отдельно от 50 000 ₽</small></div>
   </div>
@@ -29,27 +29,21 @@
   <section class="contact-action-panel booking-panel reveal" id="booking">
     <form class="project-form booking-form" id="booking-form" novalidate>
       <p class="kicker">02 / встреча / 30 минут</p>
-      <h2>выбери слот.<br><span class="serif">встречаемся в meet.</span></h2>
+      <h2>выбери слот.<br><span class="serif">я подтвержу время.</span></h2>
       <div class="field"><label for="booking-name">имя *</label><input id="booking-name" name="name" autocomplete="name" required></div>
       <div class="field"><label for="booking-email">email для приглашения *</label><input id="booking-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></div>
       <div class="field"><label for="booking-details">о чём поговорим</label><textarea id="booking-details" name="details" placeholder="можно одной фразой"></textarea></div>
-      <div class="booking-picker">
-        <div class="booking-picker-head"><span>01</span><strong>день</strong><small>время московское</small></div>
-        <div class="booking-status" id="booking-status">смотрю свободное время…</div>
-        <div class="booking-days" id="booking-days" aria-label="свободные дни"></div>
-        <div class="booking-time-step" id="booking-time-step" hidden>
-          <div class="booking-picker-head"><span>02</span><strong>время</strong><small>30 минут</small></div>
-          <div class="booking-times" id="booking-times" aria-label="свободное время"></div>
-        </div>
+      <div class="booking-request-grid">
+        <div class="field"><label for="booking-date">дата *</label><input id="booking-date" name="date" type="date" required></div>
+        <div class="field"><label for="booking-time">время, мск *</label><input id="booking-time" name="time" type="time" step="1800" required></div>
       </div>
-      <input type="hidden" id="booking-start" name="bookingStart">
       <div class="hp-field" aria-hidden="true"><label for="booking-company-website">сайт компании</label><input id="booking-company-website" name="companyWebsite" tabindex="-1" autocomplete="off"></div>
-      <div class="form-submit-row"><button class="btn primary" id="booking-submit" type="submit" disabled>забронировать встречу</button><p class="form-note">google meet и приглашение придут на email</p></div>
-      <div class="form-error" id="booking-error" role="alert" hidden>не получилось забронировать. выбери другой слот или оставь заявку выше.</div>
+      <div class="form-submit-row"><button class="btn primary" id="booking-submit" type="submit">отправить время</button><p class="form-note">я свяжусь по email и подтвержу встречу</p></div>
+      <div class="form-error" id="booking-error" role="alert" hidden>не отправилось. данные остались в форме, попробуй ещё раз или оставь заявку выше.</div>
     </form>
     <div class="form-success booking-success" id="booking-success" role="status" aria-live="polite" hidden>
-      <span>готово</span><h2>в календаре.</h2><p id="booking-success-copy">встреча забронирована.</p>
-      <div class="button-row"><a class="btn primary" id="booking-meet" href="#" target="_blank" rel="noopener noreferrer" hidden>открыть google meet</a><a class="btn ghost" href="/">на главную</a></div>
+      <span>готово</span><h2>время получила.</h2><p id="booking-success-copy">свяжусь по email и подтвержу встречу.</p>
+      <div class="button-row"><a class="btn ghost" href="/">на главную</a></div>
     </div>
   </section>
 </section>

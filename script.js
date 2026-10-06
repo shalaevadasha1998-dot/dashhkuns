@@ -19,7 +19,6 @@ if(brand&&!brand.querySelector('.brand-state')){
 }
 
 const INTAKE_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-intake';
-const BOOKING_API_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-booking';
 const REF_TTL=90*24*60*60*1000;
 const now=()=>Date.now();
 const readJSON=(key,store=localStorage)=>{try{return JSON.parse(store.getItem(key)||'null')}catch{return null}};
@@ -233,149 +232,59 @@ leadForm?.addEventListener('submit',async e=>{
 const bookingForm=document.querySelector('#booking-form');
 const bookingSuccess=document.querySelector('#booking-success');
 const bookingError=document.querySelector('#booking-error');
-const bookingDays=document.querySelector('#booking-days');
-const bookingTimes=document.querySelector('#booking-times');
-const bookingTimeStep=document.querySelector('#booking-time-step');
-const bookingStatus=document.querySelector('#booking-status');
-const bookingStart=document.querySelector('#booking-start');
-const bookingSubmit=document.querySelector('#booking-submit');
-const bookingSuccessCopy=document.querySelector('#booking-success-copy');
-const bookingMeet=document.querySelector('#booking-meet');
+const bookingDate=document.querySelector('#booking-date');
 
-let availability=[];
-let selectedDay=-1;
-let selectedSlot='';
-let pendingLeadId='';
-
-const setBookingError=message=>{
-  if(!bookingError)return;
-  bookingError.textContent=message;
-  bookingError.hidden=false;
-};
-const clearBookingError=()=>bookingError?.setAttribute('hidden','');
-
-const renderTimes=index=>{
-  if(!bookingTimes||!bookingTimeStep)return;
-  selectedDay=index;
-  selectedSlot='';
-  if(bookingStart)bookingStart.value='';
-  if(bookingSubmit)bookingSubmit.disabled=true;
-  document.querySelectorAll('.booking-day').forEach((el,i)=>el.classList.toggle('active',i===index));
-  const day=availability[index];
-  bookingTimes.replaceChildren();
-  day.slots.forEach(slot=>{
-    const button=document.createElement('button');
-    button.type='button';
-    button.className='booking-time';
-    button.textContent=slot.time;
-    button.dataset.start=slot.start;
-    button.addEventListener('click',()=>{
-      selectedSlot=slot.start;
-      if(bookingStart)bookingStart.value=slot.start;
-      document.querySelectorAll('.booking-time').forEach(el=>el.classList.toggle('active',el===button));
-      if(bookingSubmit)bookingSubmit.disabled=false;
-    });
-    bookingTimes.append(button);
-  });
-  bookingTimeStep.hidden=false;
-};
-
-const renderAvailability=days=>{
-  availability=Array.isArray(days)?days:[];
-  if(!bookingDays||!bookingStatus)return;
-  bookingDays.replaceChildren();
-  bookingTimeStep?.setAttribute('hidden','');
-  if(!availability.length){
-    bookingStatus.textContent='свободных слотов на ближайшие две недели нет';
-    return;
-  }
-  bookingStatus.textContent='занятые часы уже убрала';
-  availability.forEach((day,index)=>{
-    const button=document.createElement('button');
-    button.type='button';
-    button.className='booking-day';
-    button.innerHTML='<span>'+day.weekday+'</span><strong>'+day.label+'</strong><small>'+day.slots.length+' слотов</small>';
-    button.addEventListener('click',()=>renderTimes(index));
-    bookingDays.append(button);
-  });
-};
-
-const loadAvailability=async()=>{
-  if(!bookingForm||!bookingStatus)return;
-  bookingStatus.textContent='смотрю свободное время…';
-  clearBookingError();
-  try{
-    const response=await fetch(BOOKING_API_URL+'?action=availability',{headers:{'Accept':'application/json'},cache:'no-store'});
-    const data=await response.json();
-    if(!response.ok||!data.ok)throw new Error(data.error||'availability_failed');
-    renderAvailability(data.days);
-  }catch(error){
-    console.error(error);
-    bookingStatus.textContent='календарь сейчас не отвечает';
-    setBookingError('оставь заявку выше, я свяжусь сама');
-  }
-};
+if(bookingDate){
+  const formatDate=date=>{
+    const y=date.getFullYear();
+    const m=String(date.getMonth()+1).padStart(2,'0');
+    const d=String(date.getDate()).padStart(2,'0');
+    return y+'-'+m+'-'+d;
+  };
+  const today=new Date();
+  const maxDate=new Date(today);
+  maxDate.setDate(maxDate.getDate()+60);
+  bookingDate.min=formatDate(today);
+  bookingDate.max=formatDate(maxDate);
+}
 
 bookingForm?.addEventListener('submit',async e=>{
   e.preventDefault();
-  clearBookingError();
+  bookingError?.setAttribute('hidden','');
   if(!bookingForm.checkValidity()){bookingForm.reportValidity();return}
-  if(!selectedSlot){setBookingError('сначала выбери день и время');return}
-  const original=bookingSubmit?.textContent||'забронировать встречу';
-  if(bookingSubmit){bookingSubmit.disabled=true;bookingSubmit.textContent='бронирую…'}
+  const button=bookingForm.querySelector('button[type="submit"]');
+  const original=button?.textContent||'отправить время';
+  if(button){button.disabled=true;button.textContent='отправляю…'}
   const data=new FormData(bookingForm);
-  const name=String(data.get('name')||'').trim();
-  const email=String(data.get('email')||'').trim();
-  const details=String(data.get('details')||'').trim();
-
+  const date=String(data.get('date')||'');
+  const time=String(data.get('time')||'');
+  const topic=String(data.get('details')||'').trim();
   try{
-    if(!pendingLeadId){
-      const lead=await postIntake({
-        kind:'lead',
-        name,
-        contact:email,
-        projectType:'встреча / 30 минут',
-        projectStage:'новая заявка',
-        budgetRange:'не указан',
-        launchDate:'',
-        details,
-        companyWebsite:data.get('companyWebsite')||'',
-        context:getContext()
-      });
-      pendingLeadId=lead?.id||'';
-    }
-    const response=await fetch(BOOKING_API_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'book',leadId:pendingLeadId,name,email,contact:'',details,start:selectedSlot,context:getContext()})
+    await postIntake({
+      kind:'lead',
+      name:String(data.get('name')||'').trim(),
+      contact:String(data.get('email')||'').trim(),
+      projectType:'встреча / 30 минут',
+      projectStage:'запрос на встречу',
+      budgetRange:'не указан',
+      launchDate:'',
+      details:['предложенная дата: '+date,'время: '+time+' мск',topic?'тема: '+topic:''].filter(Boolean).join('\n'),
+      companyWebsite:data.get('companyWebsite')||'',
+      context:getContext()
     });
-    const booked=await response.json();
-    if(!response.ok||!booked.ok){
-      if(booked.error==='slot_unavailable'){
-        selectedSlot='';
-        if(bookingStart)bookingStart.value='';
-        await loadAvailability();
-        throw new Error('slot_unavailable');
-      }
-      throw new Error(booked.error||'booking_failed');
-    }
+    track('form_submit',{type:'booking_request'});
     bookingForm.reset();
     bookingForm.hidden=true;
-    pendingLeadId='';
-    track('form_submit',{type:'booking'});
-    if(bookingSuccessCopy)bookingSuccessCopy.textContent='встреча '+(booked.display||'')+' мск, приглашение уже отправлено на '+email;
-    if(bookingMeet&&booked.meetUrl){bookingMeet.href=booked.meetUrl;bookingMeet.hidden=false}
     bookingSuccess?.removeAttribute('hidden');
     bookingSuccess?.classList.add('visible');
     bookingSuccess?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
   }catch(error){
     console.error(error);
-    setBookingError(error?.message==='slot_unavailable'?'этот слот только что заняли, выбери другой':'не получилось создать встречу, оставь заявку выше');
+    bookingError?.removeAttribute('hidden');
   }finally{
-    if(bookingSubmit){bookingSubmit.textContent=original;bookingSubmit.disabled=!selectedSlot}
+    if(button){button.disabled=false;button.textContent=original}
   }
 });
-if(bookingForm)loadAvailability();
 
 document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
   const photos=[...gallery.querySelectorAll('img')];
