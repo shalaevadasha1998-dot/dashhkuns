@@ -2437,3 +2437,49 @@ body .hero-categories span:nth-child(n),
   .hero-motion-video{display:none}
   .hero-motion{opacity:.08}
 }
+
+
+/* 2026-10-06 lower motion strip */
+.motion-strip{
+  position:relative;
+  height:clamp(280px,38vw,520px);
+  overflow:hidden;
+  background:var(--deep);
+  border-top:1px solid var(--deep);
+  border-bottom:1px solid var(--deep)
+}
+.motion-strip-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 58%;
+  filter:saturate(.78) contrast(1.08) brightness(.92);
+  transform:scale(1.025)
+}
+.motion-strip-wash{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(115deg,rgba(27,7,20,.32) 0 18%,rgba(255,63,173,.24) 42%,rgba(255,114,197,.3) 60%,rgba(36,232,107,.2) 82%,rgba(27,7,20,.3) 100%);
+  mix-blend-mode:screen
+}
+@media(max-width:600px){
+  .motion-strip{
+    height:300px
+  }
+  .motion-strip-video{
+    object-position:56% center;
+    transform:scale(1.07)
+  }
+  .motion-strip-wash{
+    background:
+      linear-gradient(145deg,rgba(27,7,20,.18),rgba(255,63,173,.3) 38%,rgba(36,232,107,.18) 76%,rgba(27,7,20,.28))
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .motion-strip-video{display:none}
+  .motion-strip{
+    background:linear-gradient(135deg,var(--deep),var(--hot) 48%,var(--acid))
+  }
+}
