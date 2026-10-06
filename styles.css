@@ -2222,3 +2222,13 @@ p,li,.role,.project-role,.project-meta,.site-footer{
     font-size:clamp(36px,10.4vw,44px)!important
   }
 }
+
+
+/* 2026-10-06 services mobile overflow hotfix */
+@media(max-width:600px){
+  .services-commercial{
+    width:auto!important;
+    max-width:none!important;
+    margin:28px var(--mobile-gutter) 0!important
+  }
+}
