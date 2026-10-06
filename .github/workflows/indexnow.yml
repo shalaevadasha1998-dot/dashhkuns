@@ -1,0 +1,46 @@
+name: indexnow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: notify IndexNow
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          key = "7a5da00fb1412ad97f652be0fc30026d0d46cc903298250d33c500d6533c0ebe"
+          urls = [
+            "https://dashhkuns.com/",
+            "https://dashhkuns.com/services",
+            "https://dashhkuns.com/projects",
+            "https://dashhkuns.com/about",
+            "https://dashhkuns.com/contact",
+            "https://dashhkuns.com/insights",
+            "https://dashhkuns.com/creative-producer",
+            "https://dashhkuns.com/project-launch",
+            "https://dashhkuns.com/reality-show-producer"
+          ]
+          payload = json.dumps({
+            "host":"dashhkuns.com",
+            "key":key,
+            "keyLocation":f"https://dashhkuns.com/{key}.txt",
+            "urlList":urls
+          }).encode("utf-8")
+          req = urllib.request.Request(
+            "https://api.indexnow.org/indexnow",
+            data=payload,
+            headers={"Content-Type":"application/json; charset=utf-8"},
+            method="POST"
+          )
+          with urllib.request.urlopen(req, timeout=30) as resp:
+            print("IndexNow status:", resp.status)
+          PY
