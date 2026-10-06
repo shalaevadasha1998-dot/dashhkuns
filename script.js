@@ -1,3 +1,4 @@
+document.documentElement.classList.add('motion-ready');
 document.getElementById('year')?.replaceChildren(String(new Date().getFullYear()));
 
 const INTAKE_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-intake';
@@ -107,6 +108,14 @@ mobileMenu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setM
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mobileMenu?.classList.contains('open')){setMenu(false);menuBtn?.focus()}});
 window.addEventListener('resize',()=>{if(window.innerWidth>980&&mobileMenu?.classList.contains('open'))setMenu(false)},{passive:true});
 
+const accentEls=[...document.querySelectorAll('.accent-pop')];
+if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const aio=new IntersectionObserver(entries=>entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('accent-live');aio.unobserve(e.target)}
+  }),{threshold:.35});
+  accentEls.forEach(el=>aio.observe(el));
+}else accentEls.forEach(el=>el.classList.add('accent-live'));
+
 const revealEls=[...document.querySelectorAll('.reveal')];
 if('IntersectionObserver' in window){
   const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}})},{threshold:.1});
@@ -158,9 +167,9 @@ form?.addEventListener('submit',async e=>{
     kind:'lead',
     name:data.get('name')||'',
     contact:data.get('contact')||'',
-    projectType:data.get('type')||'',
-    projectStage:data.get('stage')||'',
-    budgetRange:data.get('budget')||'',
+    projectType:data.get('type')||'короткая заявка',
+    projectStage:data.get('stage')||'не указан',
+    budgetRange:data.get('budget')||'не указан',
     launchDate:data.get('launchDate')||'',
     details:data.get('details')||'',
     companyWebsite:data.get('companyWebsite')||'',
