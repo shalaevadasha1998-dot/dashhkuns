@@ -3258,3 +3258,125 @@ h1,h2,h3,
     height:420px!important
   }
 }
+
+
+/* 2026-10-06 mobile edit: turn long stacks into swipe rails */
+.mobile-swipe-note{
+  display:none
+}
+@media(max-width:600px){
+  .mobile-swipe-note{
+    display:block;
+    margin:-10px 0 16px;
+    font-size:10px;
+    letter-spacing:.1em;
+    opacity:.48;
+    text-transform:lowercase
+  }
+
+  .home-selected-work .project-stack{
+    display:flex!important;
+    gap:12px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:0 2px 10px!important
+  }
+  .home-selected-work .project-stack::-webkit-scrollbar{
+    display:none
+  }
+  .home-selected-work .project-row{
+    flex:0 0 88%!important;
+    width:88%!important;
+    max-width:88%!important;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    margin:0!important
+  }
+  .home-selected-work .project-copy{
+    min-height:300px!important;
+    padding:22px!important
+  }
+  .home-selected-work .project-copy h3{
+    font-size:clamp(32px,9vw,40px)!important
+  }
+  .home-selected-work .project-copy>p{
+    font-size:14px!important
+  }
+  .home-selected-work .project-cover{
+    min-height:270px!important;
+    padding:22px!important
+  }
+  .home-selected-work .project-cover strong{
+    font-size:clamp(34px,9.5vw,43px)!important
+  }
+
+  .home-proof .trust-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    border:0!important
+  }
+  .home-proof .trust-grid article{
+    min-height:145px!important;
+    padding:18px!important;
+    border:1px solid var(--line)!important;
+    border-radius:18px!important
+  }
+  .home-proof .trust-grid strong{
+    font-size:clamp(40px,11vw,50px)!important
+  }
+  .home-proof .trust-grid p{
+    font-size:12px!important
+  }
+
+  .home-service-grid{
+    display:flex!important;
+    gap:12px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:0 2px 10px!important
+  }
+  .home-service-grid::-webkit-scrollbar{
+    display:none
+  }
+  .home-service-grid .service-card{
+    flex:0 0 86%!important;
+    width:86%!important;
+    max-width:86%!important;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    margin:0!important
+  }
+  .home-service-grid .service-card-media{
+    height:190px!important
+  }
+  .home-service-grid .service-card-body{
+    padding:22px!important
+  }
+  .home-service-grid .service-card h3{
+    margin:34px 0 12px!important;
+    font-size:clamp(30px,8.7vw,38px)!important
+  }
+
+  .home-about .about-visual{
+    height:330px!important
+  }
+  .home-about .about-copy{
+    padding:0!important;
+    border:0!important;
+    background:transparent!important
+  }
+  .home-about .about-copy p{
+    font-size:17px!important
+  }
+  .home-about .about-copy .small{
+    font-size:13px!important
+  }
+}
