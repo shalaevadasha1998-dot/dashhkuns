@@ -49,6 +49,11 @@
       "permanent": true
     },
     {
+      "source": "/creative-producer-moscow.html",
+      "destination": "/creative-producer-moscow",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
@@ -92,6 +97,10 @@
     {
       "source": "/reality-show-producer",
       "destination": "/reality-show-producer.html"
+    },
+    {
+      "source": "/creative-producer-moscow",
+      "destination": "/creative-producer-moscow.html"
     }
   ],
   "headers": [
