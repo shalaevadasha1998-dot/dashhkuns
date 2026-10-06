@@ -108,6 +108,27 @@ mobileMenu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setM
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mobileMenu?.classList.contains('open')){setMenu(false);menuBtn?.focus()}});
 window.addEventListener('resize',()=>{if(window.innerWidth>980&&mobileMenu?.classList.contains('open'))setMenu(false)},{passive:true});
 
+
+
+const stockMotion=document.querySelector('[data-stock-motion]');
+if(stockMotion){
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData=Boolean(navigator.connection?.saveData);
+  if(!reduced&&!saveData){
+    const source=stockMotion.querySelector('source[data-src]');
+    if(source&&!source.src){
+      source.src=source.dataset.src||'';
+      stockMotion.load();
+      stockMotion.play().catch(()=>{});
+    }
+    const syncStockMotion=()=>{
+      if(document.hidden)stockMotion.pause();
+      else stockMotion.play().catch(()=>{});
+    };
+    document.addEventListener('visibilitychange',syncStockMotion);
+  }
+}
+
 const accentEls=[...document.querySelectorAll('.accent-pop')];
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   const aio=new IntersectionObserver(entries=>entries.forEach(e=>{
