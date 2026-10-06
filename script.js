@@ -2,6 +2,7 @@ document.documentElement.classList.add('motion-ready');
 document.getElementById('year')?.replaceChildren(String(new Date().getFullYear()));
 
 const INTAKE_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-intake';
+const BOOKING_API_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-booking';
 const REF_TTL=90*24*60*60*1000;
 const now=()=>Date.now();
 const readJSON=(key,store=localStorage)=>{try{return JSON.parse(store.getItem(key)||'null')}catch{return null}};
@@ -87,8 +88,9 @@ const pageEvents={
 };
 if(pageEvents[path])track(pageEvents[path]);
 
-document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'application'})));
-document.querySelectorAll('.js-booking-cta, a[href=\"/contact#booking\"], a[href=\"#booking\"]').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'booking'})));
+document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname})));
+document.querySelectorAll('a[href*="calendly.com"]').forEach(el=>el.addEventListener('click',()=>track('calendly_click',{label:(el.textContent||'').trim()})));
+document.querySelectorAll('a[href*="t.me/"]').forEach(el=>el.addEventListener('click',()=>track('telegram_click',{label:(el.textContent||'').trim()})));
 document.querySelectorAll('a[href^="mailto:"]').forEach(el=>el.addEventListener('click',()=>track('email_click',{label:(el.textContent||'').trim()})));
 
 const menuBtn=document.querySelector('.menu-btn');
@@ -113,11 +115,7 @@ const stockMotions=[...document.querySelectorAll('[data-stock-motion]')];
 if(stockMotions.length){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData=Boolean(navigator.connection?.saveData);
-  const mobile=matchMedia('(max-width: 700px)').matches;
-  const canPlayStockMotion=!reduced&&!saveData&&!mobile;
-
-  const startStockMotion=()=>{
-    if(!canPlayStockMotion)return;
+  if(!reduced&&!saveData){
     stockMotions.forEach(stockMotion=>{
       const source=stockMotion.querySelector('source[data-src]');
       if(source&&!source.src){
@@ -126,16 +124,8 @@ if(stockMotions.length){
       }
       stockMotion.play().catch(()=>{});
     });
-  };
-
-  if(canPlayStockMotion){
-    const startLater=()=>setTimeout(startStockMotion,650);
-    if(document.readyState==='complete')startLater();
-    else window.addEventListener('load',startLater,{once:true});
-
     const syncStockMotion=()=>{
       stockMotions.forEach(stockMotion=>{
-        if(!stockMotion.currentSrc)return;
         if(document.hidden)stockMotion.pause();
         else stockMotion.play().catch(()=>{});
       });
@@ -182,7 +172,21 @@ if(glow&&matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-mot
 const form=document.querySelector('#project-form');
 const success=document.querySelector('#form-success');
 const formError=document.querySelector('#form-error');
+const bookingDays=document.querySelector('#booking-days');
+const bookingTimes=document.querySelector('#booking-times');
+const bookingTimeStep=document.querySelector('#booking-time-step');
+const bookingStatus=document.querySelector('#booking-status');
+const bookingStart=document.querySelector('#booking-start');
+const bookingSubmit=document.querySelector('#booking-submit');
+const bookingSuccessCopy=document.querySelector('#booking-success-copy');
+const bookingMeet=document.querySelector('#booking-meet');
+
 let formStarted=false;
+let availability=[];
+let selectedDay=-1;
+let selectedSlot='';
+let pendingLeadId='';
+
 const markFormStart=()=>{
   if(formStarted)return;
   formStarted=true;
@@ -191,38 +195,161 @@ const markFormStart=()=>{
 form?.addEventListener('focusin',markFormStart,{once:true});
 form?.addEventListener('input',markFormStart,{once:true});
 
-form?.addEventListener('submit',async e=>{
-  e.preventDefault();
-  formError?.setAttribute('hidden','');
-  if(!form.checkValidity()){form.reportValidity();return}
-  const button=form.querySelector('button[type="submit"]');
-  const original=button?.textContent||'отправить заявку';
-  if(button){button.disabled=true;button.textContent='отправляю…'}
-  const data=new FormData(form);
-  const payload={
-    kind:'lead',
-    name:data.get('name')||'',
-    contact:data.get('contact')||'',
-    projectType:data.get('type')||'короткая заявка',
-    projectStage:data.get('stage')||'не указан',
-    budgetRange:data.get('budget')||'не указан',
-    launchDate:data.get('launchDate')||'',
-    details:data.get('details')||'',
-    companyWebsite:data.get('companyWebsite')||'',
-    context:getContext()
-  };
+const setBookingError=message=>{
+  if(!formError)return;
+  formError.textContent=message;
+  formError.hidden=false;
+};
+
+const clearBookingError=()=>formError?.setAttribute('hidden','');
+
+const renderTimes=index=>{
+  if(!bookingTimes||!bookingTimeStep)return;
+  selectedDay=index;
+  selectedSlot='';
+  if(bookingStart)bookingStart.value='';
+  if(bookingSubmit)bookingSubmit.disabled=true;
+
+  document.querySelectorAll('.booking-day').forEach((el,i)=>el.classList.toggle('active',i===index));
+  const day=availability[index];
+  bookingTimes.replaceChildren();
+  day.slots.forEach(slot=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='booking-time';
+    button.textContent=slot.time;
+    button.dataset.start=slot.start;
+    button.addEventListener('click',()=>{
+      selectedSlot=slot.start;
+      if(bookingStart)bookingStart.value=slot.start;
+      document.querySelectorAll('.booking-time').forEach(el=>el.classList.toggle('active',el===button));
+      if(bookingSubmit)bookingSubmit.disabled=false;
+    });
+    bookingTimes.append(button);
+  });
+  bookingTimeStep.hidden=false;
+};
+
+const renderAvailability=days=>{
+  availability=Array.isArray(days)?days:[];
+  if(!bookingDays||!bookingStatus)return;
+  bookingDays.replaceChildren();
+  bookingTimeStep?.setAttribute('hidden','');
+
+  if(!availability.length){
+    bookingStatus.textContent='свободных слотов на ближайшие две недели нет. напиши мне в телеграм.';
+    return;
+  }
+
+  bookingStatus.textContent='выбирай. занятые часы я уже убрала.';
+  availability.forEach((day,index)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='booking-day';
+    button.innerHTML='<span>'+day.weekday+'</span><strong>'+day.label+'</strong><small>'+day.slots.length+' слотов</small>';
+    button.addEventListener('click',()=>renderTimes(index));
+    bookingDays.append(button);
+  });
+};
+
+const loadAvailability=async()=>{
+  if(!form||!bookingStatus)return;
+  bookingStatus.textContent='смотрю свободное время…';
+  clearBookingError();
   try{
-    await postIntake(payload);
-    form.reset();
-    form.hidden=true;
-    if(success){success.hidden=false;success.classList.add('visible');success.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}
+    const response=await fetch(BOOKING_API_URL+'?action=availability',{headers:{'Accept':'application/json'},cache:'no-store'});
+    const data=await response.json();
+    if(!response.ok||!data.ok)throw new Error(data.error||'availability_failed');
+    renderAvailability(data.days);
   }catch(error){
     console.error(error);
-    formError?.removeAttribute('hidden');
+    bookingStatus.textContent='календарь пока не подключён.';
+    setBookingError('не смогла получить свободное время. пока можно написать мне в телеграм: @dashhkunsik');
+  }
+};
+
+form?.addEventListener('submit',async e=>{
+  e.preventDefault();
+  clearBookingError();
+  if(!form.checkValidity()){form.reportValidity();return}
+  if(!selectedSlot){setBookingError('сначала выбери день и время.');return}
+
+  const original=bookingSubmit?.textContent||'забронировать созвон';
+  if(bookingSubmit){bookingSubmit.disabled=true;bookingSubmit.textContent='бронирую…'}
+
+  const data=new FormData(form);
+  const name=String(data.get('name')||'').trim();
+  const email=String(data.get('email')||'').trim();
+  const extraContact=String(data.get('contact')||'').trim();
+  const details=String(data.get('details')||'').trim();
+
+  try{
+    if(!pendingLeadId){
+      const lead=await postIntake({
+        kind:'lead',
+        name,
+        contact:[email,extraContact].filter(Boolean).join(' / '),
+        projectType:'созвон / 30 минут',
+        projectStage:'новая заявка',
+        budgetRange:'не указан',
+        launchDate:'',
+        details,
+        companyWebsite:data.get('companyWebsite')||'',
+        context:getContext()
+      });
+      pendingLeadId=lead?.id||'';
+    }
+
+    const response=await fetch(BOOKING_API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'book',
+        leadId:pendingLeadId,
+        name,
+        email,
+        contact:extraContact,
+        details,
+        start:selectedSlot,
+        context:getContext()
+      })
+    });
+    const booked=await response.json();
+    if(!response.ok||!booked.ok){
+      if(booked.error==='slot_unavailable'){
+        selectedSlot='';
+        if(bookingStart)bookingStart.value='';
+        await loadAvailability();
+        throw new Error('slot_unavailable');
+      }
+      throw new Error(booked.error||'booking_failed');
+    }
+
+    form.reset();
+    form.hidden=true;
+    pendingLeadId='';
+    if(bookingSuccessCopy)bookingSuccessCopy.textContent='созвон '+(booked.display||'')+' мск. приглашение и google meet уже отправлены на '+email+'.';
+    if(bookingMeet&&booked.meetUrl){
+      bookingMeet.href=booked.meetUrl;
+      bookingMeet.hidden=false;
+    }
+    if(success){
+      success.hidden=false;
+      success.classList.add('visible');
+      success.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+    }
+  }catch(error){
+    console.error(error);
+    const message=error?.message==='slot_unavailable'
+      ? 'этот слот только что заняли. я обновила свободное время, выбери другой.'
+      : 'не получилось создать встречу. данные заявки сохранены, попробуй ещё раз или напиши @dashhkunsik.';
+    setBookingError(message);
   }finally{
-    if(button){button.disabled=false;button.textContent=original}
+    if(bookingSubmit){bookingSubmit.textContent=original;bookingSubmit.disabled=!selectedSlot}
   }
 });
+
+if(form)loadAvailability();
 
 document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
   const photos=[...gallery.querySelectorAll('img')];
@@ -241,66 +368,4 @@ document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
     if(e.key==='ArrowRight')show(index+1);
     if(e.key==='ArrowLeft')show(index-1);
   });
-});
-
-
-const bookingForm=document.querySelector('#booking-form');
-const bookingSuccess=document.querySelector('#booking-success');
-const bookingError=document.querySelector('#booking-error');
-const bookingDate=document.querySelector('#booking-date');
-
-if(bookingDate){
-  const isoLocal=date=>{
-    const y=date.getFullYear();
-    const m=String(date.getMonth()+1).padStart(2,'0');
-    const d=String(date.getDate()).padStart(2,'0');
-    return `${y}-${m}-${d}`;
-  };
-  const today=new Date();
-  const maxDate=new Date(today);
-  maxDate.setDate(maxDate.getDate()+60);
-  bookingDate.min=isoLocal(today);
-  bookingDate.max=isoLocal(maxDate);
-}
-
-bookingForm?.addEventListener('submit',async e=>{
-  e.preventDefault();
-  bookingError?.setAttribute('hidden','');
-  if(!bookingForm.checkValidity()){bookingForm.reportValidity();return}
-  const button=bookingForm.querySelector('button[type="submit"]');
-  const original=button?.textContent||'забронировать встречу';
-  if(button){button.disabled=true;button.textContent='отправляю…'}
-  const data=new FormData(bookingForm);
-  const date=String(data.get('date')||'');
-  const time=String(data.get('time')||'');
-  const note=String(data.get('note')||'').trim();
-  const details=[
-    'запрос на встречу / 30 минут',
-    'дата: '+date,
-    'время: '+time+' мск',
-    note?'тема: '+note:'тема: не указана'
-  ].join('\n');
-  try{
-    await postIntake({
-      kind:'lead',
-      name:data.get('name')||'',
-      contact:data.get('contact')||'',
-      projectType:'встреча / 30 минут',
-      projectStage:'запрос на встречу',
-      budgetRange:'не указан',
-      launchDate:date,
-      details,
-      companyWebsite:'',
-      context:getContext()
-    });
-    bookingForm.reset();
-    bookingForm.hidden=true;
-    bookingSuccess?.removeAttribute('hidden');
-    bookingSuccess?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-  }catch(error){
-    console.error(error);
-    bookingError?.removeAttribute('hidden');
-  }finally{
-    if(button){button.disabled=false;button.textContent=original}
-  }
 });
