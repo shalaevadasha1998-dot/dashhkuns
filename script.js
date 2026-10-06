@@ -2,7 +2,7 @@ document.documentElement.classList.add('motion-ready');
 document.getElementById('year')?.replaceChildren(String(new Date().getFullYear()));
 
 const INTAKE_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-intake';
-const BOOKING_API_URL='/api/booking';
+const BOOKING_API_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-booking';
 const REF_TTL=90*24*60*60*1000;
 const now=()=>Date.now();
 const readJSON=(key,store=localStorage)=>{try{return JSON.parse(store.getItem(key)||'null')}catch{return null}};
