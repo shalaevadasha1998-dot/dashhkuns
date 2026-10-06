@@ -87,7 +87,8 @@ const pageEvents={
 };
 if(pageEvents[path])track(pageEvents[path]);
 
-document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'application'})));\ndocument.querySelectorAll('.js-booking-cta, a[href=\"/contact#booking\"], a[href=\"#booking\"]').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'booking'})));
+document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'application'})));
+document.querySelectorAll('.js-booking-cta, a[href=\"/contact#booking\"], a[href=\"#booking\"]').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname,type:'booking'})));
 document.querySelectorAll('a[href^="mailto:"]').forEach(el=>el.addEventListener('click',()=>track('email_click',{label:(el.textContent||'').trim()})));
 
 const menuBtn=document.querySelector('.menu-btn');
