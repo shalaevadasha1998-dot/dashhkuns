@@ -3773,3 +3773,51 @@ body{background:#fff!important;color:#080808!important}
     color:#080808!important
   }
 }
+
+
+/* 2026-10-06 repair v2: Safari type metrics */
+.home-selected-work .project-copy h3,
+.home-selected-work .project-cover strong{
+  overflow:visible!important
+}
+.home-selected-work .project-copy h3{
+  line-height:1!important
+}
+.home-selected-work .project-cover strong{
+  line-height:.94!important
+}
+.portfolio-lockup{
+  overflow:visible!important;
+  line-height:1!important
+}
+.portfolio-main,
+.portfolio-serif,
+.portfolio-acid{
+  overflow:visible!important
+}
+.portfolio-main{line-height:1!important}
+.portfolio-serif{line-height:1.02!important}
+.portfolio-acid{line-height:1!important}
+@media(max-width:600px){
+  .home-selected-work .project-copy h3{
+    line-height:1!important
+  }
+  .portfolio-lockup{
+    gap:8px!important;
+    line-height:1!important
+  }
+  .portfolio-main{
+    font-size:38px!important;
+    line-height:1!important
+  }
+  .portfolio-serif{
+    font-size:36px!important;
+    line-height:1.03!important
+  }
+  .portfolio-acid{
+    max-width:100%!important;
+    font-size:28px!important;
+    line-height:1!important;
+    white-space:normal!important
+  }
+}
