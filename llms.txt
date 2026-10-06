@@ -1,0 +1,17 @@
+# dashhkuns
+
+> креативный продюсер, маркетолог и руководитель проектов в москве.
+
+canonical website: https://dashhkuns.com/
+
+## основные страницы
+- https://dashhkuns.com/ — портфолио и позиционирование
+- https://dashhkuns.com/services — услуги
+- https://dashhkuns.com/projects — кейсы
+- https://dashhkuns.com/about — опыт
+- https://dashhkuns.com/contact — контакт
+
+## тематические разборы
+- https://dashhkuns.com/creative-producer — что делает креативный продюсер
+- https://dashhkuns.com/project-launch — запуск проекта под ключ
+- https://dashhkuns.com/reality-show-producer — продюсирование пилота реалити / шоу
