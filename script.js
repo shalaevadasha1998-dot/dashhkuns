@@ -1,5 +1,22 @@
 document.documentElement.classList.add('motion-ready');
+
 document.getElementById('year')?.replaceChildren(String(new Date().getFullYear()));
+
+const brand=document.querySelector('.brand');
+if(brand&&!brand.querySelector('.brand-state')){
+  const state=document.createElement('span');
+  state.className='brand-state';
+  state.setAttribute('aria-hidden','true');
+  const words=['идея','сборка','запуск'];
+  let brandWord=0;
+  state.textContent=words[0];
+  brand.append(state);
+  setInterval(()=>{
+    brandWord=(brandWord+1)%words.length;
+    state.classList.add('brand-state-out');
+    setTimeout(()=>{state.textContent=words[brandWord];state.classList.remove('brand-state-out')},160);
+  },2200);
+}
 
 const INTAKE_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-intake';
 const BOOKING_API_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-booking';
@@ -89,9 +106,6 @@ const pageEvents={
 if(pageEvents[path])track(pageEvents[path]);
 
 document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname})));
-document.querySelectorAll('a[href*="calendly.com"]').forEach(el=>el.addEventListener('click',()=>track('calendly_click',{label:(el.textContent||'').trim()})));
-document.querySelectorAll('a[href*="t.me/"]').forEach(el=>el.addEventListener('click',()=>track('telegram_click',{label:(el.textContent||'').trim()})));
-document.querySelectorAll('a[href^="mailto:"]').forEach(el=>el.addEventListener('click',()=>track('email_click',{label:(el.textContent||'').trim()})));
 
 const menuBtn=document.querySelector('.menu-btn');
 const mobileMenu=document.querySelector('.mobile-menu');
@@ -115,22 +129,30 @@ const stockMotions=[...document.querySelectorAll('[data-stock-motion]')];
 if(stockMotions.length){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData=Boolean(navigator.connection?.saveData);
-  if(!reduced&&!saveData){
-    stockMotions.forEach(stockMotion=>{
-      const source=stockMotion.querySelector('source[data-src]');
-      if(source&&!source.src){
-        source.src=source.dataset.src||'';
-        stockMotion.load();
+  const mobile=matchMedia('(max-width:700px)').matches;
+  const canPlay=!reduced&&!saveData&&!mobile;
+  const startStockMotion=()=>{
+    if(!canPlay)return;
+    stockMotions.forEach(video=>{
+      const source=video.querySelector('source[data-src]');
+      if(source&&!source.getAttribute('src')){
+        source.setAttribute('src',source.dataset.src||'');
+        video.load();
       }
-      stockMotion.play().catch(()=>{});
+      video.play().catch(()=>{});
     });
-    const syncStockMotion=()=>{
-      stockMotions.forEach(stockMotion=>{
-        if(document.hidden)stockMotion.pause();
-        else stockMotion.play().catch(()=>{});
+  };
+  if(canPlay){
+    const startLater=()=>setTimeout(startStockMotion,700);
+    if(document.readyState==='complete')startLater();
+    else window.addEventListener('load',startLater,{once:true});
+    document.addEventListener('visibilitychange',()=>{
+      stockMotions.forEach(video=>{
+        if(!video.currentSrc)return;
+        if(document.hidden)video.pause();
+        else video.play().catch(()=>{});
       });
-    };
-    document.addEventListener('visibilitychange',syncStockMotion);
+    });
   }
 }
 
@@ -169,9 +191,48 @@ if(glow&&matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-mot
   },{passive:true});
 }
 
-const form=document.querySelector('#project-form');
-const success=document.querySelector('#form-success');
-const formError=document.querySelector('#form-error');
+const leadForm=document.querySelector('#project-form');
+const leadSuccess=document.querySelector('#lead-success');
+const leadError=document.querySelector('#lead-error');
+
+leadForm?.addEventListener('submit',async e=>{
+  e.preventDefault();
+  leadError?.setAttribute('hidden','');
+  if(!leadForm.checkValidity()){leadForm.reportValidity();return}
+  const button=leadForm.querySelector('button[type="submit"]');
+  const original=button?.textContent||'отправить заявку';
+  if(button){button.disabled=true;button.textContent='отправляю…'}
+  const data=new FormData(leadForm);
+  try{
+    await postIntake({
+      kind:'lead',
+      name:String(data.get('name')||'').trim(),
+      contact:String(data.get('contact')||'').trim(),
+      projectType:'продюсирование / заявка',
+      projectStage:'новая заявка',
+      budgetRange:'не указан',
+      launchDate:'',
+      details:String(data.get('details')||'').trim(),
+      companyWebsite:data.get('companyWebsite')||'',
+      context:getContext()
+    });
+    track('form_submit',{type:'application'});
+    leadForm.reset();
+    leadForm.hidden=true;
+    leadSuccess?.removeAttribute('hidden');
+    leadSuccess?.classList.add('visible');
+    leadSuccess?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+  }catch(error){
+    console.error(error);
+    leadError?.removeAttribute('hidden');
+  }finally{
+    if(button){button.disabled=false;button.textContent=original}
+  }
+});
+
+const bookingForm=document.querySelector('#booking-form');
+const bookingSuccess=document.querySelector('#booking-success');
+const bookingError=document.querySelector('#booking-error');
 const bookingDays=document.querySelector('#booking-days');
 const bookingTimes=document.querySelector('#booking-times');
 const bookingTimeStep=document.querySelector('#booking-time-step');
@@ -181,27 +242,17 @@ const bookingSubmit=document.querySelector('#booking-submit');
 const bookingSuccessCopy=document.querySelector('#booking-success-copy');
 const bookingMeet=document.querySelector('#booking-meet');
 
-let formStarted=false;
 let availability=[];
 let selectedDay=-1;
 let selectedSlot='';
 let pendingLeadId='';
 
-const markFormStart=()=>{
-  if(formStarted)return;
-  formStarted=true;
-  track('form_start');
-};
-form?.addEventListener('focusin',markFormStart,{once:true});
-form?.addEventListener('input',markFormStart,{once:true});
-
 const setBookingError=message=>{
-  if(!formError)return;
-  formError.textContent=message;
-  formError.hidden=false;
+  if(!bookingError)return;
+  bookingError.textContent=message;
+  bookingError.hidden=false;
 };
-
-const clearBookingError=()=>formError?.setAttribute('hidden','');
+const clearBookingError=()=>bookingError?.setAttribute('hidden','');
 
 const renderTimes=index=>{
   if(!bookingTimes||!bookingTimeStep)return;
@@ -209,7 +260,6 @@ const renderTimes=index=>{
   selectedSlot='';
   if(bookingStart)bookingStart.value='';
   if(bookingSubmit)bookingSubmit.disabled=true;
-
   document.querySelectorAll('.booking-day').forEach((el,i)=>el.classList.toggle('active',i===index));
   const day=availability[index];
   bookingTimes.replaceChildren();
@@ -235,13 +285,11 @@ const renderAvailability=days=>{
   if(!bookingDays||!bookingStatus)return;
   bookingDays.replaceChildren();
   bookingTimeStep?.setAttribute('hidden','');
-
   if(!availability.length){
-    bookingStatus.textContent='свободных слотов на ближайшие две недели нет. напиши мне в телеграм.';
+    bookingStatus.textContent='свободных слотов на ближайшие две недели нет';
     return;
   }
-
-  bookingStatus.textContent='выбирай. занятые часы я уже убрала.';
+  bookingStatus.textContent='занятые часы уже убрала';
   availability.forEach((day,index)=>{
     const button=document.createElement('button');
     button.type='button';
@@ -253,7 +301,7 @@ const renderAvailability=days=>{
 };
 
 const loadAvailability=async()=>{
-  if(!form||!bookingStatus)return;
+  if(!bookingForm||!bookingStatus)return;
   bookingStatus.textContent='смотрю свободное время…';
   clearBookingError();
   try{
@@ -263,24 +311,21 @@ const loadAvailability=async()=>{
     renderAvailability(data.days);
   }catch(error){
     console.error(error);
-    bookingStatus.textContent='календарь пока не подключён.';
-    setBookingError('не смогла получить свободное время. пока можно написать мне в телеграм: @dashhkunsik');
+    bookingStatus.textContent='календарь сейчас не отвечает';
+    setBookingError('оставь заявку выше, я свяжусь сама');
   }
 };
 
-form?.addEventListener('submit',async e=>{
+bookingForm?.addEventListener('submit',async e=>{
   e.preventDefault();
   clearBookingError();
-  if(!form.checkValidity()){form.reportValidity();return}
-  if(!selectedSlot){setBookingError('сначала выбери день и время.');return}
-
-  const original=bookingSubmit?.textContent||'забронировать созвон';
+  if(!bookingForm.checkValidity()){bookingForm.reportValidity();return}
+  if(!selectedSlot){setBookingError('сначала выбери день и время');return}
+  const original=bookingSubmit?.textContent||'забронировать встречу';
   if(bookingSubmit){bookingSubmit.disabled=true;bookingSubmit.textContent='бронирую…'}
-
-  const data=new FormData(form);
+  const data=new FormData(bookingForm);
   const name=String(data.get('name')||'').trim();
   const email=String(data.get('email')||'').trim();
-  const extraContact=String(data.get('contact')||'').trim();
   const details=String(data.get('details')||'').trim();
 
   try{
@@ -288,8 +333,8 @@ form?.addEventListener('submit',async e=>{
       const lead=await postIntake({
         kind:'lead',
         name,
-        contact:[email,extraContact].filter(Boolean).join(' / '),
-        projectType:'созвон / 30 минут',
+        contact:email,
+        projectType:'встреча / 30 минут',
         projectStage:'новая заявка',
         budgetRange:'не указан',
         launchDate:'',
@@ -299,20 +344,10 @@ form?.addEventListener('submit',async e=>{
       });
       pendingLeadId=lead?.id||'';
     }
-
     const response=await fetch(BOOKING_API_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        action:'book',
-        leadId:pendingLeadId,
-        name,
-        email,
-        contact:extraContact,
-        details,
-        start:selectedSlot,
-        context:getContext()
-      })
+      body:JSON.stringify({action:'book',leadId:pendingLeadId,name,email,contact:'',details,start:selectedSlot,context:getContext()})
     });
     const booked=await response.json();
     if(!response.ok||!booked.ok){
@@ -324,32 +359,23 @@ form?.addEventListener('submit',async e=>{
       }
       throw new Error(booked.error||'booking_failed');
     }
-
-    form.reset();
-    form.hidden=true;
+    bookingForm.reset();
+    bookingForm.hidden=true;
     pendingLeadId='';
-    if(bookingSuccessCopy)bookingSuccessCopy.textContent='созвон '+(booked.display||'')+' мск. приглашение и google meet уже отправлены на '+email+'.';
-    if(bookingMeet&&booked.meetUrl){
-      bookingMeet.href=booked.meetUrl;
-      bookingMeet.hidden=false;
-    }
-    if(success){
-      success.hidden=false;
-      success.classList.add('visible');
-      success.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-    }
+    track('form_submit',{type:'booking'});
+    if(bookingSuccessCopy)bookingSuccessCopy.textContent='встреча '+(booked.display||'')+' мск, приглашение уже отправлено на '+email;
+    if(bookingMeet&&booked.meetUrl){bookingMeet.href=booked.meetUrl;bookingMeet.hidden=false}
+    bookingSuccess?.removeAttribute('hidden');
+    bookingSuccess?.classList.add('visible');
+    bookingSuccess?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
   }catch(error){
     console.error(error);
-    const message=error?.message==='slot_unavailable'
-      ? 'этот слот только что заняли. я обновила свободное время, выбери другой.'
-      : 'не получилось создать встречу. данные заявки сохранены, попробуй ещё раз или напиши @dashhkunsik.';
-    setBookingError(message);
+    setBookingError(error?.message==='slot_unavailable'?'этот слот только что заняли, выбери другой':'не получилось создать встречу, оставь заявку выше');
   }finally{
     if(bookingSubmit){bookingSubmit.textContent=original;bookingSubmit.disabled=!selectedSlot}
   }
 });
-
-if(form)loadAvailability();
+if(bookingForm)loadAvailability();
 
 document.querySelectorAll('[data-photo-cycle]').forEach(gallery=>{
   const photos=[...gallery.querySelectorAll('img')];
