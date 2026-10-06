@@ -3570,3 +3570,206 @@ body{background:#fff!important;color:#080808!important}
   .compact-values h2{font-size:clamp(42px,11.5vw,54px)!important}
 }
 .btn.primary,.top-cta,.mobile-project,.mobile-book{background-image:none!important}
+
+
+/* 2026-10-06 repair pass: restore the good version, remove visual collisions */
+:root{
+  --neon-gradient:linear-gradient(135deg,#24e86b 0%,#ff3fad 100%)
+}
+
+/* one deliberate gradient, nowhere else */
+.home-capabilities{
+  background:var(--neon-gradient)!important;
+}
+.home-capabilities .section-title h2,
+.home-capabilities .section-title .kicker{
+  color:#080808!important;
+}
+.home-capabilities .accent-pop{
+  color:#080808!important;
+}
+
+/* facts: cleaner wording, stronger hierarchy */
+.home-proof{
+  position:relative;
+  overflow:hidden
+}
+.home-proof:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:10px;
+  background:var(--neon-gradient)
+}
+.home-proof .section-title h2{
+  max-width:11ch!important;
+  font-size:clamp(54px,5.6vw,92px)!important;
+  line-height:.9!important
+}
+.home-proof .section-title .accent-pop{
+  color:#24e86b!important
+}
+
+/* portfolio poster: no overlapping type */
+.portfolio-poster{
+  background:#080808!important;
+  color:#fff!important;
+  padding:clamp(24px,3vw,38px)!important;
+  display:grid!important;
+  grid-template-rows:auto 1fr auto!important;
+  gap:20px!important;
+  overflow:hidden!important
+}
+.portfolio-lockup{
+  align-self:center!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  font-family:Manrope,Arial,sans-serif!important;
+  font-weight:800!important;
+  line-height:.9!important;
+  letter-spacing:-.055em!important
+}
+.portfolio-lockup span{
+  display:block!important;
+  position:static!important;
+  transform:none!important;
+  width:auto!important;
+  margin:0!important
+}
+.portfolio-main{
+  color:#fff!important;
+  font-size:clamp(46px,5.2vw,78px)!important
+}
+.portfolio-serif{
+  color:#ff3fad!important;
+  font-family:Georgia,'Times New Roman',serif!important;
+  font-style:italic!important;
+  font-weight:400!important;
+  font-size:clamp(42px,4.9vw,72px)!important;
+  line-height:.92!important
+}
+.portfolio-acid{
+  align-self:flex-start!important;
+  max-width:100%!important;
+  padding:9px 14px 11px!important;
+  background:#24e86b!important;
+  color:#080808!important;
+  font-size:clamp(34px,4.2vw,60px)!important;
+  line-height:.9!important
+}
+.poster-route{
+  border-top:1px solid rgba(255,255,255,.35)!important;
+  padding-top:14px!important;
+  color:#fff!important
+}
+.poster-route i{color:#ff3fad!important}
+
+/* selected-work posters: let the idea breathe */
+.home-selected-work .project-cover{
+  overflow:hidden!important
+}
+.home-selected-work .project-cover strong{
+  max-width:10ch!important;
+  line-height:.88!important
+}
+
+/* final CTA: restore contrast */
+.home-final-cta .btn.ghost,
+.cta-band.home-final-cta .btn.ghost{
+  background:#fff!important;
+  color:#080808!important;
+  border:1px solid #080808!important;
+  box-shadow:none!important;
+  opacity:1!important
+}
+.home-final-cta .btn.primary{
+  background:#080808!important;
+  color:#fff!important;
+  border-color:#080808!important;
+  box-shadow:0 5px 0 #ff3fad!important
+}
+
+/* mobile: the method is a swipe rail, not three giant floors */
+@media(max-width:600px){
+  .home-method{
+    overflow:hidden!important
+  }
+  .home-method .method-swipe-note{
+    display:block!important
+  }
+  .home-method .expertise-grid{
+    display:flex!important;
+    gap:12px!important;
+    width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory!important;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    border-top:0!important;
+    padding:0 2px 10px!important
+  }
+  .home-method .expertise-grid::-webkit-scrollbar{display:none}
+  .home-method .expertise-grid article{
+    flex:0 0 82%!important;
+    width:82%!important;
+    max-width:82%!important;
+    min-height:280px!important;
+    padding:24px!important;
+    border:1px solid #080808!important;
+    border-radius:22px!important;
+    background:#fff!important;
+    color:#080808!important;
+    scroll-snap-align:start!important
+  }
+  .home-method .expertise-grid article:nth-child(2){
+    background:#24e86b!important;
+    padding:24px!important
+  }
+  .home-method .expertise-grid article:nth-child(3){
+    background:#080808!important;
+    color:#fff!important
+  }
+  .home-method .expertise-grid h3{
+    margin:auto 0 12px!important;
+    font-size:clamp(36px,10vw,46px)!important;
+    line-height:.92!important
+  }
+  .home-method .expertise-grid p{
+    font-size:11px!important;
+    opacity:.62!important
+  }
+
+  .portfolio-poster{
+    min-height:270px!important;
+    padding:20px!important;
+    gap:14px!important
+  }
+  .portfolio-main{
+    font-size:clamp(36px,10vw,44px)!important
+  }
+  .portfolio-serif{
+    font-size:clamp(34px,9.4vw,42px)!important
+  }
+  .portfolio-acid{
+    font-size:clamp(26px,7.6vw,34px)!important;
+    padding:7px 10px 9px!important
+  }
+  .poster-route{
+    font-size:8px!important;
+    gap:6px!important
+  }
+
+  .home-proof .section-title h2{
+    max-width:100%!important;
+    font-size:clamp(44px,11.8vw,56px)!important
+  }
+
+  .home-final-cta .btn.ghost{
+    background:#fff!important;
+    color:#080808!important
+  }
+}
