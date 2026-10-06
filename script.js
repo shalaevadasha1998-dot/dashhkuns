@@ -113,7 +113,11 @@ const stockMotions=[...document.querySelectorAll('[data-stock-motion]')];
 if(stockMotions.length){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData=Boolean(navigator.connection?.saveData);
-  if(!reduced&&!saveData){
+  const mobile=matchMedia('(max-width: 700px)').matches;
+  const canPlayStockMotion=!reduced&&!saveData&&!mobile;
+
+  const startStockMotion=()=>{
+    if(!canPlayStockMotion)return;
     stockMotions.forEach(stockMotion=>{
       const source=stockMotion.querySelector('source[data-src]');
       if(source&&!source.src){
@@ -122,8 +126,16 @@ if(stockMotions.length){
       }
       stockMotion.play().catch(()=>{});
     });
+  };
+
+  if(canPlayStockMotion){
+    const startLater=()=>setTimeout(startStockMotion,650);
+    if(document.readyState==='complete')startLater();
+    else window.addEventListener('load',startLater,{once:true});
+
     const syncStockMotion=()=>{
       stockMotions.forEach(stockMotion=>{
+        if(!stockMotion.currentSrc)return;
         if(document.hidden)stockMotion.pause();
         else stockMotion.play().catch(()=>{});
       });
