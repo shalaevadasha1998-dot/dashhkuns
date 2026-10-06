@@ -100,32 +100,6 @@ function doPost(e) {
         console.error('notification failed', mailError);
       }
 
-      return json_({ ok: false, error: 'calendar_create_failed' });
-      }
-
-      try {
-        MailApp.sendEmail({
-          to: CONFIG.notifyEmail,
-          subject: 'новый созвон / ' + name,
-          body: [
-            'новый созвон с dashhkuns.com',
-            '',
-            'имя: ' + name,
-            'email: ' + email,
-            'контакт: ' + (contact || 'не указан'),
-            'когда: ' + formatMoscow_(start) + ' мск',
-            '',
-            'задача:',
-            details,
-            '',
-            'meet: ' + (created.hangoutLink || 'создаётся'),
-            'calendar: ' + (created.htmlLink || '')
-          ].join('\n')
-        });
-      } catch (mailError) {
-        console.error('notification failed', mailError);
-      }
-
       return json_({
         ok: true,
         eventId: created.eventId,
