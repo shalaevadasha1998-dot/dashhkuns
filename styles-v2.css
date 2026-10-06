@@ -1588,3 +1588,77 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   .photo-brand span{animation:none}
   .brand-state{display:none!important}
 }
+
+
+/* v2 completion: long-form and 404 */
+.people-card-kicker{
+  margin:0;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.11em
+}
+.about-text>.kicker{margin-bottom:18px}
+.about-text>p:not(.kicker):not(.mega){
+  max-width:56ch;
+  margin-top:18px;
+  color:rgba(8,8,8,.7);
+  font-size:17px;
+  line-height:1.6
+}
+.manifesto{margin-top:30px}
+.manifesto-row strong{
+  display:block;
+  max-width:46ch;
+  font-size:17px;
+  line-height:1.35;
+  letter-spacing:-.025em
+}
+.career:not(.career-compact) .career-grid{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr))
+}
+.career-compact .career-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))
+}
+.proof-copy p+p{margin-top:16px}
+
+.not-found{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  padding:var(--section) var(--gutter);
+  background:var(--pink);
+  color:var(--black)
+}
+.not-found h1{
+  max-width:9ch;
+  margin:0;
+  font-size:clamp(72px,10vw,150px)
+}
+.not-found>p:not(.kicker){
+  max-width:38ch;
+  margin-top:26px;
+  font-size:clamp(17px,1.5vw,22px)
+}
+.not-found .button-row{margin-top:30px}
+
+@media(max-width:760px){
+  .about-text>p:not(.kicker):not(.mega){
+    font-size:16px;
+    line-height:1.55
+  }
+  .manifesto{margin-top:24px}
+  .manifesto-row strong{font-size:15px}
+  .career:not(.career-compact) .career-grid{
+    display:flex!important
+  }
+  .not-found{
+    justify-content:flex-start;
+    padding-top:18svh
+  }
+  .not-found h1{
+    max-width:100%;
+    font-size:clamp(58px,16vw,82px)
+  }
+}
