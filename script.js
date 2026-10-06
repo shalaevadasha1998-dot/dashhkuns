@@ -114,7 +114,7 @@ const setMenu=open=>{
   mobileMenu.setAttribute('aria-hidden',String(!open));
   menuBtn.setAttribute('aria-expanded',String(open));
   menuBtn.setAttribute('aria-label',open?'закрыть меню':'открыть навигацию');
-  menuBtn.textContent=open?'закрыть':'открыть';
+  menuBtn.textContent=open?'закрыть':'тык сюда';
   document.body.classList.toggle('menu-open',open);
 };
 menuBtn?.addEventListener('click',()=>setMenu(!mobileMenu?.classList.contains('open')));
