@@ -110,20 +110,24 @@ window.addEventListener('resize',()=>{if(window.innerWidth>980&&mobileMenu?.clas
 
 
 
-const stockMotion=document.querySelector('[data-stock-motion]');
-if(stockMotion){
+const stockMotions=[...document.querySelectorAll('[data-stock-motion]')];
+if(stockMotions.length){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData=Boolean(navigator.connection?.saveData);
   if(!reduced&&!saveData){
-    const source=stockMotion.querySelector('source[data-src]');
-    if(source&&!source.src){
-      source.src=source.dataset.src||'';
-      stockMotion.load();
+    stockMotions.forEach(stockMotion=>{
+      const source=stockMotion.querySelector('source[data-src]');
+      if(source&&!source.src){
+        source.src=source.dataset.src||'';
+        stockMotion.load();
+      }
       stockMotion.play().catch(()=>{});
-    }
+    });
     const syncStockMotion=()=>{
-      if(document.hidden)stockMotion.pause();
-      else stockMotion.play().catch(()=>{});
+      stockMotions.forEach(stockMotion=>{
+        if(document.hidden)stockMotion.pause();
+        else stockMotion.play().catch(()=>{});
+      });
     };
     document.addEventListener('visibilitychange',syncStockMotion);
   }
