@@ -1,4 +1,5 @@
 document.documentElement.classList.add('motion-ready');
+const IS_EN=document.documentElement.lang.toLowerCase().startsWith('en');
 
 document.getElementById('year')?.replaceChildren(String(new Date().getFullYear()));
 
@@ -7,7 +8,7 @@ if(brand&&!brand.querySelector('.brand-state')){
   const state=document.createElement('span');
   state.className='brand-state';
   state.setAttribute('aria-hidden','true');
-  const words=['идея','сборка','запуск'];
+  const words=IS_EN?['idea','build','launch']:['идея','сборка','запуск'];
   let brandWord=0;
   state.textContent=words[0];
   brand.append(state);
@@ -113,8 +114,8 @@ const setMenu=open=>{
   mobileMenu.classList.toggle('open',open);
   mobileMenu.setAttribute('aria-hidden',String(!open));
   menuBtn.setAttribute('aria-expanded',String(open));
-  menuBtn.setAttribute('aria-label',open?'закрыть меню':'открыть навигацию');
-  menuBtn.textContent=open?'закрыть':'тык сюда';
+  menuBtn.setAttribute('aria-label',open?(IS_EN?'close menu':'закрыть меню'):(IS_EN?'open navigation':'открыть навигацию'));
+  menuBtn.textContent=open?(IS_EN?'close':'закрыть'):(IS_EN?'menu':'тык сюда');
   document.body.classList.toggle('menu-open',open);
 };
 menuBtn?.addEventListener('click',()=>setMenu(!mobileMenu?.classList.contains('open')));
@@ -199,8 +200,8 @@ leadForm?.addEventListener('submit',async e=>{
   leadError?.setAttribute('hidden','');
   if(!leadForm.checkValidity()){leadForm.reportValidity();return}
   const button=leadForm.querySelector('button[type="submit"]');
-  const original=button?.textContent||'отправить заявку';
-  if(button){button.disabled=true;button.textContent='отправляю…'}
+  const original=button?.textContent||(IS_EN?'send inquiry':'отправить заявку');
+  if(button){button.disabled=true;button.textContent=IS_EN?'sending…':'отправляю…'}
   const data=new FormData(leadForm);
   try{
     await postIntake({
@@ -253,8 +254,8 @@ bookingForm?.addEventListener('submit',async e=>{
   bookingError?.setAttribute('hidden','');
   if(!bookingForm.checkValidity()){bookingForm.reportValidity();return}
   const button=bookingForm.querySelector('button[type="submit"]');
-  const original=button?.textContent||'отправить время';
-  if(button){button.disabled=true;button.textContent='отправляю…'}
+  const original=button?.textContent||(IS_EN?'send preferred time':'отправить время');
+  if(button){button.disabled=true;button.textContent=IS_EN?'sending…':'отправляю…'}
   const data=new FormData(bookingForm);
   const date=String(data.get('date')||'');
   const time=String(data.get('time')||'');
