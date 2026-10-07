@@ -1737,3 +1737,153 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     font-size:clamp(42px,11.2vw,54px)!important
   }
 }
+
+
+/* 2026-10-07 final polish: quieter, tighter, aligned */
+.brand{
+  align-items:center!important;
+  line-height:1!important
+}
+.brand-state{
+  height:22px!important;
+  min-height:22px!important;
+  margin-left:8px!important;
+  padding:0 7px!important;
+  align-self:center!important;
+  line-height:20px!important;
+  transform:translateY(0)
+}
+.brand-state-out{
+  opacity:0;
+  transform:translateY(2px)
+}
+.brand>span:not(.brand-state),
+.photo-brand span{
+  animation-duration:8.4s!important
+}
+
+.hero .btn.primary{
+  min-height:56px
+}
+.hero .btn.ghost{
+  min-height:48px;
+  padding-left:20px;
+  padding-right:20px;
+  font-size:12px;
+  background:#fff;
+  box-shadow:none
+}
+
+.hero-categories{
+  gap:7px
+}
+.hero-categories span{
+  min-height:27px;
+  padding:5px 9px;
+  background:#fff!important;
+  font-size:9px;
+  font-weight:650;
+  opacity:.82
+}
+.hero-categories span:nth-child(2){
+  background:var(--acid)!important;
+  opacity:1
+}
+
+@media(max-width:760px){
+  .hero{
+    gap:24px;
+    padding:46px var(--gutter) 50px
+  }
+  .hero-copy .kicker{
+    margin-bottom:18px
+  }
+  .hero-commercial{
+    margin-top:20px
+  }
+  .hero-lead{
+    margin-top:20px
+  }
+  .hero-categories{
+    margin-top:18px
+  }
+  .hero .button-row{
+    margin-top:24px;
+    gap:10px
+  }
+  .hero .btn.primary{
+    min-height:54px
+  }
+  .hero .btn.ghost{
+    width:92%;
+    min-height:46px;
+    justify-self:center;
+    font-size:12px
+  }
+  .hero-photo-card .tap-gallery{
+    height:48svh;
+    min-height:370px;
+    max-height:470px
+  }
+
+  .brand-state{
+    height:20px!important;
+    min-height:20px!important;
+    margin-left:7px!important;
+    padding:0 6px!important;
+    line-height:18px!important;
+    font-size:7px!important
+  }
+
+  .hero-categories span{
+    min-height:25px;
+    padding:4px 8px;
+    font-size:9px
+  }
+
+  .project-row{
+    grid-template-rows:310px 285px!important
+  }
+  .project-copy{
+    min-height:0!important;
+    height:310px!important
+  }
+  .project-copy h3{
+    min-height:3em;
+    margin:28px 0 16px!important
+  }
+  .project-fragments{
+    min-height:58px;
+    align-content:flex-start
+  }
+  .project-role{
+    min-height:56px;
+    display:flex;
+    align-items:flex-end
+  }
+  .project-cover{
+    min-height:0!important;
+    height:285px!important
+  }
+  .portfolio-poster{
+    min-height:0!important;
+    height:285px!important
+  }
+}
+
+@media(max-width:430px){
+  .hero-first-line{font-size:clamp(28px,7.9vw,33px)}
+  .hero-second-line{font-size:clamp(50px,13.2vw,61px)}
+  .project-copy h3{font-size:clamp(31px,8.6vw,38px)}
+}
+@media(max-width:390px){
+  .hero{padding-top:42px}
+  .hero-first-line{font-size:clamp(27px,7.8vw,31px)}
+  .hero-second-line{font-size:clamp(49px,13vw,58px)}
+}
+@media(max-width:375px){
+  .hero-first-line{font-size:28px}
+  .hero-second-line{font-size:49px}
+  .hero-commercial{font-size:13px}
+  .project-copy h3{font-size:31px}
+}
