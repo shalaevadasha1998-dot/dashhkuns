@@ -4,6 +4,31 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/en/contact.html",
+      "destination": "/en/contact",
+      "permanent": true
+    },
+    {
+      "source": "/en/about.html",
+      "destination": "/en/about",
+      "permanent": true
+    },
+    {
+      "source": "/en/projects.html",
+      "destination": "/en/projects",
+      "permanent": true
+    },
+    {
+      "source": "/en/services.html",
+      "destination": "/en/services",
+      "permanent": true
+    },
+    {
+      "source": "/en/index.html",
+      "destination": "/en",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
@@ -67,6 +92,30 @@
   ],
   "rewrites": [
     {
+      "source": "/en/contact",
+      "destination": "/en/contact.html"
+    },
+    {
+      "source": "/en/about",
+      "destination": "/en/about.html"
+    },
+    {
+      "source": "/en/projects",
+      "destination": "/en/projects.html"
+    },
+    {
+      "source": "/en/services",
+      "destination": "/en/services.html"
+    },
+    {
+      "source": "/en/",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/en",
+      "destination": "/en/index.html"
+    },
+    {
       "source": "/services",
       "destination": "/services.html"
     },
@@ -114,7 +163,7 @@
       ]
     },
     {
-      "source": "/styles.css",
+      "source": "/styles-v2.css",
       "headers": [
         {
           "key": "Cache-Control",
