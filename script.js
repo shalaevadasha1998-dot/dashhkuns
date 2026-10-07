@@ -14,8 +14,8 @@ if(brand&&!brand.querySelector('.brand-state')){
   setInterval(()=>{
     brandWord=(brandWord+1)%words.length;
     state.classList.add('brand-state-out');
-    setTimeout(()=>{state.textContent=words[brandWord];state.classList.remove('brand-state-out')},160);
-  },2200);
+    setTimeout(()=>{state.textContent=words[brandWord];state.classList.remove('brand-state-out')},240);
+  },4200);
 }
 
 const INTAKE_URL='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-intake';
