@@ -1887,3 +1887,96 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   .hero-commercial{font-size:13px}
   .project-copy h3{font-size:31px}
 }
+
+
+/* 2026-10-07 selected-work mobile repair: content first, equal deck */
+@media(max-width:760px){
+  .home-selected-work .project-stack{
+    align-items:stretch!important
+  }
+
+  .home-selected-work .project-row{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(360px,auto) 285px!important;
+    height:auto!important;
+    min-height:645px!important;
+    align-self:stretch!important
+  }
+
+  .home-selected-work .project-copy{
+    display:grid!important;
+    grid-template-rows:auto auto auto 1fr auto!important;
+    align-content:start!important;
+    gap:0!important;
+    height:auto!important;
+    min-height:360px!important;
+    padding:22px!important;
+    overflow:visible!important
+  }
+
+  .home-selected-work .project-meta{
+    min-height:34px!important;
+    font-size:10px!important;
+    line-height:1.35!important
+  }
+
+  .home-selected-work .project-copy h3{
+    min-height:0!important;
+    margin:24px 0 16px!important;
+    font-size:clamp(31px,8.5vw,38px)!important;
+    line-height:1!important
+  }
+
+  .home-selected-work .project-fragments{
+    min-height:0!important;
+    margin:0 0 18px!important;
+    gap:7px!important;
+    align-content:start!important
+  }
+
+  .home-selected-work .project-fragments span{
+    min-height:28px!important;
+    padding:5px 9px!important;
+    font-size:10px!important;
+    line-height:1!important
+  }
+
+  .home-selected-work .project-role{
+    grid-row:5!important;
+    min-height:0!important;
+    margin-top:16px!important;
+    padding-top:16px!important;
+    display:block!important;
+    align-items:initial!important;
+    font-size:11px!important;
+    line-height:1.45!important;
+    overflow:visible!important
+  }
+
+  .home-selected-work .project-role strong{
+    display:inline!important
+  }
+
+  .home-selected-work .project-cover,
+  .home-selected-work .portfolio-poster{
+    height:285px!important;
+    min-height:285px!important;
+    overflow:hidden!important
+  }
+
+  .home-selected-work .project-cover>strong{
+    margin:auto 0!important;
+    max-width:10ch!important
+  }
+}
+
+@media(max-width:390px){
+  .home-selected-work .project-row{
+    grid-template-rows:minmax(370px,auto) 285px!important;
+    min-height:655px!important
+  }
+  .home-selected-work .project-copy{
+    min-height:370px!important
+  }
+}
