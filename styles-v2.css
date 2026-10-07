@@ -1694,3 +1694,46 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     top:1px
   }
 }
+
+
+/* ui3 2026-10-07: fixed mobile header + tighter internal heroes */
+.stamp{display:none!important}
+
+@media(max-width:760px){
+  body{
+    padding-top:64px
+  }
+  .topbar{
+    position:fixed!important;
+    top:0;
+    left:0;
+    right:0;
+    z-index:120
+  }
+  .mobile-menu{
+    top:64px
+  }
+  .compact-page-hero{
+    padding:38px var(--gutter) 40px!important;
+    gap:16px!important
+  }
+  .compact-page-hero h1{
+    font-size:clamp(50px,13vw,62px)!important;
+    line-height:.94!important
+  }
+  .compact-page-hero>p{
+    max-width:30ch!important;
+    font-size:15px!important;
+    line-height:1.42!important
+  }
+  .projects-compact .section-title,
+  .services-compact .section-title{
+    margin-bottom:22px!important
+  }
+  .projects-compact .section-title h2{
+    font-size:clamp(40px,10.8vw,52px)!important
+  }
+  .compact-cta h2{
+    font-size:clamp(42px,11.2vw,54px)!important
+  }
+}
