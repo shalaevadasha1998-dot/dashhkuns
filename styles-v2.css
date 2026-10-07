@@ -1680,3 +1680,17 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   .portfolio-serif{line-height:1.08;overflow:visible}
   .portfolio-acid{line-height:1.06;overflow:visible}
 }
+
+
+/* ui polish 2026-10-07: optical brand-state alignment */
+.brand-state{
+  align-self:center;
+  position:relative;
+  top:1px
+}
+@media(max-width:760px){
+  .brand-state{
+    margin-left:12px;
+    top:1px
+  }
+}
