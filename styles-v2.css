@@ -2325,3 +2325,24 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   .principle-band h2{max-width:100%}
   .principle-band>p:last-child{font-size:15px}
 }
+
+
+/* 2026-10-08 casing system: lowercase by default, project titles are the exception */
+header,
+nav,
+main,
+footer{
+  text-transform:lowercase
+}
+input,
+textarea,
+select,
+option{
+  text-transform:none
+}
+.project-name-caps{
+  text-transform:uppercase!important
+}
+.brand-state{
+  text-transform:lowercase!important
+}
