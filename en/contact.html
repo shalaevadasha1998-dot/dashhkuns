@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ff3fad"><meta name="description" content="Send a project inquiry or request a 30-minute call with dashhkuns."><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"><link rel="canonical" href="https://dashhkuns.com/en/contact"><link rel="alternate" hreflang="en" href="https://dashhkuns.com/en/contact"><link rel="alternate" hreflang="ru" href="https://dashhkuns.com/contact"><meta property="og:type" content="website"><meta property="og:site_name" content="dashhkuns"><meta property="og:locale" content="en_US"><meta property="og:url" content="https://dashhkuns.com/en/contact"><meta property="og:title" content="Contact & book a call — dashhkuns"><meta property="og:description" content="Send a project inquiry or request a 30-minute call with dashhkuns."><meta property="og:image" content="https://dashhkuns.com/assets/og-card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Contact & book a call — dashhkuns"><meta name="twitter:description" content="Send a project inquiry or request a 30-minute call with dashhkuns."><meta name="twitter:image" content="https://dashhkuns.com/assets/og-card.png"><title>Contact & book a call — dashhkuns</title><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles-v2.css?v=20261008-case"></head><body><div class="pointer-glow" aria-hidden="true"></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ff3fad"><meta name="description" content="Send a project inquiry or request a 30-minute call with dashhkuns."><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"><link rel="canonical" href="https://dashhkuns.com/en/contact"><link rel="alternate" hreflang="en" href="https://dashhkuns.com/en/contact"><link rel="alternate" hreflang="ru" href="https://dashhkuns.com/contact"><meta property="og:type" content="website"><meta property="og:site_name" content="dashhkuns"><meta property="og:locale" content="en_US"><meta property="og:url" content="https://dashhkuns.com/en/contact"><meta property="og:title" content="Contact & book a call — dashhkuns"><meta property="og:description" content="Send a project inquiry or request a 30-minute call with dashhkuns."><meta property="og:image" content="https://dashhkuns.com/assets/og-card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Contact & book a call — dashhkuns"><meta name="twitter:description" content="Send a project inquiry or request a 30-minute call with dashhkuns."><meta name="twitter:image" content="https://dashhkuns.com/assets/og-card.png"><title>Contact & book a call — dashhkuns</title><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles-v2.css?v=20261008-month-grid-1"></head><body><div class="pointer-glow" aria-hidden="true"></div>
 <header class="topbar"><a class="brand" href="/en/">dash<span>h</span>kuns</a><nav class="nav" aria-label="main navigation"><a href="/en/services">services</a><a href="/en/projects">projects</a><a href="/en/about">about</a><a class="active" href="/en/contact">contact</a></nav><a class="lang-toggle" href="/contact" aria-label="switch to Russian"><span class="">RU</span><span class="lang-slash">/</span><span class="is-current">EN</span></a><a class="top-cta js-project-cta" href="/en/contact#project-form">send inquiry</a><button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="open menu">menu</button></header>
 <nav class="mobile-menu" id="mobile-menu" aria-label="mobile navigation" aria-hidden="true"><a href="/en/services">services</a><a href="/en/projects">projects</a><a href="/en/about">about</a><a href="/en/contact">contact</a><a class="mobile-project js-project-cta" href="/en/contact#project-form">send inquiry</a><a class="mobile-book" href="/en/contact#booking">book a call</a></nav>
 <main><section class="contact-page contact-page-v3">
@@ -12,17 +12,30 @@
     </div>
     <div class="booking-calendar" id="booking-calendar">
       <p class="booking-loading" id="booking-loading" role="status">checking available times, this may take up to a minute…</p>
-      <div class="booking-date-control">
-        <label class="booking-section-label" for="booking-date-picker">choose a date</label>
-        <input id="booking-date-picker" class="booking-date-picker" name="date" type="date" aria-describedby="booking-date-note">
-        <p id="booking-date-note" class="booking-date-note">available times for the selected date will appear below</p>
+
+      <div class="booking-date-control" id="booking-date-control">
+        <p class="booking-section-label" id="booking-date-label">date of the call</p>
+        <button class="booking-calendar-trigger" id="booking-calendar-trigger" type="button" aria-expanded="true" aria-controls="booking-month-popover" aria-labelledby="booking-date-label booking-calendar-trigger">
+          <span class="booking-calendar-trigger-icon" aria-hidden="true">▦</span>
+          <span id="booking-selected-day">choose a date from the calendar</span>
+          <span class="booking-calendar-trigger-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="booking-month-popover" id="booking-month-popover" role="group" aria-label="calendar to choose a day">
+          <div class="booking-month-toolbar">
+            <button type="button" class="booking-month-arrow" id="booking-month-prev" aria-label="previous month">‹</button>
+            <strong class="booking-month-name" id="booking-month-name" aria-live="polite"></strong>
+            <button type="button" class="booking-month-arrow" id="booking-month-next" aria-label="next month">›</button>
+          </div>
+          <div class="booking-weekdays" aria-hidden="true">
+            <span>mon</span><span>tue</span><span>wed</span><span>thu</span><span>fri</span><span>sat</span><span>sun</span>
+          </div>
+          <div class="booking-month-grid" id="booking-month-grid" role="group" aria-label="available dates"></div>
+          <p class="booking-calendar-legend"><span class="booking-legend-dot" aria-hidden="true"></span>marked dates have available times</p>
+        </div>
       </div>
       <div class="booking-options" id="booking-options" hidden>
-        <p class="booking-section-label">nearest available days</p>
-        <div class="booking-days" id="booking-days" role="group" aria-label="choose a day"></div>
-        <p class="booking-section-label" id="booking-times-title">available times</p>
+        <p class="booking-section-label" id="booking-times-title">available times · moscow</p>
         <div class="booking-slots" id="booking-slots" role="group" aria-labelledby="booking-times-title"></div>
-        <p class="booking-day-empty" id="booking-day-empty" hidden>no slots on this date, choose another day</p>
       </div>
       <p class="booking-empty" id="booking-empty" hidden>no open slots over the next two weeks</p>
       <div class="booking-fetch-error" id="booking-fetch-error" hidden><p>calendar unavailable, try again or send an inquiry</p><button class="btn ghost booking-retry" id="booking-retry" type="button">refresh slots</button></div>
@@ -44,4 +57,4 @@
     </div>
     <p class="booking-fallback">can’t find a suitable time?<br><a href="#project-form">send an inquiry and i’ll get back to you to arrange a call</a></p>
   </section>
-</section></main><footer class="site-footer"><a href="/en/">dashhkuns</a><span>creative producer</span><span>© <span id="year"></span></span></footer><script src="/script.js?v=20261008-lang"></script></body></html>
+</section></main><footer class="site-footer"><a href="/en/">dashhkuns</a><span>creative producer</span><span>© <span id="year"></span></span></footer><script src="/script.js?v=20261008-month-grid-1"></script></body></html>

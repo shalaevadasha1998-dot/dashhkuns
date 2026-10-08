@@ -231,12 +231,12 @@ leadForm?.addEventListener('submit',async e=>{
 });
 
 
+
 const BOOKING_API='https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/website-booking';
 const bookingForm=document.getElementById('booking-form');
 const bookingCalendar=document.getElementById('booking-calendar');
 const bookingLoading=document.getElementById('booking-loading');
 const bookingOptions=document.getElementById('booking-options');
-const bookingDays=document.getElementById('booking-days');
 const bookingSlots=document.getElementById('booking-slots');
 const bookingEmpty=document.getElementById('booking-empty');
 const bookingFetchError=document.getElementById('booking-fetch-error');
@@ -245,36 +245,112 @@ const bookingPicked=document.getElementById('booking-picked-date');
 const bookingError=document.getElementById('booking-error');
 const bookingSuccess=document.getElementById('booking-success');
 const bookingMeetLink=document.getElementById('booking-meet-link');
+const bookingDateControl=document.getElementById('booking-date-control');
+const bookingCalendarTrigger=document.getElementById('booking-calendar-trigger');
+const bookingCalendarPopover=document.getElementById('booking-month-popover');
+const bookingCalendarGrid=document.getElementById('booking-month-grid');
+const bookingCalendarMonthName=document.getElementById('booking-month-name');
+const bookingCalendarPrev=document.getElementById('booking-month-prev');
+const bookingCalendarNext=document.getElementById('booking-month-next');
+const bookingSelectedDay=document.getElementById('booking-selected-day');
+
 let bookingData=[];
 let bookingDayIndex=0;
 let bookingSelected='';
+let bookingSelectedDate='';
 let bookingSubmitting=false;
-
-
-const bookingDatePicker=document.getElementById('booking-date-picker');
-const bookingDayEmpty=document.getElementById('booking-day-empty');
-let bookingDateUserSelected=false;
+let bookingAvailabilityLoaded=false;
 
 const bookingDateLabel=date=>{
   const parsed=new Date(date+'T12:00:00Z');
   return new Intl.DateTimeFormat(IS_EN?'en-GB':'ru-RU',{weekday:'short',day:'numeric',month:'short',timeZone:'UTC'}).format(parsed);
 };
 const bookingTimeLabel=start=>{
-  const date=new Date(start);
-  return new Intl.DateTimeFormat(IS_EN?'en-GB':'ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Moscow'}).format(date);
+  return new Intl.DateTimeFormat(IS_EN?'en-GB':'ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Moscow'}).format(new Date(start));
 };
 const moscowToday=()=>{
   const parts=new Intl.DateTimeFormat('en-US',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Europe/Moscow'}).formatToParts(new Date());
   const value=part=>parts.find(p=>p.type===part)?.value||'';
   return value('year')+'-'+value('month')+'-'+value('day');
 };
-if(bookingDatePicker){
-  const today=moscowToday();
-  bookingDatePicker.min=today;
-  const [year,month,day]=today.split('-').map(Number);
-  bookingDatePicker.max=new Date(Date.UTC(year,month-1,day+13)).toISOString().slice(0,10);
-}
+const bookingIsoDay=date=>date.toISOString().slice(0,10);
+const bookingWindowStart=moscowToday();
+const bookingWindowEnd=bookingIsoDay(new Date(Date.parse(bookingWindowStart+'T00:00:00Z')+13*86400000));
+const bookingMonthStart=iso=>iso.slice(0,7);
+let bookingViewMonth=bookingMonthStart(bookingWindowStart);
 
+const showBookingPopover=open=>{
+  if(!bookingCalendarPopover||!bookingCalendarTrigger)return;
+  bookingCalendarPopover.hidden=!open;
+  bookingCalendarTrigger.setAttribute('aria-expanded',String(open));
+};
+const drawBookingMonth=()=>{
+  if(!bookingCalendarGrid)return;
+  const [year,month]=bookingViewMonth.split('-').map(Number);
+  const first=new Date(Date.UTC(year,month-1,1));
+  const last=new Date(Date.UTC(year,month,0));
+  const weekday=(first.getUTCDay()+6)%7;
+  if(bookingCalendarMonthName){
+    bookingCalendarMonthName.textContent=new Intl.DateTimeFormat(IS_EN?'en-GB':'ru-RU',{month:'long',year:'numeric',timeZone:'UTC'}).format(first);
+  }
+  if(bookingCalendarPrev)bookingCalendarPrev.disabled=bookingViewMonth<=bookingMonthStart(bookingWindowStart);
+  if(bookingCalendarNext)bookingCalendarNext.disabled=bookingViewMonth>=bookingMonthStart(bookingWindowEnd);
+  bookingCalendarGrid.replaceChildren();
+  for(let i=0;i<weekday;i++){
+    const gap=document.createElement('span');
+    gap.className='booking-calendar-gap';
+    gap.setAttribute('aria-hidden','true');
+    bookingCalendarGrid.append(gap);
+  }
+  const allowedDays=new Set(bookingData.map(day=>day.date));
+  for(let day=1;day<=last.getUTCDate();day++){
+    const iso=bookingIsoDay(new Date(Date.UTC(year,month-1,day)));
+    const available=bookingAvailabilityLoaded&&allowedDays.has(iso)&&iso>=bookingWindowStart&&iso<=bookingWindowEnd;
+    const cell=document.createElement('button');
+    cell.type='button';
+    cell.className='booking-month-day';
+    cell.textContent=String(day);
+    cell.disabled=!available;
+    cell.setAttribute('aria-label',bookingDateLabel(iso)+(available?(IS_EN?', available':', доступно'):(IS_EN?', unavailable':', нет свободного времени')));
+    cell.setAttribute('aria-pressed',String(bookingSelectedDate===iso));
+    if(available){
+      cell.classList.add('has-availability');
+      if(bookingSelectedDate===iso)cell.classList.add('is-selected');
+      if(iso===bookingWindowStart)cell.classList.add('is-today');
+      cell.addEventListener('click',()=>{
+        const index=bookingData.findIndex(item=>item.date===iso);
+        if(index>=0)selectBookingDay(index);
+      });
+    }
+    bookingCalendarGrid.append(cell);
+  }
+};
+const selectBookingDay=index=>{
+  const day=bookingData[index];
+  if(!day)return;
+  bookingDayIndex=index;
+  bookingSelectedDate=day.date;
+  bookingSelected='';
+  if(bookingStart)bookingStart.value='';
+  if(bookingForm)bookingForm.hidden=true;
+  if(bookingError)bookingError.hidden=true;
+  if(bookingSelectedDay)bookingSelectedDay.textContent=bookingDateLabel(day.date);
+  bookingViewMonth=bookingMonthStart(day.date);
+  showBookingPopover(false);
+  drawBookingMonth();
+  if(bookingOptions)bookingOptions.hidden=false;
+  if(!bookingSlots)return;
+  bookingSlots.replaceChildren();
+  day.slots.forEach(slot=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='booking-slot';
+    button.textContent=slot.time||bookingTimeLabel(slot.start);
+    button.setAttribute('aria-pressed','false');
+    button.addEventListener('click',()=>setBookingSlot(slot,button));
+    bookingSlots.append(button);
+  });
+};
 const setBookingSlot=(slot,button)=>{
   bookingSelected=slot.start;
   if(bookingStart)bookingStart.value=slot.start;
@@ -287,73 +363,46 @@ const setBookingSlot=(slot,button)=>{
   if(bookingError)bookingError.hidden=true;
   bookingForm?.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 };
-const selectBookingDay=index=>{
-  if(!bookingData[index])return;
-  bookingDayIndex=index;
-  bookingSelected='';
-  if(bookingStart)bookingStart.value='';
-  if(bookingForm)bookingForm.hidden=true;
-  if(bookingDatePicker)bookingDatePicker.value=bookingData[index].date;
-  bookingDays?.querySelectorAll('button').forEach((b,i)=>{
-    b.classList.toggle('active',i===index);
-    b.setAttribute('aria-pressed',String(i===index));
-  });
-  if(!bookingSlots)return;
-  bookingSlots.replaceChildren();
-  const day=bookingData[index];
-  if(bookingDayEmpty)bookingDayEmpty.hidden=true;
-  day.slots.forEach(slot=>{
-    const button=document.createElement('button');
-    button.type='button';
-    button.className='booking-slot';
-    button.textContent=slot.time||bookingTimeLabel(slot.start);
-    button.setAttribute('aria-pressed','false');
-    button.addEventListener('click',()=>setBookingSlot(slot,button));
-    bookingSlots.append(button);
-  });
+const shiftBookingMonth=delta=>{
+  const [year,month]=bookingViewMonth.split('-').map(Number);
+  const updated=new Date(Date.UTC(year,month-1+delta,1));
+  const newMonth=updated.toISOString().slice(0,7);
+  if(newMonth<bookingMonthStart(bookingWindowStart)||newMonth>bookingMonthStart(bookingWindowEnd))return;
+  bookingViewMonth=newMonth;
+  drawBookingMonth();
 };
-const updateBookingDate=()=>{
-  if(!bookingDatePicker?.value||!bookingOptions||!bookingData.length)return;
-  const selected=bookingDatePicker.value;
-  const index=bookingData.findIndex(day=>day.date===selected);
-  if(index>=0){selectBookingDay(index);return;}
-  bookingSelected='';
-  if(bookingStart)bookingStart.value='';
-  if(bookingForm)bookingForm.hidden=true;
-  if(bookingSlots)bookingSlots.replaceChildren();
-  bookingDays?.querySelectorAll('button').forEach(button=>{
-    button.classList.remove('active');button.setAttribute('aria-pressed','false');
-  });
-  if(bookingDayEmpty)bookingDayEmpty.hidden=false;
-};
-bookingDatePicker?.addEventListener('change',()=>{
-  bookingDateUserSelected=true;
-  updateBookingDate();
+bookingCalendarPrev?.addEventListener('click',()=>shiftBookingMonth(-1));
+bookingCalendarNext?.addEventListener('click',()=>shiftBookingMonth(1));
+bookingCalendarTrigger?.addEventListener('click',()=>{
+  const willOpen=bookingCalendarPopover?.hidden;
+  showBookingPopover(Boolean(willOpen));
+  if(willOpen)drawBookingMonth();
 });
-const drawBookingCalendar=()=>{
-  if(!bookingDays)return;
-  bookingDays.replaceChildren();
-  bookingData.forEach((day,index)=>{
-    const button=document.createElement('button');
-    button.type='button';
-    button.className='booking-day';
-    button.textContent=bookingDateLabel(day.date);
-    button.setAttribute('aria-pressed','false');
-    button.addEventListener('click',()=>{bookingDateUserSelected=true;selectBookingDay(index);});
-    bookingDays.append(button);
-  });
-  if(bookingDateUserSelected&&bookingDatePicker?.value)updateBookingDate();
-  else if(bookingData.length)selectBookingDay(0);
-};
+document.addEventListener('pointerdown',event=>{
+  if(bookingCalendarPopover&&!bookingCalendarPopover.hidden&&bookingDateControl&&!bookingDateControl.contains(event.target)){
+    showBookingPopover(false);
+  }
+});
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&bookingCalendarPopover&&!bookingCalendarPopover.hidden){
+    showBookingPopover(false);bookingCalendarTrigger?.focus();
+  }
+});
 const loadBookingAvailability=async()=>{
   if(!bookingCalendar)return;
+  bookingAvailabilityLoaded=false;
+  bookingData=[];
+  bookingSelectedDate='';
+  bookingSelected='';
+  if(bookingSelectedDay)bookingSelectedDay.textContent=IS_EN?'choose a date from the calendar':'выбери дату в календаре';
+  if(bookingStart)bookingStart.value='';
   if(bookingLoading)bookingLoading.hidden=false;
   if(bookingOptions)bookingOptions.hidden=true;
   if(bookingEmpty)bookingEmpty.hidden=true;
   if(bookingFetchError)bookingFetchError.hidden=true;
-  if(bookingDayEmpty)bookingDayEmpty.hidden=true;
   if(bookingForm)bookingForm.hidden=true;
-  bookingSelected='';
+  showBookingPopover(true);
+  drawBookingMonth();
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),62000);
   try{
@@ -361,12 +410,18 @@ const loadBookingAvailability=async()=>{
     if(!response.ok)throw Error('availability_http_'+response.status);
     const result=await response.json();
     if(!result.ok||!Array.isArray(result.days))throw Error(result.error||'invalid_availability');
-    bookingData=result.days.slice(0,14).filter(day=>typeof day.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(day.date)&&Array.isArray(day.slots)).map(day=>({
-      date:day.date,
-      slots:day.slots.slice(0,40).filter(slot=>typeof slot.start==='string'&&!Number.isNaN(new Date(slot.start).getTime())&&new Date(slot.start).getTime()>Date.now()).map(slot=>({start:slot.start,time:typeof slot.time==='string'?slot.time.slice(0,5):''}))
-    })).filter(day=>day.slots.length>0);
-    if(bookingData.length){drawBookingCalendar();if(bookingOptions)bookingOptions.hidden=false;}
-    else if(bookingEmpty)bookingEmpty.hidden=false;
+    bookingData=result.days.slice(0,14)
+      .filter(day=>typeof day.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(day.date)&&Array.isArray(day.slots))
+      .map(day=>({
+        date:day.date,
+        slots:day.slots.slice(0,40).filter(slot=>
+          typeof slot.start==='string'&&!Number.isNaN(new Date(slot.start).getTime())&&new Date(slot.start).getTime()>Date.now()
+        ).map(slot=>({start:slot.start,time:typeof slot.time==='string'?slot.time.slice(0,5):''}))
+      }))
+      .filter(day=>day.date>=bookingWindowStart&&day.date<=bookingWindowEnd&&day.slots.length>0);
+    bookingAvailabilityLoaded=true;
+    drawBookingMonth();
+    if(!bookingData.length&&bookingEmpty)bookingEmpty.hidden=false;
   }catch(error){
     console.error('availability unavailable',error);
     if(bookingFetchError)bookingFetchError.hidden=false;
@@ -408,6 +463,7 @@ bookingForm?.addEventListener('submit',async event=>{
       throw err;
     }
     bookingForm.hidden=true;
+    if(bookingCalendar)bookingCalendar.hidden=true;
     if(bookingOptions)bookingOptions.hidden=true;
     if(bookingEmpty)bookingEmpty.hidden=true;
     if(bookingFetchError)bookingFetchError.hidden=true;
