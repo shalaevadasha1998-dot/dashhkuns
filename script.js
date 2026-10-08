@@ -307,7 +307,7 @@ const drawBookingCalendar=()=>{
   if(bookingData.length)selectBookingDay(0);
 };
 const loadBookingAvailability=async()=>{
-  if(!bookingCalendar||bookingSubmitting)return;
+  if(!bookingCalendar)return;
   if(bookingLoading)bookingLoading.hidden=false;
   if(bookingOptions)bookingOptions.hidden=true;
   if(bookingEmpty)bookingEmpty.hidden=true;
