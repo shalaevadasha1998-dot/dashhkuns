@@ -2346,3 +2346,39 @@ option{
 .brand-state{
   text-transform:lowercase!important
 }
+
+/* calendar booking: actual availability, accessible day and time selection */
+#booking [hidden]{display:none!important}
+.booking-panel{display:flex;flex-direction:column;gap:20px}
+.booking-calendar-intro{padding:30px 30px 0}
+.booking-calendar-intro h2{font-size:clamp(36px,3.7vw,57px);line-height:1.04;margin:16px 0}
+.booking-timezone{font-size:13px;line-height:1.5;color:rgba(0,0,0,.7);max-width:52ch}
+.booking-calendar{padding:0 30px}
+.booking-loading,.booking-empty,.booking-fetch-error{font-size:14px;line-height:1.55;padding:22px 0}
+.booking-section-label{font-size:11px;font-weight:800;letter-spacing:.07em;margin:16px 0 10px}
+.booking-days{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;padding:4px 2px 12px}
+.booking-day,.booking-slot{appearance:none;cursor:pointer;border:1px solid var(--black);background:var(--white);color:var(--black);font:inherit;font-weight:800;text-transform:lowercase;transition:background .16s ease,border-color .16s ease}
+.booking-day{min-width:122px;min-height:50px;padding:10px 12px;border-radius:12px;scroll-snap-align:start;font-size:12px;white-space:nowrap}
+.booking-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.booking-slot{min-height:48px;border-radius:10px;font-size:15px}
+.booking-day:hover,.booking-slot:hover{background:var(--acid)}
+.booking-day.active,.booking-slot.active{background:var(--acid);border-width:2px}
+.booking-day:focus-visible,.booking-slot:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.booking-form{padding-top:20px!important;border-top:1px solid rgba(0,0,0,.15)}
+.booking-picked{display:flex;flex-wrap:wrap;gap:8px;padding:13px 16px;background:var(--acid);border:1px solid var(--black);border-radius:10px;margin-bottom:20px;font-size:13px}
+.booking-picked strong{font-weight:800}
+.booking-fallback{padding:0 30px 28px;font-size:13px;line-height:1.6}
+.booking-fallback a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.booking-fallback a:hover{color:#b81766}
+.booking-fetch-error .booking-retry{margin-top:12px;min-height:44px}
+@media(max-width:760px){
+  .booking-panel{gap:14px}
+  .booking-calendar-intro{padding:22px 18px 0}
+  .booking-calendar-intro h2{font-size:clamp(32px,9vw,43px);line-height:1.06}
+  .booking-calendar{padding:0 18px}
+  .booking-days{gap:7px}
+  .booking-day{min-width:110px}
+  .booking-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .booking-fallback{padding:0 18px 22px}
+}
+@media(max-width:360px){.booking-slots{grid-template-columns:repeat(2,minmax(0,1fr))}}
