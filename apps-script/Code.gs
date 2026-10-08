@@ -178,45 +178,73 @@ function createCalendarEvent_(input) {
   }
 }
 
+// Build the complete two-week calendar with only one getEvents call per busy calendar.
+// The previous implementation made hundreds of calls, exceeding the edge proxy timeout.
 function buildAvailability_() {
   const now = new Date();
-  const firstAllowed = new Date(now.getTime() + CONFIG.minNoticeHours * 3600000);
+  const firstAllowedMs = now.getTime() + CONFIG.minNoticeHours * 3600000;
+  const firstDay = Utilities.formatDate(now, CONFIG.timezone, 'yyyy-MM-dd');
+  const startRange = new Date(firstDay + 'T00:00:00+03:00');
+  const endRange = new Date(startRange.getTime() + CONFIG.horizonDays * 86400000);
+  const bufferMs = CONFIG.bufferMinutes * 60000;
+  const meetingMs = CONFIG.slotMinutes * 60000;
+
+  // Fail closed when a required calendar cannot be read: never publish
+  // 'available' slots while one of the busy sources is inaccessible.
+  const calendars = CONFIG.busyCalendarIds.map(id => {
+    const calendar = id === 'primary'
+      ? CalendarApp.getDefaultCalendar()
+      : CalendarApp.getCalendarById(id);
+    if (!calendar) throw new Error('calendar_not_accessible: ' + id);
+    return { id, events: calendar.getEvents(startRange, endRange) };
+  });
+  const primary = calendars.find(c => c.id === 'primary');
+  if (!primary) throw new Error('primary_calendar_missing');
+
+  const busy = calendars.reduce((all, item) => {
+    item.events.forEach(event => all.push({
+      startMs: event.getStartTime().getTime(),
+      endMs: event.getEndTime().getTime()
+    }));
+    return all;
+  }, []);
+  const siteMeetings = primary.events.filter(event =>
+    String(event.getTitle() || '').startsWith('созвон / ')
+  );
   const days = [];
 
   for (let offset = 0; offset < CONFIG.horizonDays; offset++) {
-    const day = new Date(now);
-    day.setHours(0, 0, 0, 0);
-    day.setDate(day.getDate() + offset);
-    const weekday = Number(Utilities.formatDate(day, CONFIG.timezone, 'u'));
-    if (weekday > 5) continue;
+    const day = new Date(startRange.getTime() + offset * 86400000);
+    const date = Utilities.formatDate(day, CONFIG.timezone, 'yyyy-MM-dd');
+    const weekday = new Date(date + 'T12:00:00Z').getUTCDay();
+    if (weekday === 0 || weekday === 6) continue;
+
+    const startDay = new Date(date + 'T' + String(CONFIG.workStartHour).padStart(2,'0') + ':00:00+03:00');
+    const endDay = new Date(date + 'T' + String(CONFIG.workEndHour).padStart(2,'0') + ':00:00+03:00');
+    const existingSiteBookings = siteMeetings.filter(event =>
+      event.getStartTime() < endDay && event.getEndTime() > startDay
+    ).length;
+    if (existingSiteBookings >= CONFIG.maxBookingsPerDay) continue;
 
     const slots = [];
-    const startDay = atMoscow_(day, CONFIG.workStartHour, 0);
-    const endDay = atMoscow_(day, CONFIG.workEndHour, 0);
-
-    if (siteBookingCount_(startDay, endDay) >= CONFIG.maxBookingsPerDay) continue;
-
-    for (let t = new Date(startDay); t.getTime() + CONFIG.slotMinutes * 60000 <= endDay.getTime(); t = new Date(t.getTime() + 30 * 60000)) {
-      const slotEnd = new Date(t.getTime() + CONFIG.slotMinutes * 60000);
-      if (t <= firstAllowed) continue;
-      if (!isBusy_(t, slotEnd)) {
-        slots.push({
-          start: isoMoscow_(t),
-          time: Utilities.formatDate(t, CONFIG.timezone, 'HH:mm')
-        });
-      }
-    }
-
-    if (slots.length) {
-      days.push({
-        date: Utilities.formatDate(day, CONFIG.timezone, 'yyyy-MM-dd'),
-        weekday: Utilities.formatDate(day, CONFIG.timezone, 'EEE'),
-        label: Utilities.formatDate(day, CONFIG.timezone, 'd MMM'),
-        slots
+    for (let ms = startDay.getTime(); ms + meetingMs <= endDay.getTime(); ms += 30 * 60000) {
+      const slotEnd = ms + meetingMs;
+      if (ms <= firstAllowedMs) continue;
+      if (busy.some(event => ms < event.endMs + bufferMs && slotEnd > event.startMs - bufferMs)) continue;
+      const start = new Date(ms);
+      slots.push({
+        start: isoMoscow_(start),
+        time: Utilities.formatDate(start, CONFIG.timezone, 'HH:mm')
       });
     }
-  }
 
+    if (slots.length) days.push({
+      date,
+      weekday: Utilities.formatDate(day, CONFIG.timezone, 'EEE'),
+      label: Utilities.formatDate(day, CONFIG.timezone, 'd MMM'),
+      slots
+    });
+  }
   return days;
 }
 
