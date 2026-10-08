@@ -612,7 +612,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 }
 .trust-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:10px
 }
 .trust-grid article{
@@ -2146,6 +2146,8 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 }
 .authority-metric:nth-child(2) strong{color:var(--acid)}
 .authority-metric:nth-child(3) strong{color:var(--pink)}
+.authority-metric:nth-child(4) strong{color:var(--acid)}
+.authority-metric:nth-child(5) strong{color:var(--pink)}
 .authority-metric p{
   max-width:26ch;
   color:rgba(255,255,255,.7);
