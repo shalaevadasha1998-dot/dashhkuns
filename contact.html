@@ -28,20 +28,26 @@
 
   <section class="contact-action-panel booking-panel reveal" id="booking">
     <div class="booking-calendar-intro">
-      <p class="kicker">02 / созвон · 30 минут</p>
+      <p class="kicker">02 / созвон / 30 минут</p>
       <h2>выбери свободное время<br><span class="serif">запись сразу в календарь</span></h2>
-      <p class="booking-timezone">покажу только доступные окна. время указано по москве (мск).</p>
+      <p class="booking-timezone">покажу только доступные окна. время указано по москве (мск)</p>
     </div>
     <div class="booking-calendar" id="booking-calendar">
-      <p class="booking-loading" id="booking-loading" role="status">проверяю свободное время…</p>
+      <p class="booking-loading" id="booking-loading" role="status">проверяю свободные окна, это может занять до минуты…</p>
+      <div class="booking-date-control">
+        <label class="booking-section-label" for="booking-date-picker">выбери дату</label>
+        <input id="booking-date-picker" class="booking-date-picker" name="date" type="date" aria-describedby="booking-date-note">
+        <p id="booking-date-note" class="booking-date-note">ниже покажу свободные часы на выбранную дату</p>
+      </div>
       <div class="booking-options" id="booking-options" hidden>
-        <p class="booking-section-label">выбери день</p>
+        <p class="booking-section-label">ближайшие свободные дни</p>
         <div class="booking-days" id="booking-days" role="group" aria-label="выбери день"></div>
         <p class="booking-section-label" id="booking-times-title">свободные часы</p>
         <div class="booking-slots" id="booking-slots" role="group" aria-labelledby="booking-times-title"></div>
+        <p class="booking-day-empty" id="booking-day-empty" hidden>на эту дату свободных часов нет, выбери другой день</p>
       </div>
-      <p class="booking-empty" id="booking-empty" hidden>свободных окон на ближайшие две недели пока нет.</p>
-      <div class="booking-fetch-error" id="booking-fetch-error" hidden><p>не получилось загрузить календарь. попробуй ещё раз или оставь заявку.</p><button class="btn ghost booking-retry" id="booking-retry" type="button">обновить слоты</button></div>
+      <p class="booking-empty" id="booking-empty" hidden>свободных окон на ближайшие две недели пока нет</p>
+      <div class="booking-fetch-error" id="booking-fetch-error" hidden><p>календарь недоступен, попробуй снова или оставь заявку</p><button class="btn ghost booking-retry" id="booking-retry" type="button">обновить слоты</button></div>
     </div>
     <form class="project-form booking-form" id="booking-form" novalidate hidden>
       <p class="booking-picked"><span>выбрано:</span> <strong id="booking-picked-date">выбери свободное время выше</strong></p>
@@ -58,7 +64,7 @@
       <p id="booking-success-copy">встреча добавлена в календарь. приглашение отправлено на email.</p>
       <div class="button-row"><a class="btn ghost" href="/">на главную</a><a class="btn primary" id="booking-meet-link" target="_blank" rel="noopener noreferrer" hidden>ссылка на встречу</a></div>
     </div>
-    <p class="booking-fallback">не нашла подходящее время?<br><a href="#project-form">оставь заявку, и я напишу тебе, чтобы договориться.</a></p>
+    <p class="booking-fallback">не нашла подходящее время?<br><a href="#project-form">оставь заявку, и я напишу тебе, чтобы договориться</a></p>
   </section>
 </section>
 </main>

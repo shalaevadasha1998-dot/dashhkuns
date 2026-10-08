@@ -6,20 +6,26 @@
 <section class="contact-action-panel lead-panel reveal" id="project"><form class="project-form lead-form" id="project-form" novalidate><p class="kicker">01 / inquiry</p><h2>three fields<br><span class="serif">I’ll take it from there</span></h2><div class="field"><label for="lead-name">name *</label><input id="lead-name" name="name" autocomplete="name" required></div><div class="field"><label for="lead-contact">email / phone / preferred contact *</label><input id="lead-contact" name="contact" autocomplete="email" required></div><div class="field"><label for="lead-details">what needs to be done *</label><textarea id="lead-details" name="details" placeholder="briefly: what already exists and where it is stuck" required></textarea></div><div class="hp-field" aria-hidden="true"><label for="lead-company-website">company website</label><input id="lead-company-website" name="companyWebsite" tabindex="-1" autocomplete="off"></div><div class="form-submit-row"><button class="btn primary" type="submit">send inquiry</button><p class="form-note">I’ll review it and get back to you using the contact you leave</p></div><div class="form-error" id="lead-error" role="alert" hidden>couldn’t send it. your text is still here, please try again</div></form><div class="form-success lead-success" id="lead-success" role="status" aria-live="polite" hidden><span>done</span><h2>got it</h2><p>I’ll review the task and get back to you using the contact you provided</p></div></section>
 <section class="contact-action-panel booking-panel reveal" id="booking">
     <div class="booking-calendar-intro">
-      <p class="kicker">02 / call · 30 minutes</p>
+      <p class="kicker">02 / call / 30 minutes</p>
       <h2>pick an available time<br><span class="serif">book straight into my calendar</span></h2>
-      <p class="booking-timezone">only available slots are shown. all times are in moscow time (msk).</p>
+      <p class="booking-timezone">only available slots are shown. all times are in moscow time (msk)</p>
     </div>
     <div class="booking-calendar" id="booking-calendar">
-      <p class="booking-loading" id="booking-loading" role="status">checking the calendar…</p>
+      <p class="booking-loading" id="booking-loading" role="status">checking available times, this may take up to a minute…</p>
+      <div class="booking-date-control">
+        <label class="booking-section-label" for="booking-date-picker">choose a date</label>
+        <input id="booking-date-picker" class="booking-date-picker" name="date" type="date" aria-describedby="booking-date-note">
+        <p id="booking-date-note" class="booking-date-note">available times for the selected date will appear below</p>
+      </div>
       <div class="booking-options" id="booking-options" hidden>
-        <p class="booking-section-label">choose a day</p>
+        <p class="booking-section-label">nearest available days</p>
         <div class="booking-days" id="booking-days" role="group" aria-label="choose a day"></div>
         <p class="booking-section-label" id="booking-times-title">available times</p>
         <div class="booking-slots" id="booking-slots" role="group" aria-labelledby="booking-times-title"></div>
+        <p class="booking-day-empty" id="booking-day-empty" hidden>no slots on this date, choose another day</p>
       </div>
-      <p class="booking-empty" id="booking-empty" hidden>no open slots over the next two weeks.</p>
-      <div class="booking-fetch-error" id="booking-fetch-error" hidden><p>couldn’t load the calendar. try again or send an inquiry.</p><button class="btn ghost booking-retry" id="booking-retry" type="button">refresh slots</button></div>
+      <p class="booking-empty" id="booking-empty" hidden>no open slots over the next two weeks</p>
+      <div class="booking-fetch-error" id="booking-fetch-error" hidden><p>calendar unavailable, try again or send an inquiry</p><button class="btn ghost booking-retry" id="booking-retry" type="button">refresh slots</button></div>
     </div>
     <form class="project-form booking-form" id="booking-form" novalidate hidden>
       <p class="booking-picked"><span>selected:</span> <strong id="booking-picked-date">choose an available slot above</strong></p>
@@ -36,6 +42,6 @@
       <p id="booking-success-copy">the event is in my calendar. an invitation has been emailed to you.</p>
       <div class="button-row"><a class="btn ghost" href="/en/">back home</a><a class="btn primary" id="booking-meet-link" target="_blank" rel="noopener noreferrer" hidden>join the call</a></div>
     </div>
-    <p class="booking-fallback">can’t find a suitable time?<br><a href="#project-form">send an inquiry and i’ll get back to you to arrange a call.</a></p>
+    <p class="booking-fallback">can’t find a suitable time?<br><a href="#project-form">send an inquiry and i’ll get back to you to arrange a call</a></p>
   </section>
 </section></main><footer class="site-footer"><a href="/en/">dashhkuns</a><span>creative producer</span><span>© <span id="year"></span></span></footer><script src="/script.js?v=20261008-lang"></script></body></html>

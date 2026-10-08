@@ -250,6 +250,11 @@ let bookingDayIndex=0;
 let bookingSelected='';
 let bookingSubmitting=false;
 
+
+const bookingDatePicker=document.getElementById('booking-date-picker');
+const bookingDayEmpty=document.getElementById('booking-day-empty');
+let bookingDateUserSelected=false;
+
 const bookingDateLabel=date=>{
   const parsed=new Date(date+'T12:00:00Z');
   return new Intl.DateTimeFormat(IS_EN?'en-GB':'ru-RU',{weekday:'short',day:'numeric',month:'short',timeZone:'UTC'}).format(parsed);
@@ -258,6 +263,18 @@ const bookingTimeLabel=start=>{
   const date=new Date(start);
   return new Intl.DateTimeFormat(IS_EN?'en-GB':'ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Moscow'}).format(date);
 };
+const moscowToday=()=>{
+  const parts=new Intl.DateTimeFormat('en-US',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Europe/Moscow'}).formatToParts(new Date());
+  const value=part=>parts.find(p=>p.type===part)?.value||'';
+  return value('year')+'-'+value('month')+'-'+value('day');
+};
+if(bookingDatePicker){
+  const today=moscowToday();
+  bookingDatePicker.min=today;
+  const [year,month,day]=today.split('-').map(Number);
+  bookingDatePicker.max=new Date(Date.UTC(year,month-1,day+13)).toISOString().slice(0,10);
+}
+
 const setBookingSlot=(slot,button)=>{
   bookingSelected=slot.start;
   if(bookingStart)bookingStart.value=slot.start;
@@ -265,16 +282,18 @@ const setBookingSlot=(slot,button)=>{
     b.classList.toggle('active',b===button);
     b.setAttribute('aria-pressed',String(b===button));
   });
-  if(bookingPicked)bookingPicked.textContent=bookingDateLabel(bookingData[bookingDayIndex].date)+' · '+bookingTimeLabel(slot.start)+' мск';
+  if(bookingPicked)bookingPicked.textContent=bookingDateLabel(bookingData[bookingDayIndex].date)+' / '+bookingTimeLabel(slot.start)+' мск';
   if(bookingForm)bookingForm.hidden=false;
   if(bookingError)bookingError.hidden=true;
   bookingForm?.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 };
 const selectBookingDay=index=>{
+  if(!bookingData[index])return;
   bookingDayIndex=index;
   bookingSelected='';
   if(bookingStart)bookingStart.value='';
   if(bookingForm)bookingForm.hidden=true;
+  if(bookingDatePicker)bookingDatePicker.value=bookingData[index].date;
   bookingDays?.querySelectorAll('button').forEach((b,i)=>{
     b.classList.toggle('active',i===index);
     b.setAttribute('aria-pressed',String(i===index));
@@ -282,6 +301,7 @@ const selectBookingDay=index=>{
   if(!bookingSlots)return;
   bookingSlots.replaceChildren();
   const day=bookingData[index];
+  if(bookingDayEmpty)bookingDayEmpty.hidden=true;
   day.slots.forEach(slot=>{
     const button=document.createElement('button');
     button.type='button';
@@ -292,6 +312,24 @@ const selectBookingDay=index=>{
     bookingSlots.append(button);
   });
 };
+const updateBookingDate=()=>{
+  if(!bookingDatePicker?.value||!bookingOptions||!bookingData.length)return;
+  const selected=bookingDatePicker.value;
+  const index=bookingData.findIndex(day=>day.date===selected);
+  if(index>=0){selectBookingDay(index);return;}
+  bookingSelected='';
+  if(bookingStart)bookingStart.value='';
+  if(bookingForm)bookingForm.hidden=true;
+  if(bookingSlots)bookingSlots.replaceChildren();
+  bookingDays?.querySelectorAll('button').forEach(button=>{
+    button.classList.remove('active');button.setAttribute('aria-pressed','false');
+  });
+  if(bookingDayEmpty)bookingDayEmpty.hidden=false;
+};
+bookingDatePicker?.addEventListener('change',()=>{
+  bookingDateUserSelected=true;
+  updateBookingDate();
+});
 const drawBookingCalendar=()=>{
   if(!bookingDays)return;
   bookingDays.replaceChildren();
@@ -301,10 +339,11 @@ const drawBookingCalendar=()=>{
     button.className='booking-day';
     button.textContent=bookingDateLabel(day.date);
     button.setAttribute('aria-pressed','false');
-    button.addEventListener('click',()=>selectBookingDay(index));
+    button.addEventListener('click',()=>{bookingDateUserSelected=true;selectBookingDay(index);});
     bookingDays.append(button);
   });
-  if(bookingData.length)selectBookingDay(0);
+  if(bookingDateUserSelected&&bookingDatePicker?.value)updateBookingDate();
+  else if(bookingData.length)selectBookingDay(0);
 };
 const loadBookingAvailability=async()=>{
   if(!bookingCalendar)return;
@@ -312,10 +351,11 @@ const loadBookingAvailability=async()=>{
   if(bookingOptions)bookingOptions.hidden=true;
   if(bookingEmpty)bookingEmpty.hidden=true;
   if(bookingFetchError)bookingFetchError.hidden=true;
+  if(bookingDayEmpty)bookingDayEmpty.hidden=true;
   if(bookingForm)bookingForm.hidden=true;
   bookingSelected='';
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),16000);
+  const timer=setTimeout(()=>controller.abort(),62000);
   try{
     const response=await fetch(BOOKING_API+'?action=availability',{cache:'no-store',signal:controller.signal});
     if(!response.ok)throw Error('availability_http_'+response.status);
@@ -373,7 +413,7 @@ bookingForm?.addEventListener('submit',async event=>{
     if(bookingFetchError)bookingFetchError.hidden=true;
     if(bookingSuccess)bookingSuccess.hidden=false;
     const copy=document.getElementById('booking-success-copy');
-    if(copy)copy.textContent=(IS_EN?'confirmed for ':'встреча подтверждена: ')+bookingDateLabel(start.slice(0,10))+' · '+bookingTimeLabel(start)+' мск. '+(IS_EN?'an invitation will arrive by email.':'приглашение придёт на email.');
+    if(copy)copy.textContent=(IS_EN?'confirmed for ':'встреча подтверждена: ')+bookingDateLabel(start.slice(0,10))+' / '+bookingTimeLabel(start)+' мск. '+(IS_EN?'an invitation will arrive by email.':'приглашение придёт на email.');
     if(bookingMeetLink&&typeof result.meetUrl==='string'&&/^https:\/\/meet\.google\.com\//.test(result.meetUrl)){
       bookingMeetLink.href=result.meetUrl;
       bookingMeetLink.hidden=false;
