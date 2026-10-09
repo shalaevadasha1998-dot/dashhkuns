@@ -92,7 +92,14 @@ const postIntake=async(payload,{keepalive=false}={})=>{
 };
 
 const track=(eventName,data={})=>{
-  postIntake({kind:'event',eventName,data,context:getContext()},{keepalive:true}).catch(()=>{});
+  const context=getContext();
+  postIntake({kind:'event',eventName,data,context},{keepalive:true}).catch(()=>{});
+  try{
+    if(typeof window.va==='function')window.va('event',{name:eventName,data:{...data,path:context.path,utmSource:context.utmSource||undefined,utmCampaign:context.utmCampaign||undefined}});
+  }catch{}
+  try{
+    if(window.posthog?.capture)window.posthog.capture(eventName,{...data,...context});
+  }catch{}
 };
 
 const path=location.pathname.replace(/\.html$/,'').replace(/\/$/,'')||'/';
@@ -106,6 +113,74 @@ const pageEvents={
 if(pageEvents[path])track(pageEvents[path]);
 
 document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname})));
+
+const startedForms=new Set();
+document.querySelectorAll('form').forEach(form=>{
+  form.addEventListener('focusin',()=>{
+    const formId=form.id||'unknown';
+    if(startedForms.has(formId))return;
+    startedForms.add(formId);
+    track('form_start',{form:formId});
+  },{once:true});
+});
+
+const safeDestination=href=>{
+  try{
+    const url=new URL(href,location.href);
+    return {host:url.host,path:url.pathname};
+  }catch{return {host:'',path:''}}
+};
+
+document.addEventListener('click',event=>{
+  const link=event.target.closest?.('a[href]');
+  if(!link)return;
+  const href=link.getAttribute('href')||'';
+  const label=(link.textContent||link.getAttribute('aria-label')||'').trim().slice(0,160);
+  const destination=safeDestination(href);
+  if(/^mailto:/i.test(href)){
+    track('email_click',{label});
+    return;
+  }
+  if(/^tel:/i.test(href)){
+    track('phone_click',{label});
+    return;
+  }
+  if(/(^|\\.)t\\.me$/i.test(destination.host)||/telegram/i.test(destination.host)){
+    track('telegram_click',{label,destinationHost:destination.host,destinationPath:destination.path});
+    return;
+  }
+  if(destination.host&&destination.host!==location.host){
+    track('outbound_click',{label,destinationHost:destination.host,destinationPath:destination.path});
+    return;
+  }
+  if(/#booking$/.test(href)||destination.path==='/contact'&&href.includes('#booking')){
+    track('booking_cta_click',{label,from:location.pathname});
+  }
+});
+
+const scrollMilestones=new Set();
+let scrollTicking=false;
+const recordScroll=()=>{
+  const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+  const percent=Math.min(100,Math.round((scrollY/max)*100));
+  [25,50,75,90].forEach(milestone=>{
+    if(percent>=milestone&&!scrollMilestones.has(milestone)){
+      scrollMilestones.add(milestone);
+      track('scroll_depth',{percent:milestone});
+    }
+  });
+  scrollTicking=false;
+};
+addEventListener('scroll',()=>{
+  if(scrollTicking)return;
+  scrollTicking=true;
+  requestAnimationFrame(recordScroll);
+},{passive:true});
+
+const pageOpenedAt=Date.now();
+addEventListener('pagehide',()=>{
+  track('page_exit',{seconds:Math.max(0,Math.round((Date.now()-pageOpenedAt)/1000))});
+},{capture:true});
 
 const menuBtn=document.querySelector('.menu-btn');
 const mobileMenu=document.querySelector('.mobile-menu');
@@ -216,7 +291,7 @@ leadForm?.addEventListener('submit',async e=>{
       companyWebsite:data.get('companyWebsite')||'',
       context:getContext()
     });
-    track('form_submit',{type:'application'});
+    track('form_submit_success',{type:'application'});
     leadForm.reset();
     leadForm.hidden=true;
     leadSuccess?.removeAttribute('hidden');
@@ -331,6 +406,7 @@ const selectBookingDay=index=>{
   bookingDayIndex=index;
   bookingSelectedDate=day.date;
   bookingSelected='';
+  track('booking_date_selected',{date:day.date});
   if(bookingStart)bookingStart.value='';
   if(bookingForm)bookingForm.hidden=true;
   if(bookingError)bookingError.hidden=true;
@@ -353,6 +429,7 @@ const selectBookingDay=index=>{
 };
 const setBookingSlot=(slot,button)=>{
   bookingSelected=slot.start;
+  track('booking_slot_selected',{start:slot.start});
   if(bookingStart)bookingStart.value=slot.start;
   bookingSlots?.querySelectorAll('button').forEach(b=>{
     b.classList.toggle('active',b===button);
@@ -474,6 +551,8 @@ bookingForm?.addEventListener('submit',async event=>{
       bookingMeetLink.href=result.meetUrl;
       bookingMeetLink.hidden=false;
     }
+    track('booking_submit_success',{start});
+    track('form_submit_success',{type:'booking'});
     postIntake({
       kind:'lead',name,contact:email,
       projectType:'встреча / 30 минут',
