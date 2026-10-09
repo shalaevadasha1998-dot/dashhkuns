@@ -1,3 +1,49 @@
+// PostHog web analytics. The project token is intentionally public client-side.
+(function(t,e){
+  if(e.__SV)return;
+  window.posthog=e;
+  e._i=[];
+  e.init=function(token,config,name){
+    function stub(target,method){
+      const parts=method.split('.');
+      if(parts.length===2){target=target[parts[0]];method=parts[1]}
+      target[method]=function(){target.push([method].concat(Array.prototype.slice.call(arguments,0)))};
+    }
+    const script=t.createElement('script');
+    script.type='text/javascript';
+    script.crossOrigin='anonymous';
+    script.async=true;
+    script.src=config.api_host.replace('.i.posthog.com','-assets.i.posthog.com')+'/static/array.js';
+    const first=t.getElementsByTagName('script')[0];
+    first.parentNode.insertBefore(script,first);
+    let instance=e;
+    if(name!==undefined)instance=e[name]=[];
+    else name='posthog';
+    instance.people=instance.people||[];
+    instance.toString=function(short){let value='posthog';if(name!=='posthog')value+='.'+name;if(!short)value+=' (stub)';return value};
+    instance.people.toString=function(){return instance.toString(1)+'.people (stub)'};
+    [
+      'init','capture','register','register_once','register_for_session','unregister','unregister_for_session',
+      'identify','alias','group','reset','get_distinct_id','get_session_id','get_session_replay_url',
+      'set_config','startSessionRecording','stopSessionRecording','sessionRecordingStarted',
+      'captureException','get_property','getSessionProperty','opt_in_capturing','opt_out_capturing',
+      'has_opted_in_capturing','has_opted_out_capturing','clear_opt_in_out_capturing','debug','getPageViewId'
+    ].forEach(method=>stub(instance,method));
+    e._i.push([token,config,name]);
+  };
+  e.__SV=1;
+})(document,window.posthog||[]);
+
+posthog.init('phc_tnecfXhXJbjga9GfMdDG8SSv8QNCLFLvPb4oeWCRKJqF',{
+  api_host:'https://us.i.posthog.com',
+  ui_host:'https://us.posthog.com',
+  person_profiles:'identified_only',
+  autocapture:true,
+  capture_pageview:true,
+  capture_pageleave:true,
+  session_recording:{maskAllInputs:true}
+});
+
 document.documentElement.classList.add('motion-ready');
 const IS_EN=document.documentElement.lang.toLowerCase().startsWith('en');
 
