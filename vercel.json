@@ -99,6 +99,11 @@
       "permanent": false
     },
     {
+      "source": "/go/internal",
+      "destination": "/?internal=1",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [
         {
