@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ff3fad">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>dashhkuns crm</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles-v2.css?v=20261011-crm-os">
+  <style id="crm-inline-style">
+.crm-body{background:var(--white);min-height:100vh}
+.crm-brand{gap:0}.crm-brand small{margin-left:9px;padding:4px 8px;border:1px solid var(--black);border-radius:999px;background:var(--acid);font-size:8px;letter-spacing:.08em;text-transform:uppercase}
+.crm-login{min-height:100svh;display:grid;grid-template-columns:1.05fr .95fr;background:var(--white)}
+.crm-login-card{display:flex;flex-direction:column;justify-content:center;padding:clamp(34px,6vw,96px);border-right:1px solid var(--black);position:relative}
+.crm-login-card .crm-brand{position:absolute;top:28px;left:clamp(24px,6vw,96px)}
+.crm-login-card h1{max-width:10ch;margin:34px 0 20px;font-size:clamp(54px,7vw,104px)}
+.crm-login-copy{max-width:540px;margin-bottom:32px;font-size:16px;color:rgba(8,8,8,.62)}
+.crm-login-form{width:min(100%,480px);display:grid;gap:13px}.crm-login-btn{width:100%}.crm-error{font-size:12px;color:#b90035}
+.crm-login-art{display:flex;align-items:stretch;padding:24px;background:var(--black)}
+.crm-poster{width:100%;min-height:560px;border:1px solid var(--black);border-radius:var(--radius);background:var(--pink);box-shadow:10px 10px 0 var(--acid);padding:clamp(28px,4vw,54px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.crm-poster>span{font-size:10px;font-weight:800;letter-spacing:.11em}.crm-poster strong{font-size:clamp(58px,6vw,102px);line-height:.82;letter-spacing:-.075em}.crm-poster i{font-family:var(--serif);font-size:clamp(48px,4vw,74px)}
+.crm-field{display:grid;gap:7px}.crm-field>span{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.crm-field input,.crm-field select,.crm-field textarea,.crm-search input,.crm-select{width:100%;min-height:46px;border:1px solid var(--black);border-radius:14px;background:var(--white);color:var(--black);padding:11px 13px;outline:none}
+.crm-field textarea{resize:vertical}.crm-field input:focus,.crm-field select:focus,.crm-field textarea:focus,.crm-search input:focus,.crm-select:focus{box-shadow:4px 4px 0 var(--acid)}
+.crm-app{min-height:100vh;padding-bottom:84px}
+.crm-topbar{position:sticky;top:0;z-index:50;height:70px;padding:0 var(--gutter);display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:24px;border-bottom:1px solid var(--black);background:rgba(255,255,255,.97);backdrop-filter:blur(14px)}
+.crm-desktop-nav{display:flex;justify-content:center;gap:4px}.crm-desktop-nav button{border:0;background:transparent;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:800;opacity:.52}.crm-desktop-nav button.active{background:var(--black);color:var(--white);opacity:1}
+.crm-sync{display:flex;align-items:center;gap:7px;font-size:10px;color:rgba(8,8,8,.55)}.crm-dot{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 0 4px rgba(36,232,107,.15)}
+.crm-round{width:42px;height:42px;border:1px solid var(--black);border-radius:50%;background:var(--white);font-size:22px}.crm-round:hover{background:var(--acid)}
+.crm-page{min-height:calc(100vh - 70px)}
+.crm-hero,.crm-section-hero{padding:clamp(54px,7vw,92px) var(--gutter) 42px;display:flex;align-items:end;justify-content:space-between;gap:30px;border-bottom:1px solid var(--black)}
+.crm-hero h1,.crm-section-hero h1{max-width:10ch;font-size:clamp(60px,7vw,112px)}.crm-section-hero h1{margin:0}
+.crm-stats{padding:22px var(--gutter);display:grid;grid-template-columns:repeat(4,1fr);gap:12px;background:var(--black);color:var(--white)}
+.crm-stat{min-height:130px;border:1px solid rgba(255,255,255,.35);border-radius:var(--radius-sm);padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.crm-stat strong{font-size:clamp(42px,5vw,72px);line-height:.85;letter-spacing:-.07em}.crm-stat span{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.crm-stat.due{background:var(--acid);color:var(--black);border-color:var(--acid)}.crm-stat.hot{background:var(--pink);color:var(--black);border-color:var(--pink)}.crm-stat.due span,.crm-stat.hot span{color:rgba(8,8,8,.6)}
+.crm-dashboard-grid{padding:34px var(--gutter) var(--section);display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+.crm-panel{min-width:0;border:1px solid var(--black);border-radius:var(--radius);padding:24px;background:var(--white)}.crm-panel-wide{grid-row:span 3}
+.crm-panel-head{display:flex;align-items:end;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--black);margin-bottom:12px}.crm-panel-head h2{font-size:clamp(34px,4vw,58px)}.crm-panel-head>span{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--pink)}
+.crm-text-btn{border:0;background:transparent;font-size:11px;font-weight:800;padding:8px}
+.crm-task-list{display:grid}.crm-task-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:15px 0;border-bottom:1px solid rgba(8,8,8,.18)}.crm-task-row:last-child{border-bottom:0}
+.crm-check{appearance:none;width:25px;height:25px;border:1px solid var(--black);border-radius:50%;background:var(--white);display:grid;place-items:center;margin:2px 0 0}.crm-check:checked{background:var(--acid)}.crm-check:checked::after{content:"✓";font-size:15px;font-weight:800}
+.crm-task-main button{border:0;background:transparent;padding:0;text-align:left;font-weight:800;font-size:15px;line-height:1.25}.crm-task-main p{margin:5px 0 0;font-size:11px;color:rgba(8,8,8,.55);line-height:1.45}.crm-task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.crm-due{font-family:var(--serif);font-style:italic;font-size:18px;white-space:nowrap}.crm-due.overdue{color:var(--pink)}
+.crm-pill{display:inline-flex;align-items:center;min-height:24px;padding:3px 8px;border:1px solid var(--black);border-radius:999px;font-size:8px;font-weight:800;text-transform:uppercase}.crm-pill.acid{background:var(--acid)}.crm-pill.pink{background:var(--pink)}.crm-pill.dark{background:var(--black);color:var(--white)}
+.crm-mini-list{display:grid}.crm-mini-item{padding:13px 0;border-bottom:1px solid rgba(8,8,8,.16);cursor:pointer}.crm-mini-item:last-child{border-bottom:0}.crm-mini-item strong{display:block;font-size:14px}.crm-mini-item p{margin:4px 0 0;font-size:11px;color:rgba(8,8,8,.58);line-height:1.4}.crm-mini-item time{display:block;margin-top:5px;font-size:9px;font-weight:800;text-transform:uppercase}
+.crm-controls{padding:20px var(--gutter);display:grid;grid-template-columns:auto minmax(240px,420px);gap:12px;align-items:center;border-bottom:1px solid var(--black)}.crm-controls-tasks{grid-template-columns:auto minmax(240px,420px) minmax(180px,260px)}
+.crm-tabs{display:flex;border:1px solid var(--black);border-radius:999px;overflow:hidden}.crm-tabs button{min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--black);background:var(--white);font-weight:800;font-size:11px}.crm-tabs button:last-child{border-right:0}.crm-tabs button.active{background:var(--black);color:var(--white)}
+.crm-search{display:flex;align-items:center;gap:8px}.crm-search>span{font-size:22px}.crm-search input{min-height:44px;border-radius:999px}
+.crm-chips{grid-column:1/-1;display:flex;gap:8px;overflow:auto;scrollbar-width:none}.crm-chips::-webkit-scrollbar{display:none}.crm-chip{white-space:nowrap;padding:8px 12px;border:1px solid var(--black);border-radius:999px;background:var(--white);font-size:10px;font-weight:800}.crm-chip.active{background:var(--acid)}
+.crm-task-board{padding:30px var(--gutter) var(--section);display:grid;gap:10px}.crm-task-card{border:1px solid var(--black);border-radius:18px;padding:15px 17px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:start}.crm-task-card.priority-high{box-shadow:5px 5px 0 var(--pink)}.crm-task-card.status-waiting{background:#fff8ed}.crm-task-card.status-backlog{opacity:.68}.crm-task-card.status-done{opacity:.42}.crm-task-card.status-done .crm-task-title{text-decoration:line-through}
+.crm-task-title{font-size:17px;font-weight:800;line-height:1.2}.crm-task-desc{margin-top:4px;font-size:11px;color:rgba(8,8,8,.56);line-height:1.45}.crm-task-side{text-align:right}
+.crm-message-list{padding:30px var(--gutter) var(--section);display:grid;gap:10px}.crm-message-card{border:1px solid var(--black);border-radius:var(--radius);padding:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;background:var(--white);cursor:pointer}.crm-message-card.unread{box-shadow:7px 7px 0 var(--acid)}.crm-message-card.actionable{border-width:2px}.crm-message-card h3{margin:10px 0 8px;font-size:clamp(24px,3vw,40px)}.crm-message-card p{font-size:12px;color:rgba(8,8,8,.6);line-height:1.5}.crm-message-side{text-align:right}.crm-message-side time{font-size:10px;font-weight:800}.crm-message-side span{display:block;margin-top:8px}
+.crm-project-grid{padding:30px var(--gutter) var(--section);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.crm-project-card{min-height:310px;border:1px solid var(--black);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;background:var(--white);cursor:pointer}.crm-project-card.priority-high{box-shadow:8px 8px 0 var(--pink)}.crm-project-card.status-paused,.crm-project-card.status-later{opacity:.62}.crm-project-card .crm-project-top{display:flex;justify-content:space-between;gap:10px}.crm-project-card h3{margin:38px 0 14px;font-size:clamp(34px,4vw,56px)}.crm-project-card .crm-project-goal{font-size:12px;line-height:1.5;color:rgba(8,8,8,.6)}.crm-project-next{margin-top:auto;padding-top:18px;border-top:1px solid var(--black);font-size:12px}.crm-project-next strong{display:block;margin-bottom:5px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}.crm-project-count{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--pink)}
+.crm-leads{padding:30px var(--gutter) var(--section);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.crm-lead{min-height:260px;border:1px solid var(--black);border-radius:var(--radius);padding:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;background:var(--white);transition:transform .15s,box-shadow .15s;cursor:pointer}.crm-lead:hover{transform:translateY(-3px);box-shadow:8px 8px 0 var(--acid)}.crm-lead.priority-high{box-shadow:7px 7px 0 var(--pink)}.crm-lead.is-due{border-width:2px}.crm-lead.is-warm{background:#fff6fb}.crm-lead h3{margin:22px 0 8px;font-size:clamp(28px,3vw,44px);line-height:.9}.crm-contact{font-size:12px;color:rgba(8,8,8,.55);overflow-wrap:anywhere}.crm-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}.crm-tag{display:inline-flex;min-height:27px;align-items:center;padding:4px 9px;border:1px solid var(--black);border-radius:999px;background:var(--white);font-size:9px;font-weight:800;text-transform:uppercase}.crm-tag.status-warm,.crm-tag.status-replied{background:var(--pink)}.crm-tag.status-action-needed{background:var(--acid)}.crm-tag.status-bounce,.crm-tag.status-declined{background:var(--black);color:var(--white)}.crm-date{text-align:right}.crm-date b{display:block;font-family:var(--serif);font-style:italic;font-size:28px;font-weight:400}.crm-date span{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.crm-date.overdue b{color:var(--pink)}.crm-note{grid-column:1/-1;margin-top:auto;padding-top:16px;border-top:1px solid var(--black);font-size:11px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(8,8,8,.6)}
+.crm-empty{padding:46px;border:1px dashed var(--black);border-radius:var(--radius);text-align:center;grid-column:1/-1}.crm-mobile-nav{display:none}.crm-fab{display:none}
+.crm-dialog{width:min(760px,calc(100% - 20px));max-height:92svh;padding:0;border:1px solid var(--black);border-radius:28px;background:var(--white);color:var(--black);box-shadow:12px 12px 0 var(--pink)}.crm-dialog::backdrop{background:rgba(8,8,8,.76)}.crm-sheet{padding:24px}.crm-sheet-head{position:sticky;top:0;z-index:2;padding:4px 0 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(12px)}.crm-sheet-head h2{font-size:46px}.crm-quick{display:flex;gap:7px;overflow:auto;margin:0 0 18px}.crm-quick button,.crm-mini{border:1px solid var(--black);border-radius:999px;background:var(--white);padding:8px 11px;font-size:10px;font-weight:800}.crm-quick button:hover,.crm-mini:hover{background:var(--acid)}
+.crm-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.crm-form-grid .wide{grid-column:1/-1}.crm-sheet-actions{position:sticky;bottom:0;padding:18px 0 2px;display:flex;justify-content:flex-end;gap:8px;background:linear-gradient(transparent,var(--white) 26%)}.crm-danger{color:#9d0030}
+.crm-message-full-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.crm-message-full-body{white-space:pre-wrap;font-size:13px;line-height:1.65;padding:18px;border:1px solid var(--black);border-radius:18px;background:#fff}.crm-message-dialog .crm-sheet-actions{justify-content:space-between}
+.crm-toast{position:fixed;z-index:100;left:50%;bottom:26px;transform:translateX(-50%);padding:11px 16px;border:1px solid var(--black);border-radius:999px;background:var(--acid);font-size:11px;font-weight:800;box-shadow:5px 5px 0 var(--pink)}
+@media(max-width:1040px){.crm-project-grid,.crm-leads{grid-template-columns:repeat(2,minmax(0,1fr))}.crm-dashboard-grid{grid-template-columns:1fr}.crm-panel-wide{grid-row:auto}.crm-controls-tasks{grid-template-columns:1fr 1fr}.crm-select{grid-column:1/-1}}
+@media(max-width:820px){.crm-login{grid-template-columns:1fr}.crm-login-card{min-height:100svh;border-right:0}.crm-login-art{display:none}.crm-desktop-nav{display:none}.crm-topbar{grid-template-columns:1fr auto auto}.crm-stats{grid-template-columns:repeat(2,1fr)}.crm-controls{grid-template-columns:1fr}.crm-controls-tasks{grid-template-columns:1fr}.crm-chips{grid-column:auto}.crm-project-grid,.crm-leads{grid-template-columns:1fr}}
+@media(max-width:640px){.crm-app{padding-bottom:88px}.crm-topbar{padding:0 18px;height:64px}.crm-sync{display:none}.crm-hero,.crm-section-hero{padding:42px 18px 28px}.crm-hero h1,.crm-section-hero h1{font-size:58px}.crm-new-task-desktop,.crm-section-hero>.btn{display:none}.crm-stats{padding:12px 18px;gap:8px}.crm-stat{min-height:104px;padding:14px}.crm-stat strong{font-size:46px}.crm-dashboard-grid{padding:22px 18px 110px;gap:10px}.crm-panel{padding:18px}.crm-panel-head h2{font-size:38px}.crm-controls{padding:14px 18px}.crm-tabs{overflow:auto;scrollbar-width:none}.crm-tabs::-webkit-scrollbar{display:none}.crm-tabs button{padding:0 12px;white-space:nowrap}.crm-task-board,.crm-message-list,.crm-project-grid,.crm-leads{padding:20px 18px 110px}.crm-task-card{grid-template-columns:auto minmax(0,1fr);}.crm-task-card .crm-task-side{grid-column:2;text-align:left}.crm-message-card{grid-template-columns:1fr}.crm-message-side{text-align:left}.crm-mobile-nav{position:fixed;z-index:45;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));height:68px;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;border:1px solid var(--black);border-radius:22px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 10px 40px rgba(0,0,0,.12)}.crm-mobile-nav button{border:0;border-radius:16px;background:transparent;font-size:9px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.crm-mobile-nav button span{font-size:16px}.crm-mobile-nav button.active{background:var(--black);color:var(--white)}.crm-fab{display:block;position:fixed;z-index:46;right:18px;bottom:calc(86px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border:1px solid var(--black);border-radius:50%;background:var(--pink);font-size:34px;box-shadow:5px 5px 0 var(--acid)}.crm-dialog{width:calc(100% - 12px);margin:auto 6px 80px;border-radius:26px 26px 18px 18px}.crm-sheet{padding:18px}.crm-sheet-head h2{font-size:36px}.crm-form-grid{grid-template-columns:1fr}.crm-form-grid .wide{grid-column:auto}.crm-login-card{padding:26px 20px}.crm-login-card .crm-brand{left:20px;top:24px}.crm-login-card h1{font-size:55px}.crm-login-copy{font-size:14px}}
+
+.crm-reply-box{margin-top:16px;padding:18px;border:1px solid var(--black);border-radius:18px;background:#fff8fb}
+.crm-reply-box textarea{width:100%;border:1px solid var(--black);border-radius:14px;padding:13px;background:var(--white);color:var(--black);font:inherit;resize:vertical;outline:none}
+.crm-reply-box textarea:focus{box-shadow:4px 4px 0 var(--acid)}
+.crm-reply-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.crm-reply-actions span{font-size:10px;line-height:1.4;color:rgba(8,8,8,.55)}
+@media(max-width:640px){.crm-reply-actions{align-items:stretch;flex-direction:column}.crm-reply-actions .btn{width:100%}}
+
+</style>
+<script>
+window.__CRM_PAGE_LOADED=true;
+(function(){
+  function show(msg){
+    var old=document.getElementById('crm-diag-banner'); if(old) old.remove();
+    var b=document.createElement('div'); b.id='crm-diag-banner';
+    b.style.cssText='position:fixed;z-index:99999;left:10px;right:10px;top:10px;padding:12px 14px;border:1px solid #080808;border-radius:14px;background:#d7ff39;color:#080808;font:700 12px/1.4 Manrope,Arial,sans-serif;box-shadow:5px 5px 0 #ff3fad';
+    b.textContent='crm diagnostic: '+msg;
+    document.body.appendChild(b);
+  }
+  window.addEventListener('error',function(e){show((e.message||'javascript error')+(e.filename?' · '+e.filename+':'+e.lineno:''));});
+  window.addEventListener('unhandledrejection',function(e){show('promise: '+String(e.reason&&e.reason.message||e.reason||'unknown'));});
+  setTimeout(function(){if(!window.__CRM_SCRIPT_LOADED)show('интерфейс не запустился. обнови страницу, этот текст можно прислать мне скрином.');},2500);
+})();
+</script></head>
+<body class="crm-body">
+  <main class="crm-login" id="login-screen">
+    <section class="crm-login-card">
+      <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <p class="kicker">private producer operating system</p>
+      <h1>вся работа<br><span class="serif accent-pop">в одной голове</span></h1>
+      <p class="crm-login-copy">проекты, задачи, ответы, лиды, календарь и всё, что раньше жило по чатам.</p>
+      <form id="login-form" class="crm-login-form">
+        <label class="crm-field"><span>пароль</span><input id="login-password" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary crm-login-btn" id="login-button" type="submit">войти</button>
+        <p class="crm-error" id="login-error" hidden>пароль не подошёл</p>
+      </form>
+    </section>
+    <aside class="crm-login-art" aria-hidden="true">
+      <div class="crm-poster"><span>producer os / 02</span><strong>не помнить<br>всё самой</strong><i>dashhkuns</i></div>
+    </aside>
+  </main>
+
+  <main class="crm-app" id="app" hidden>
+    <header class="crm-topbar">
+      <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <nav class="crm-desktop-nav" id="desktop-nav">
+        <button data-section="today" class="active">сегодня</button>
+        <button data-section="tasks">задачи</button>
+        <button data-section="inbox">ответы</button>
+        <button data-section="projects">проекты</button>
+        <button data-section="leads">лиды</button>
+      </nav>
+      <div class="crm-sync"><span class="crm-dot"></span><span id="sync-label">синхронизация…</span></div>
+      <button class="crm-round" id="logout-button" type="button" aria-label="выйти">↗</button>
+    </header>
+
+    <section class="crm-page crm-page-today" data-page="today">
+      <section class="crm-hero">
+        <div><p class="kicker">producer control room</p><h1>что двигаем<br><span class="serif accent-pop">сегодня</span></h1></div>
+        <button class="btn primary crm-new-task-desktop" type="button" data-open-task>+ задача</button>
+      </section>
+      <section class="crm-stats" id="today-stats"></section>
+      <section class="crm-dashboard-grid">
+        <article class="crm-panel crm-panel-wide">
+          <div class="crm-panel-head"><div><p class="kicker">action</p><h2>сделать</h2></div><span id="today-task-count"></span></div>
+          <div id="today-tasks" class="crm-task-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">inbox</p><h2>ответы</h2></div><button class="crm-text-btn" data-goto="inbox">все →</button></div>
+          <div id="today-messages" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">calendar</p><h2>ближайшее</h2></div></div>
+          <div id="today-events" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">waiting</p><h2>ждём</h2></div></div>
+          <div id="today-waiting" class="crm-mini-list"></div>
+        </article>
+      </section>
+    </section>
+
+    <section class="crm-page" data-page="tasks" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all tasks</p><h1>задачи</h1></div><button class="btn primary" type="button" data-open-task>+ новая</button>
+      </section>
+      <section class="crm-controls crm-controls-tasks">
+        <div class="crm-tabs" id="task-tabs">
+          <button data-task-view="open" class="active">открытые</button>
+          <button data-task-view="today">сегодня</button>
+          <button data-task-view="waiting">ждём</button>
+          <button data-task-view="backlog">потом</button>
+          <button data-task-view="done">готово</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="task-search" type="search" placeholder="найти задачу"></label>
+        <select class="crm-select" id="task-project-filter"><option value="all">все проекты</option></select>
+      </section>
+      <section class="crm-task-board" id="task-board"></section>
+    </section>
+
+    <section class="crm-page" data-page="inbox" hidden>
+      <section class="crm-section-hero"><div><p class="kicker">gmail + outreach</p><h1>ответы</h1></div></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="message-tabs">
+          <button data-message-view="all" class="active">все</button>
+          <button data-message-view="unread">непрочитанные</button>
+          <button data-message-view="actionable">нужно действие</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="message-search" type="search" placeholder="отправитель, тема, текст"></label>
+      </section>
+      <section class="crm-message-list" id="message-list"></section>
+    </section>
+
+    <section class="crm-page" data-page="projects" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all moving parts</p><h1>проекты</h1></div><button class="btn primary" id="new-project-button" type="button">+ проект</button>
+      </section>
+      <section class="crm-project-grid" id="project-grid"></section>
+    </section>
+
+    <section class="crm-page" data-page="leads" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">sales pipeline</p><h1>лиды</h1></div><button class="btn primary" type="button" data-open-lead>+ новый лид</button>
+      </section>
+      <section class="crm-stats" id="lead-stats"></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="lead-tabs">
+          <button data-lead-view="today" class="active">сегодня</button>
+          <button data-lead-view="hot">горячие</button>
+          <button data-lead-view="all">все</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="lead-search" type="search" placeholder="компания, контакт, заметка"></label>
+        <div class="crm-chips" id="lead-direction-chips"></div>
+      </section>
+      <section class="crm-leads" id="lead-list"></section>
+    </section>
+
+    <nav class="crm-mobile-nav" id="mobile-nav">
+      <button data-section="today" class="active"><span>●</span>сегодня</button>
+      <button data-section="tasks"><span>✓</span>задачи</button>
+      <button data-section="inbox"><span>↩</span>ответы</button>
+      <button data-section="projects"><span>▦</span>проекты</button>
+      <button data-section="leads"><span>↗</span>лиды</button>
+    </nav>
+    <button class="crm-fab" id="global-fab" type="button">+</button>
+  </main>
+
+  <dialog class="crm-dialog" id="task-dialog">
+    <form method="dialog" class="crm-sheet" id="task-form">
+      <header class="crm-sheet-head"><div><p class="kicker">task</p><h2 id="task-dialog-title">новая задача</h2></div><button type="button" class="crm-round" data-close-dialog="task-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>задача *</span><input name="title" required></label>
+        <label class="crm-field wide"><span>описание</span><textarea name="description" rows="3"></textarea></label>
+        <label class="crm-field"><span>проект</span><select name="project_id" id="task-project-select"><option value="">без проекта</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="todo">todo</option><option value="doing">doing</option><option value="waiting">waiting</option><option value="backlog">backlog</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>срок</span><input name="due_at" type="date"></label>
+        <label class="crm-field"><span>кто делает</span><select name="owner"><option value="dora">я</option><option value="chatgpt">chatgpt</option><option value="external">кто-то другой</option></select></label>
+        <label class="crm-field"><span>ждём от</span><input name="waiting_on" placeholder="имя / команда"></label>
+        <label class="crm-field wide"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-task" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="project-dialog">
+    <form method="dialog" class="crm-sheet" id="project-form">
+      <header class="crm-sheet-head"><div><p class="kicker">project</p><h2 id="project-dialog-title">проект</h2></div><button type="button" class="crm-round" data-close-dialog="project-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>название *</span><input name="name" required></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="active">active</option><option value="later">later</option><option value="paused">paused</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium">medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+        <label class="crm-field"><span>дедлайн</span><input name="deadline" type="date"></label>
+        <label class="crm-field wide"><span>цель</span><textarea name="goal" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>следующий шаг</span><textarea name="next_action" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="lead-dialog">
+    <form method="dialog" class="crm-sheet" id="lead-form">
+      <header class="crm-sheet-head"><div><p class="kicker">lead</p><h2 id="lead-dialog-title">новый лид</h2></div><button type="button" class="crm-round" data-close-dialog="lead-dialog">×</button></header>
+      <div class="crm-quick" id="quick-status">
+        <button type="button" data-status="waiting">ждём</button><button type="button" data-status="replied">ответили</button><button type="button" data-status="warm">горячий</button><button type="button" data-status="declined">нет</button>
+      </div>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>компания *</span><input name="company" required></label>
+        <label class="crm-field"><span>направление</span><select name="direction"><option>producer jobs</option><option>producer sales</option><option>iGaming production</option><option>podcast venue</option><option>photo studio</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field wide"><span>контакт</span><input name="contact"></label>
+        <label class="crm-field"><span>канал</span><input name="channel" value="email"></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="new">new</option><option value="waiting">waiting</option><option value="action needed">action needed</option><option value="replied">replied</option><option value="warm">warm</option><option value="auto-ack">auto-ack</option><option value="paid-only">paid-only</option><option value="declined">declined</option><option value="bounce">bounce</option></select></label>
+        <label class="crm-field"><span>отправлено</span><input name="sent_at" type="date"></label>
+        <label class="crm-field"><span>следующее действие</span><input name="next_action_at" type="date"></label>
+        <label class="crm-field wide"><span>последний ответ</span><textarea name="last_reply" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-lead" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog crm-message-dialog" id="message-dialog">
+    <section class="crm-sheet">
+      <header class="crm-sheet-head"><div><p class="kicker" id="message-channel">email</p><h2 id="message-subject">ответ</h2></div><button type="button" class="crm-round" data-close-dialog="message-dialog">×</button></header>
+      <div class="crm-message-full-meta" id="message-full-meta"></div>
+      <div class="crm-message-full-body" id="message-full-body"></div>
+      <section class="crm-reply-box">
+        <p class="kicker">ответ из crm</p>
+        <textarea id="message-reply" rows="5" placeholder="напиши ответ здесь"></textarea>
+        <div class="crm-reply-actions">
+          <span>после «отправить» письмо попадёт в очередь и уйдёт через gmail</span>
+          <button class="btn primary" id="message-queue-reply" type="button">отправить</button>
+        </div>
+      </section>
+      <footer class="crm-sheet-actions" id="message-actions"></footer>
+    </section>
+  </dialog>
+
+  <div class="crm-toast" id="toast" hidden></div>
+  <script id="crm-inline-script">
+const API="https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/crm-api";
+const APIKEY="sb_publishable_nlajzfkH1tYEOAUZKcBvgg_5hbYJCM4";
+const TOKEN_KEY="dashhkuns_crm_token_v3";
+window.__CRM_SCRIPT_LOADED=true;
+const CLOSED_LEADS=new Set(["bounce","declined"]);
+const DONE_TASKS=new Set(["done"]);
+
+const state={
+  section:"today",
+  projects:[],tasks:[],leads:[],messages:[],events:[],briefings:[],outbox:[],
+  taskView:"open",taskSearch:"",taskProject:"all",
+  messageView:"all",messageSearch:"",
+  leadView:"today",leadSearch:"",leadDirection:"all",
+  editingTask:null,editingLead:null,editingProject:null,currentMessage:null
+};
+
+const $=(s)=>document.querySelector(s);
+const $=(s)=>[...document.querySelectorAll(s)];
+const esc=(v)=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const token=()=>localStorage.getItem(TOKEN_KEY);
+const moscowDate=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Moscow",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+const today=()=>moscowDate();
+const fmtDate=(v)=>{if(!v)return "—";const d=new Date(String(v).length===10?v+"T12:00:00":v);return new Intl.DateTimeFormat("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"short"}).format(d).replace(".","")};
+const fmtDateLong=(v)=>{if(!v)return "—";const d=new Date(v);return new Intl.DateTimeFormat("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(d).replace(".","")};
+const projectById=(id)=>state.projects.find(p=>p.id===id);
+const projectName=(id)=>projectById(id)?.name||"без проекта";
+const isTaskOpen=(t)=>!DONE_TASKS.has(t.status);
+const isTaskDue=(t)=>isTaskOpen(t)&&t.due_at&&t.due_at<=today();
+const isTaskOverdue=(t)=>isTaskOpen(t)&&t.due_at&&t.due_at<today();
+const isLeadDue=(l)=>l.next_action_at&&!CLOSED_LEADS.has(l.status)&&l.next_action_at<=today();
+const isLeadHot=(l)=>!CLOSED_LEADS.has(l.status)&&(l.priority==="high"||["warm","replied","action needed"].includes(l.status));
+const normalize=(v)=>String(v||"").toLowerCase();
+
+async function api(action,payload={}){
+  const headers={"Content-Type":"application/json","apikey":APIKEY};
+  if(action!=="login"&&token())headers.Authorization="Bearer "+token();
+  const res=await fetch(API,{method:"POST",headers,body:JSON.stringify({action,...payload})});
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401&&action!=="login"){localStorage.removeItem(TOKEN_KEY);showLogin();throw new Error("unauthorized")}
+  if(!res.ok)throw new Error(data.detail||data.error||"request_failed");
+  return data;
+}
+function toast(message,error=false){
+  const el=$("#toast");el.textContent=message;el.style.background=error?"#ff8baa":"var(--acid)";el.hidden=false;
+  clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200);
+}
+function showLogin(){ $("#app").hidden=true;$("#login-screen").hidden=false;setTimeout(()=>$("#login-password")?.focus(),80) }
+function showApp(){ $("#login-screen").hidden=true;$("#app").hidden=false }
+
+$("#login-form").addEventListener("submit",async e=>{
+  e.preventDefault();const b=$("#login-button"),err=$("#login-error");err.hidden=true;b.disabled=true;b.textContent="вхожу…";
+  try{const data=await api("login",{password:$("#login-password").value});localStorage.setItem(TOKEN_KEY,data.token);$("#login-password").value="";showApp();await load()}
+  catch{err.hidden=false}
+  finally{b.disabled=false;b.textContent="войти"}
+});
+$("#logout-button").addEventListener("click",()=>{localStorage.removeItem(TOKEN_KEY);showLogin()});
+
+async function load(){
+  $("#sync-label").textContent="обновляю…";
+  try{
+    const data=await api("snapshot");
+    Object.assign(state,{
+      projects:data.projects||[],tasks:data.tasks||[],leads:data.leads||[],messages:data.messages||[],events:data.events||[],briefings:data.briefings||[],outbox:data.outbox||[]
+    });
+    $("#sync-label").textContent="обновлено сейчас";
+    renderAll();
+  }catch(e){$("#sync-label").textContent="ошибка синхронизации";toast("не удалось обновить crm",true)}
+}
+function renderAll(){
+  populateProjectSelects();
+  renderToday();renderTasks();renderInbox();renderProjects();renderLeads();
+}
+function goto(section){
+  state.section=section;
+  $("[data-page]").forEach(p=>p.hidden=p.dataset.page!==section);
+  $("[data-section]").forEach(b=>b.classList.toggle("active",b.dataset.section===section));
+  const fab=$("#global-fab");fab.textContent="+";
+  window.scrollTo({top:0,behavior:"instant"});
+}
+$("[data-section]").forEach(b=>b.addEventListener("click",()=>goto(b.dataset.section)));
+$("[data-goto]").forEach(b=>b.addEventListener("click",()=>goto(b.dataset.goto)));
+
+function stat(label,value,cl=""){return `<article class="crm-stat ${cl}"><strong>${value}</strong><span>${label}</span></article>`}
+
+function renderToday(){
+  const open=state.tasks.filter(isTaskOpen).length;
+  const due=state.tasks.filter(isTaskDue).length;
+  const unread=state.messages.filter(m=>m.status==="unread").length;
+  const hot=state.leads.filter(isLeadHot).length;
+  $("#today-stats").innerHTML=stat("открыто",open)+stat("сегодня",due,"due")+stat("ответы",unread)+stat("горячие",hot,"hot");
+
+  const priority={high:0,medium:1,low:2};
+  let tasks=state.tasks.filter(t=>isTaskDue(t)||(["high"].includes(t.priority)&&isTaskOpen(t)&&t.status!=="backlog"))
+    .sort((a,b)=>(isTaskOverdue(b)-isTaskOverdue(a))||((priority[a.priority]??9)-(priority[b.priority]??9))||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
+  tasks=tasks.slice(0,12);
+  $("#today-task-count").textContent=tasks.length;
+  $("#today-tasks").innerHTML=tasks.length?tasks.map(taskRow).join(""):`<div class="crm-empty">на сегодня пусто. это хорошо.</div>`;
+  bindTaskRows("#today-tasks");
+
+  const messages=state.messages.filter(m=>m.direction==="inbound").slice(0,5);
+  $("#today-messages").innerHTML=messages.length?messages.map(m=>miniMessage(m)).join(""):`<div class="crm-mini-item"><p>новых ответов нет</p></div>`;
+  $("#today-messages [data-message-id]").forEach(el=>el.onclick=()=>openMessage(el.dataset.messageId));
+
+  const now=Date.now();
+  const events=state.events.filter(e=>new Date(e.ends_at||e.starts_at).getTime()>=now).slice(0,6);
+  $("#today-events").innerHTML=events.length?events.map(e=>`<div class="crm-mini-item"><strong>${esc(e.title)}</strong><p>${esc(e.location||projectName(e.project_id)||"")}</p><time>${fmtDateLong(e.starts_at)}</time></div>`).join(""):`<div class="crm-mini-item"><p>в календаре пусто</p></div>`;
+
+  const waitingTasks=state.tasks.filter(t=>t.status==="waiting").slice(0,5);
+  const waitingLeads=state.leads.filter(l=>l.status==="waiting"&&l.priority==="high").slice(0,3);
+  const chunks=[
+    ...waitingTasks.map(t=>`<div class="crm-mini-item" data-edit-task="${t.id}"><strong>${esc(t.title)}</strong><p>ждём: ${esc(t.waiting_on||"ответ")} · ${esc(projectName(t.project_id))}</p><time>${t.due_at?"до "+fmtDate(t.due_at):"без срока"}</time></div>`),
+    ...waitingLeads.map(l=>`<div class="crm-mini-item" data-edit-lead="${l.id}"><strong>${esc(l.company)}</strong><p>${esc(l.contact||"")} · ${esc(l.direction)}</p><time>follow-up ${fmtDate(l.next_action_at)}</time></div>`)
+  ];
+  $("#today-waiting").innerHTML=chunks.length?chunks.join(""):`<div class="crm-mini-item"><p>ничего критичного не ждём</p></div>`;
+  $("#today-waiting [data-edit-task]").forEach(el=>el.onclick=()=>openTask(el.dataset.editTask));
+  $("#today-waiting [data-edit-lead]").forEach(el=>el.onclick=()=>openLead(el.dataset.editLead));
+}
+function taskRow(t){
+  const p=projectById(t.project_id);
+  return `<div class="crm-task-row" data-task-row="${t.id}">
+    <input class="crm-check" type="checkbox" data-task-check="${t.id}" ${t.status==="done"?"checked":""}>
+    <div class="crm-task-main"><button type="button" data-edit-task="${t.id}">${esc(t.title)}</button>
+      ${t.description?`<p>${esc(t.description)}</p>`:""}
+      <div class="crm-task-meta">${p?`<span class="crm-pill">${esc(p.name)}</span>`:""}${t.waiting_on?`<span class="crm-pill pink">ждём: ${esc(t.waiting_on)}</span>`:""}<span class="crm-pill ${t.priority==="high"?"acid":""}">${esc(t.priority)}</span></div>
+    </div>
+    <div class="crm-due ${isTaskOverdue(t)?"overdue":""}">${fmtDate(t.due_at)}</div>
+  </div>`;
+}
+function bindTaskRows(root){
+  $(root+" [data-task-check]").forEach(cb=>cb.onchange=()=>toggleTask(cb.dataset.taskCheck,cb.checked));
+  $(root+" [data-edit-task]").forEach(b=>b.onclick=()=>openTask(b.dataset.editTask));
+}
+async function toggleTask(id,done){
+  try{await api("update_task",{id,patch:{status:done?"done":"todo"}});toast(done?"готово ✓":"вернула в работу");await load()}catch{toast("не сохранилось",true)}
+}
+
+function renderTasks(){
+  const projectFilter=$("#task-project-filter");projectFilter.value=state.taskProject;
+  const q=normalize(state.taskSearch);
+  let rows=state.tasks.filter(t=>{
+    if(state.taskView==="open"&&["done","backlog"].includes(t.status))return false;
+    if(state.taskView==="today"&&!isTaskDue(t))return false;
+    if(state.taskView==="waiting"&&t.status!=="waiting")return false;
+    if(state.taskView==="backlog"&&t.status!=="backlog")return false;
+    if(state.taskView==="done"&&t.status!=="done")return false;
+    if(state.taskProject!=="all"&&t.project_id!==state.taskProject)return false;
+    if(q&&!normalize([t.title,t.description,t.waiting_on,projectName(t.project_id)].join(" ")).includes(q))return false;
+    return true;
+  });
+  const rank={high:0,medium:1,low:2};rows.sort((a,b)=>(rank[a.priority]-rank[b.priority])||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
+  $("#task-board").innerHTML=rows.length?rows.map(t=>`<article class="crm-task-card priority-${esc(t.priority)} status-${esc(t.status)}">
+    <input class="crm-check" type="checkbox" data-task-check="${t.id}" ${t.status==="done"?"checked":""}>
+    <div><button class="crm-text-btn crm-task-title" data-edit-task="${t.id}">${esc(t.title)}</button>
+    ${t.description?`<div class="crm-task-desc">${esc(t.description)}</div>`:""}
+    <div class="crm-task-meta"><span class="crm-pill">${esc(projectName(t.project_id))}</span><span class="crm-pill">${esc(t.status)}</span>${t.waiting_on?`<span class="crm-pill pink">ждём: ${esc(t.waiting_on)}</span>`:""}</div></div>
+    <div class="crm-task-side"><div class="crm-due ${isTaskOverdue(t)?"overdue":""}">${fmtDate(t.due_at)}</div><span class="crm-pill ${t.priority==="high"?"acid":""}">${esc(t.priority)}</span></div>
+  </article>`).join(""):`<div class="crm-empty">ничего нет</div>`;
+  bindTaskRows("#task-board");
+}
+$("#task-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-task-view]");if(!b)return;state.taskView=b.dataset.taskView;$("[data-task-view]").forEach(x=>x.classList.toggle("active",x===b));renderTasks()});
+$("#task-search").addEventListener("input",e=>{state.taskSearch=e.target.value;renderTasks()});
+$("#task-project-filter").addEventListener("change",e=>{state.taskProject=e.target.value;renderTasks()});
+
+function miniMessage(m){return `<div class="crm-mini-item" data-message-id="${m.id}"><strong>${esc(m.sender||m.subject||"ответ")}</strong><p>${esc(m.snippet||m.subject||"")}</p><time>${fmtDateLong(m.received_at)} ${m.status==="unread"?"· новое":""}</time></div>`}
+function renderInbox(){
+  const q=normalize(state.messageSearch);
+  let rows=state.messages.filter(m=>{
+    if(state.messageView==="unread"&&m.status!=="unread")return false;
+    if(state.messageView==="actionable"&&!m.actionable)return false;
+    if(q&&!normalize([m.sender,m.subject,m.body,m.snippet].join(" ")).includes(q))return false;
+    return true;
+  });
+  $("#message-list").innerHTML=rows.length?rows.map(m=>`<article class="crm-message-card ${m.status==="unread"?"unread":""} ${m.actionable?"actionable":""}" data-message-id="${m.id}">
+    <div><p class="kicker">${esc(m.channel)} · ${esc(m.direction)}</p><h3>${esc(m.subject||"без темы")}</h3><p><strong>${esc(m.sender||"")}</strong></p><p>${esc(m.snippet||m.body||"")}</p></div>
+    <div class="crm-message-side"><time>${fmtDateLong(m.received_at)}</time>${m.actionable?`<span class="crm-pill acid">нужно действие</span>`:""}${m.status==="unread"?`<span class="crm-pill pink">новое</span>`:""}</div>
+  </article>`).join(""):`<div class="crm-empty">ответов по этому фильтру нет</div>`;
+  $("#message-list [data-message-id]").forEach(el=>el.onclick=()=>openMessage(el.dataset.messageId));
+}
+$("#message-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-message-view]");if(!b)return;state.messageView=b.dataset.messageView;$("[data-message-view]").forEach(x=>x.classList.toggle("active",x===b));renderInbox()});
+$("#message-search").addEventListener("input",e=>{state.messageSearch=e.target.value;renderInbox()});
+
+async function openMessage(id){
+  const m=state.messages.find(x=>x.id===id);if(!m)return;state.currentMessage=id;
+  $("#message-channel").textContent=m.channel||"email";$("#message-subject").textContent=m.subject||"ответ";
+  $("#message-full-meta").innerHTML=`<span class="crm-pill">${esc(m.sender||"")}</span><span class="crm-pill">${fmtDateLong(m.received_at)}</span>${m.actionable?`<span class="crm-pill acid">нужно действие</span>`:""}`;
+  $("#message-full-body").textContent=m.body||m.snippet||"";
+  const url=m.metadata?.gmail_url;
+  $("#message-actions").innerHTML=`<div>${url?`<a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener">открыть в gmail</a>`:""}</div><div class="button-row"><button class="btn ghost" id="message-toggle-action">${m.actionable?"действие закрыто":"нужно действие"}</button><button class="btn primary" id="message-mark-read">${m.status==="unread"?"прочитано":"закрыть"}</button></div>`;
+  $("#message-reply").value="";
+  const queued=state.outbox.find(o=>o.source_message_id===id&&o.status==="queued");
+  if(queued){$("#message-reply").value=queued.body||"";$("#message-queue-reply").textContent="уже в очереди";$("#message-queue-reply").disabled=true}else{$("#message-queue-reply").textContent="отправить";$("#message-queue-reply").disabled=false}
+  $("#message-queue-reply").onclick=async()=>{
+    const body=$("#message-reply").value.trim();if(!body)return toast("напиши ответ",true);
+    const match=String(m.sender||"").match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+    const recipient=match?match[0]:String(m.sender||"").trim();
+    if(!recipient.includes("@"))return toast("не нашла email получателя",true);
+    const subject=/^re:/i.test(m.subject||"")?(m.subject||""):"Re: "+(m.subject||"");
+    try{await api("queue_email",{source_message_id:id,recipient,subject,body});toast("письмо поставлено в отправку");$("#message-queue-reply").textContent="в очереди";$("#message-queue-reply").disabled=true;await load()}catch{toast("не удалось поставить в очередь",true)}
+  };
+  $("#message-dialog").showModal();
+  $("#message-mark-read").onclick=async()=>{if(m.status==="unread"){await api("update_message",{id,patch:{status:"read"}});m.status="read";toast("прочитано");renderAll()}else $("#message-dialog").close()};
+  $("#message-toggle-action").onclick=async()=>{await api("update_message",{id,patch:{actionable:!m.actionable}});m.actionable=!m.actionable;toast(m.actionable?"пометила как действие":"убрала из действий");renderAll();openMessage(id)};
+  if(m.status==="unread"){api("update_message",{id,patch:{status:"read"}}).then(()=>{m.status="read";renderToday();renderInbox()}).catch(()=>{})}
+}
+
+function renderProjects(){
+  const rows=[...state.projects].sort((a,b)=>(a.sort_order||100)-(b.sort_order||100));
+  $("#project-grid").innerHTML=rows.map(p=>{
+    const open=state.tasks.filter(t=>t.project_id===p.id&&isTaskOpen(t)&&t.status!=="backlog").length;
+    return `<article class="crm-project-card priority-${esc(p.priority)} status-${esc(p.status)}" data-project-id="${p.id}">
+      <div class="crm-project-top"><div><span class="crm-pill">${esc(p.status)}</span> <span class="crm-pill">${esc(p.category)}</span></div><span class="crm-project-count">${open}</span></div>
+      <h3>${esc(p.name)}</h3><p class="crm-project-goal">${esc(p.goal||"")}</p>
+      <div class="crm-project-next"><strong>следующий шаг ${p.deadline?"· "+fmtDate(p.deadline):""}</strong>${esc(p.next_action||"нет следующего действия")}</div>
+    </article>`;
+  }).join("");
+  $("#project-grid [data-project-id]").forEach(el=>el.onclick=()=>openProject(el.dataset.projectId));
+}
+
+function leadScore(l){let s=0;if(isLeadDue(l))s+=100;if(l.status==="warm")s+=80;if(l.status==="replied")s+=60;if(l.priority==="high")s+=30;return s}
+function renderLeads(){
+  const active=state.leads.filter(l=>!CLOSED_LEADS.has(l.status)).length,due=state.leads.filter(isLeadDue).length,hot=state.leads.filter(isLeadHot).length,replies=state.leads.filter(l=>["replied","warm","auto-ack","paid-only"].includes(l.status)).length;
+  $("#lead-stats").innerHTML=stat("в работе",active)+stat("сегодня",due,"due")+stat("горячие",hot,"hot")+stat("ответы",replies);
+  renderLeadChips();
+  const q=normalize(state.leadSearch);
+  let rows=state.leads.filter(l=>{
+    if(state.leadView==="today"&&!isLeadDue(l))return false;
+    if(state.leadView==="hot"&&!isLeadHot(l))return false;
+    if(state.leadDirection!=="all"&&l.direction!==state.leadDirection)return false;
+    if(q&&!normalize([l.company,l.contact,l.notes,l.last_reply,l.direction,l.status].join(" ")).includes(q))return false;
+    return true;
+  }).sort((a,b)=>leadScore(b)-leadScore(a)||String(a.company).localeCompare(String(b.company),"ru"));
+  $("#lead-list").innerHTML=rows.length?rows.map(leadCard).join(""):`<div class="crm-empty">здесь сейчас пусто</div>`;
+  $("#lead-list [data-lead-id]").forEach(el=>el.onclick=()=>openLead(el.dataset.leadId));
+}
+function leadCard(l){return `<article class="crm-lead priority-${esc(l.priority)} ${isLeadDue(l)?"is-due":""} ${["warm","replied"].includes(l.status)?"is-warm":""}" data-lead-id="${l.id}">
+  <div><p class="kicker">${esc(l.direction)}</p><h3>${esc(l.company)}</h3><div class="crm-contact">${esc(l.contact||"контакт не указан")}</div><div class="crm-meta"><span class="crm-tag status-${esc(l.status).replace(/\s+/g,"-")}">${esc(l.status)}</span><span class="crm-tag">${esc(l.priority)}</span><span class="crm-tag">${esc(l.channel||"")}</span></div></div>
+  <div class="crm-date ${l.next_action_at<today()&&isLeadDue(l)?"overdue":""}"><b>${fmtDate(l.next_action_at)}</b><span>next</span></div>
+  <div class="crm-note">${esc(l.last_reply||l.notes||"")}</div></article>`}
+function renderLeadChips(){
+  const dirs=["all",...new Set(state.leads.map(l=>l.direction).filter(Boolean))];
+  const labels={"all":"все","producer jobs":"вакансии","producer sales":"продажи","iGaming production":"igaming","podcast venue":"подкаст","photo studio":"фотостудии"};
+  $("#lead-direction-chips").innerHTML=dirs.map(d=>`<button class="crm-chip ${state.leadDirection===d?"active":""}" data-dir="${esc(d)}">${esc(labels[d]||d)}</button>`).join("");
+  $("#lead-direction-chips [data-dir]").forEach(b=>b.onclick=()=>{state.leadDirection=b.dataset.dir;renderLeads()});
+}
+$("#lead-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-lead-view]");if(!b)return;state.leadView=b.dataset.leadView;$("[data-lead-view]").forEach(x=>x.classList.toggle("active",x===b));renderLeads()});
+$("#lead-search").addEventListener("input",e=>{state.leadSearch=e.target.value;renderLeads()});
+
+function populateProjectSelects(){
+  const options=state.projects.filter(p=>p.status!=="done").map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  $("#task-project-select").innerHTML='<option value="">без проекта</option>'+options;
+  $("#task-project-filter").innerHTML='<option value="all">все проекты</option>'+options;
+  $("#task-project-filter").value=state.taskProject;
+}
+
+const taskDialog=$("#task-dialog"),taskForm=$("#task-form");
+$("[data-open-task]").forEach(b=>b.onclick=()=>openTask());
+function openTask(id=null){
+  const t=id?state.tasks.find(x=>x.id===id):null;state.editingTask=t?.id||null;
+  $("#task-dialog-title").textContent=t?"задача":"новая задача";$("#delete-task").hidden=!t;
+  const defaults={title:"",description:"",project_id:"",priority:"medium",status:"todo",due_at:"",owner:"dora",waiting_on:"",category:"work"};
+  for(const [k,v] of Object.entries(defaults))if(taskForm.elements[k])taskForm.elements[k].value=t?.[k]??v;
+  taskDialog.showModal();
+}
+taskForm.addEventListener("submit",async e=>{
+  e.preventDefault();const fd=new FormData(taskForm),task={};for(const [k,v] of fd.entries())task[k]=String(v).trim()||null;
+  try{if(state.editingTask)await api("update_task",{id:state.editingTask,patch:task});else await api("create_task",{task});taskDialog.close();toast("задача сохранена");await load()}catch{toast("не сохранилось",true)}
+});
+$("#delete-task").onclick=async()=>{if(!state.editingTask||!confirm("удалить задачу?"))return;await api("delete_task",{id:state.editingTask});taskDialog.close();toast("удалено");await load()};
+
+const projectDialog=$("#project-dialog"),projectForm=$("#project-form");
+$("#new-project-button").onclick=()=>openProject();
+function openProject(id=null){
+  const p=id?state.projects.find(x=>x.id===id):null;state.editingProject=p?.id||null;$("#project-dialog-title").textContent=p?p.name:"новый проект";
+  const defaults={name:"",status:"active",priority:"medium",category:"work",deadline:"",goal:"",next_action:"",notes:""};
+  for(const [k,v] of Object.entries(defaults))if(projectForm.elements[k])projectForm.elements[k].value=p?.[k]??v;
+  projectDialog.showModal();
+}
+projectForm.addEventListener("submit",async e=>{
+  e.preventDefault();const fd=new FormData(projectForm),project={};for(const [k,v] of fd.entries())project[k]=String(v).trim()||null;
+  try{if(state.editingProject)await api("update_project",{id:state.editingProject,patch:project});else await api("create_project",{project});projectDialog.close();toast("проект сохранён");await load()}catch{toast("не сохранилось",true)}
+});
+
+const leadDialog=$("#lead-dialog"),leadForm=$("#lead-form");
+$("[data-open-lead]").forEach(b=>b.onclick=()=>openLead());
+function openLead(id=null){
+  const l=id?state.leads.find(x=>x.id===id):null;state.editingLead=l?.id||null;$("#lead-dialog-title").textContent=l?l.company:"новый лид";$("#delete-lead").hidden=!l;
+  const defaults={company:"",direction:"producer jobs",priority:"medium",contact:"",channel:"email",status:"new",sent_at:"",next_action_at:"",last_reply:"",notes:""};
+  for(const [k,v] of Object.entries(defaults))if(leadForm.elements[k])leadForm.elements[k].value=l?.[k]??v;
+  leadDialog.showModal();
+}
+$("#quick-status").addEventListener("click",e=>{const b=e.target.closest("[data-status]");if(b)leadForm.elements.status.value=b.dataset.status});
+leadForm.addEventListener("submit",async e=>{
+  e.preventDefault();const fd=new FormData(leadForm),lead={};for(const [k,v] of fd.entries())lead[k]=String(v).trim()||null;
+  try{if(state.editingLead)await api("update_lead",{id:state.editingLead,patch:lead});else await api("create_lead",{lead});leadDialog.close();toast("лид сохранён");await load()}catch{toast("не сохранилось",true)}
+});
+$("#delete-lead").onclick=async()=>{if(!state.editingLead||!confirm("удалить лид?"))return;await api("delete_lead",{id:state.editingLead});leadDialog.close();toast("удалено");await load()};
+
+$("[data-close-dialog]").forEach(b=>b.onclick=()=>$("#"+b.dataset.closeDialog).close());
+$("#global-fab").onclick=()=>state.section==="leads"?openLead():openTask();
+
+(async()=>{
+  try{
+    if(token()){showApp();await load()}else showLogin();
+    window.__CRM_BOOT_OK=true;
+  }catch(e){
+    window.__CRM_BOOT_ERROR=String(e&&e.message||e);
+    showLogin();
+  }
+})();
+</script>
+</body>
+</html>
