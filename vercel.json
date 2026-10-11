@@ -137,14 +137,6 @@
   ],
   "rewrites": [
     {
-      "source": "/crm",
-      "destination": "/crm/index.html"
-    },
-    {
-      "source": "/crm/",
-      "destination": "/crm/index.html"
-    },
-    {
       "source": "/",
       "has": [
         {
@@ -152,17 +144,15 @@
           "value": "crm.dashhkuns.com"
         }
       ],
-      "destination": "/crm/index.html"
+      "destination": "/crm.html"
     },
     {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "crm.dashhkuns.com"
-        }
-      ],
-      "destination": "/crm/:path*"
+      "source": "/crm",
+      "destination": "/crm.html"
+    },
+    {
+      "source": "/crm/",
+      "destination": "/crm.html"
     },
     {
       "source": "/en/contact",
@@ -227,7 +217,7 @@
   ],
   "headers": [
     {
-      "source": "/crm/:path*",
+      "source": "/crm.html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -236,10 +226,24 @@
         {
           "key": "X-Robots-Tag",
           "value": "noindex, nofollow, noarchive"
-        },
+        }
+      ]
+    },
+    {
+      "source": "/crm.css",
+      "headers": [
         {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; connect-src 'self' https://hiczdxqlmrzozdvnlqfl.supabase.co; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    },
+    {
+      "source": "/crm.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
         }
       ]
     },
