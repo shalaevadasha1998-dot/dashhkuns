@@ -171,6 +171,7 @@ const pageEvents={
   '/about':'page_view_about',
   '/contact':'page_view_contact',
   '/insights':'page_view_insights',
+  '/faq':'page_view_faq',
   '/creative-producer':'page_view_creative_producer',
   '/creative-producer-moscow':'page_view_creative_producer_moscow',
   '/project-launch':'page_view_project_launch',
