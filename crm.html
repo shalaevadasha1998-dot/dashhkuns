@@ -198,6 +198,14 @@
       <header class="crm-sheet-head"><div><p class="kicker" id="message-channel">email</p><h2 id="message-subject">ответ</h2></div><button type="button" class="crm-round" data-close-dialog="message-dialog">×</button></header>
       <div class="crm-message-full-meta" id="message-full-meta"></div>
       <div class="crm-message-full-body" id="message-full-body"></div>
+      <section class="crm-reply-box">
+        <p class="kicker">ответ из crm</p>
+        <textarea id="message-reply" rows="5" placeholder="напиши ответ здесь"></textarea>
+        <div class="crm-reply-actions">
+          <span>после «отправить» письмо попадёт в очередь и уйдёт через gmail</span>
+          <button class="btn primary" id="message-queue-reply" type="button">отправить</button>
+        </div>
+      </section>
       <footer class="crm-sheet-actions" id="message-actions"></footer>
     </section>
   </dialog>
