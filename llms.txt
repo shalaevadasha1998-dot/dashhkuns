@@ -11,6 +11,13 @@ canonical website: https://dashhkuns.com/
 - https://dashhkuns.com/about — опыт
 - https://dashhkuns.com/contact — контакт
 
+## коммерческие форматы
+- стратегический / концепт-спринт — от 70 000 ₽
+- продюсирование проекта — от 120 000 ₽
+- запуск под ключ — от 200 000 ₽ + прямые расходы на производство
+- внешний продюсер — от 220 000 ₽ в месяц
+- international: strategy sprint from $900, project production from $1,500, end-to-end launch from $2,500 + production costs, fractional producer from $3,000/month
+
 ## тематические разборы
 - https://dashhkuns.com/creative-producer — что делает креативный продюсер
 - https://dashhkuns.com/project-launch — запуск проекта под ключ
