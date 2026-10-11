@@ -10,134 +10,199 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles-v2.css?v=20261011-crm">
-  <link rel="stylesheet" href="/crm.css?v=20261011-2">
+  <link rel="stylesheet" href="/styles-v2.css?v=20261011-crm-os">
+  <link rel="stylesheet" href="/crm.css?v=20261011-os2">
 </head>
 <body class="crm-body">
   <main class="crm-login" id="login-screen">
     <section class="crm-login-card">
       <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
-      <p class="kicker">private producer control room</p>
-      <h1>вся работа<br><span class="serif accent-pop">без табличного ада</span></h1>
-      <p class="crm-login-copy">лиды, ответы, follow-up и следующие действия в одном месте.</p>
+      <p class="kicker">private producer operating system</p>
+      <h1>вся работа<br><span class="serif accent-pop">в одной голове</span></h1>
+      <p class="crm-login-copy">проекты, задачи, ответы, лиды, календарь и всё, что раньше жило по чатам.</p>
       <form id="login-form" class="crm-login-form">
-        <label class="crm-field">
-          <span>пароль</span>
-          <input id="login-password" type="password" autocomplete="current-password" required>
-        </label>
+        <label class="crm-field"><span>пароль</span><input id="login-password" type="password" autocomplete="current-password" required></label>
         <button class="btn primary crm-login-btn" id="login-button" type="submit">войти</button>
         <p class="crm-error" id="login-error" hidden>пароль не подошёл</p>
       </form>
     </section>
     <aside class="crm-login-art" aria-hidden="true">
-      <div class="crm-poster">
-        <span>producer os / 01</span>
-        <strong>ответ<br>важнее<br>ещё одного<br>лида</strong>
-        <i>dashhkuns</i>
-      </div>
+      <div class="crm-poster"><span>producer os / 02</span><strong>не помнить<br>всё самой</strong><i>dashhkuns</i></div>
     </aside>
   </main>
 
   <main class="crm-app" id="app" hidden>
     <header class="crm-topbar">
       <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <nav class="crm-desktop-nav" id="desktop-nav">
+        <button data-section="today" class="active">сегодня</button>
+        <button data-section="tasks">задачи</button>
+        <button data-section="inbox">ответы</button>
+        <button data-section="projects">проекты</button>
+        <button data-section="leads">лиды</button>
+      </nav>
       <div class="crm-sync"><span class="crm-dot"></span><span id="sync-label">синхронизация…</span></div>
       <button class="crm-round" id="logout-button" type="button" aria-label="выйти">↗</button>
     </header>
 
-    <section class="crm-hero">
-      <div>
-        <p class="kicker">producer control room</p>
-        <h1>что двигаем<br><span class="serif accent-pop">сегодня</span></h1>
-      </div>
-      <button class="btn primary crm-add-desktop" id="desktop-add" type="button">+ новый лид</button>
+    <section class="crm-page crm-page-today" data-page="today">
+      <section class="crm-hero">
+        <div><p class="kicker">producer control room</p><h1>что двигаем<br><span class="serif accent-pop">сегодня</span></h1></div>
+        <button class="btn primary crm-new-task-desktop" type="button" data-open-task>+ задача</button>
+      </section>
+      <section class="crm-stats" id="today-stats"></section>
+      <section class="crm-dashboard-grid">
+        <article class="crm-panel crm-panel-wide">
+          <div class="crm-panel-head"><div><p class="kicker">action</p><h2>сделать</h2></div><span id="today-task-count"></span></div>
+          <div id="today-tasks" class="crm-task-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">inbox</p><h2>ответы</h2></div><button class="crm-text-btn" data-goto="inbox">все →</button></div>
+          <div id="today-messages" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">calendar</p><h2>ближайшее</h2></div></div>
+          <div id="today-events" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">waiting</p><h2>ждём</h2></div></div>
+          <div id="today-waiting" class="crm-mini-list"></div>
+        </article>
+      </section>
     </section>
 
-    <section class="crm-stats" id="stats"></section>
-
-    <section class="crm-controls">
-      <div class="crm-tabs" id="view-switch">
-        <button data-view="today" class="active">сегодня</button>
-        <button data-view="hot">горячие</button>
-        <button data-view="all">все</button>
-      </div>
-      <label class="crm-search">
-        <span>⌕</span>
-        <input id="search-input" type="search" placeholder="компания, контакт, заметка">
-      </label>
-      <div class="crm-chips" id="direction-chips"></div>
+    <section class="crm-page" data-page="tasks" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all tasks</p><h1>задачи</h1></div><button class="btn primary" type="button" data-open-task>+ новая</button>
+      </section>
+      <section class="crm-controls crm-controls-tasks">
+        <div class="crm-tabs" id="task-tabs">
+          <button data-task-view="open" class="active">открытые</button>
+          <button data-task-view="today">сегодня</button>
+          <button data-task-view="waiting">ждём</button>
+          <button data-task-view="backlog">потом</button>
+          <button data-task-view="done">готово</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="task-search" type="search" placeholder="найти задачу"></label>
+        <select class="crm-select" id="task-project-filter"><option value="all">все проекты</option></select>
+      </section>
+      <section class="crm-task-board" id="task-board"></section>
     </section>
 
-    <section class="crm-section-head">
-      <div>
-        <p class="kicker" id="section-kicker">сегодня</p>
-        <h2 id="section-title">нужно сделать</h2>
-      </div>
-      <strong id="result-count">0</strong>
+    <section class="crm-page" data-page="inbox" hidden>
+      <section class="crm-section-hero"><div><p class="kicker">gmail + outreach</p><h1>ответы</h1></div></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="message-tabs">
+          <button data-message-view="all" class="active">все</button>
+          <button data-message-view="unread">непрочитанные</button>
+          <button data-message-view="actionable">нужно действие</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="message-search" type="search" placeholder="отправитель, тема, текст"></label>
+      </section>
+      <section class="crm-message-list" id="message-list"></section>
     </section>
 
-    <section class="crm-leads" id="lead-list">
-      <div class="crm-empty">загружаю crm…</div>
+    <section class="crm-page" data-page="projects" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all moving parts</p><h1>проекты</h1></div><button class="btn primary" id="new-project-button" type="button">+ проект</button>
+      </section>
+      <section class="crm-project-grid" id="project-grid"></section>
     </section>
 
-    <button class="crm-fab" id="fab" type="button" aria-label="добавить лид">+</button>
+    <section class="crm-page" data-page="leads" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">sales pipeline</p><h1>лиды</h1></div><button class="btn primary" type="button" data-open-lead>+ новый лид</button>
+      </section>
+      <section class="crm-stats" id="lead-stats"></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="lead-tabs">
+          <button data-lead-view="today" class="active">сегодня</button>
+          <button data-lead-view="hot">горячие</button>
+          <button data-lead-view="all">все</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="lead-search" type="search" placeholder="компания, контакт, заметка"></label>
+        <div class="crm-chips" id="lead-direction-chips"></div>
+      </section>
+      <section class="crm-leads" id="lead-list"></section>
+    </section>
+
+    <nav class="crm-mobile-nav" id="mobile-nav">
+      <button data-section="today" class="active"><span>●</span>сегодня</button>
+      <button data-section="tasks"><span>✓</span>задачи</button>
+      <button data-section="inbox"><span>↩</span>ответы</button>
+      <button data-section="projects"><span>▦</span>проекты</button>
+      <button data-section="leads"><span>↗</span>лиды</button>
+    </nav>
+    <button class="crm-fab" id="global-fab" type="button">+</button>
   </main>
+
+  <dialog class="crm-dialog" id="task-dialog">
+    <form method="dialog" class="crm-sheet" id="task-form">
+      <header class="crm-sheet-head"><div><p class="kicker">task</p><h2 id="task-dialog-title">новая задача</h2></div><button type="button" class="crm-round" data-close-dialog="task-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>задача *</span><input name="title" required></label>
+        <label class="crm-field wide"><span>описание</span><textarea name="description" rows="3"></textarea></label>
+        <label class="crm-field"><span>проект</span><select name="project_id" id="task-project-select"><option value="">без проекта</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="todo">todo</option><option value="doing">doing</option><option value="waiting">waiting</option><option value="backlog">backlog</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>срок</span><input name="due_at" type="date"></label>
+        <label class="crm-field"><span>кто делает</span><select name="owner"><option value="dora">я</option><option value="chatgpt">chatgpt</option><option value="external">кто-то другой</option></select></label>
+        <label class="crm-field"><span>ждём от</span><input name="waiting_on" placeholder="имя / команда"></label>
+        <label class="crm-field wide"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-task" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="project-dialog">
+    <form method="dialog" class="crm-sheet" id="project-form">
+      <header class="crm-sheet-head"><div><p class="kicker">project</p><h2 id="project-dialog-title">проект</h2></div><button type="button" class="crm-round" data-close-dialog="project-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>название *</span><input name="name" required></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="active">active</option><option value="later">later</option><option value="paused">paused</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium">medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+        <label class="crm-field"><span>дедлайн</span><input name="deadline" type="date"></label>
+        <label class="crm-field wide"><span>цель</span><textarea name="goal" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>следующий шаг</span><textarea name="next_action" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
 
   <dialog class="crm-dialog" id="lead-dialog">
     <form method="dialog" class="crm-sheet" id="lead-form">
-      <header class="crm-sheet-head">
-        <div>
-          <p class="kicker" id="dialog-kicker">лид</p>
-          <h2 id="dialog-title">новый контакт</h2>
-        </div>
-        <button type="button" class="crm-round" id="close-dialog">×</button>
-      </header>
-
+      <header class="crm-sheet-head"><div><p class="kicker">lead</p><h2 id="lead-dialog-title">новый лид</h2></div><button type="button" class="crm-round" data-close-dialog="lead-dialog">×</button></header>
       <div class="crm-quick" id="quick-status">
-        <button type="button" data-status="waiting">ждём</button>
-        <button type="button" data-status="replied">ответили</button>
-        <button type="button" data-status="warm">горячий</button>
-        <button type="button" data-status="declined">нет</button>
+        <button type="button" data-status="waiting">ждём</button><button type="button" data-status="replied">ответили</button><button type="button" data-status="warm">горячий</button><button type="button" data-status="declined">нет</button>
       </div>
-
       <div class="crm-form-grid">
         <label class="crm-field wide"><span>компания *</span><input name="company" required></label>
-        <label class="crm-field"><span>направление</span>
-          <select name="direction">
-            <option>producer jobs</option><option>producer sales</option><option>iGaming production</option><option>podcast venue</option><option>photo studio</option>
-          </select>
-        </label>
-        <label class="crm-field"><span>приоритет</span>
-          <select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select>
-        </label>
-        <label class="crm-field wide"><span>контакт</span><input name="contact" placeholder="email / telegram / whatsapp"></label>
+        <label class="crm-field"><span>направление</span><select name="direction"><option>producer jobs</option><option>producer sales</option><option>iGaming production</option><option>podcast venue</option><option>photo studio</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field wide"><span>контакт</span><input name="contact"></label>
         <label class="crm-field"><span>канал</span><input name="channel" value="email"></label>
-        <label class="crm-field"><span>статус</span>
-          <select name="status"><option value="new">new</option><option value="waiting">waiting</option><option value="action needed">action needed</option><option value="replied">replied</option><option value="warm">warm</option><option value="auto-ack">auto-ack</option><option value="paid-only">paid-only</option><option value="declined">declined</option><option value="bounce">bounce</option></select>
-        </label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="new">new</option><option value="waiting">waiting</option><option value="action needed">action needed</option><option value="replied">replied</option><option value="warm">warm</option><option value="auto-ack">auto-ack</option><option value="paid-only">paid-only</option><option value="declined">declined</option><option value="bounce">bounce</option></select></label>
         <label class="crm-field"><span>отправлено</span><input name="sent_at" type="date"></label>
         <label class="crm-field"><span>следующее действие</span><input name="next_action_at" type="date"></label>
         <label class="crm-field wide"><span>последний ответ</span><textarea name="last_reply" rows="3"></textarea></label>
         <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
-        <label class="crm-field"><span>сумма</span><input name="deal_value" inputmode="decimal" placeholder="0"></label>
-        <label class="crm-field"><span>валюта</span><input name="currency" value="RUB"></label>
-        <label class="crm-field wide"><span>ссылка</span><input name="source_url" type="url" placeholder="https://"></label>
       </div>
-
-      <section class="crm-activity" id="activity-section" hidden>
-        <div class="crm-activity-title"><span>история</span><button type="button" class="crm-mini" id="copy-contact">копировать контакт</button></div>
-        <div id="activity-list"></div>
-        <div class="crm-activity-add"><input id="activity-input" placeholder="добавить заметку"><button class="crm-mini" id="activity-add" type="button">добавить</button></div>
-      </section>
-
-      <footer class="crm-sheet-actions">
-        <button type="button" class="btn ghost crm-danger" id="delete-lead" hidden>удалить</button>
-        <button type="submit" class="btn primary" id="save-lead">сохранить</button>
-      </footer>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-lead" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
     </form>
   </dialog>
 
+  <dialog class="crm-dialog crm-message-dialog" id="message-dialog">
+    <section class="crm-sheet">
+      <header class="crm-sheet-head"><div><p class="kicker" id="message-channel">email</p><h2 id="message-subject">ответ</h2></div><button type="button" class="crm-round" data-close-dialog="message-dialog">×</button></header>
+      <div class="crm-message-full-meta" id="message-full-meta"></div>
+      <div class="crm-message-full-body" id="message-full-body"></div>
+      <footer class="crm-sheet-actions" id="message-actions"></footer>
+    </section>
+  </dialog>
+
   <div class="crm-toast" id="toast" hidden></div>
-  <script src="/crm.js?v=20261011-2"></script>
+  <script src="/crm.js?v=20261011-os2"></script>
 </body>
 </html>
