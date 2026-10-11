@@ -6,7 +6,7 @@ const DONE_TASKS=new Set(["done"]);
 
 const state={
   section:"today",
-  projects:[],tasks:[],leads:[],messages:[],events:[],briefings:[],
+  projects:[],tasks:[],leads:[],messages:[],events:[],briefings:[],outbox:[],
   taskView:"open",taskSearch:"",taskProject:"all",
   messageView:"all",messageSearch:"",
   leadView:"today",leadSearch:"",leadDirection:"all",
@@ -59,7 +59,7 @@ async function load(){
   try{
     const data=await api("snapshot");
     Object.assign(state,{
-      projects:data.projects||[],tasks:data.tasks||[],leads:data.leads||[],messages:data.messages||[],events:data.events||[],briefings:data.briefings||[]
+      projects:data.projects||[],tasks:data.tasks||[],leads:data.leads||[],messages:data.messages||[],events:data.events||[],briefings:data.briefings||[],outbox:data.outbox||[]
     });
     $("#sync-label").textContent="обновлено сейчас";
     renderAll();
@@ -185,6 +185,17 @@ async function openMessage(id){
   $("#message-full-body").textContent=m.body||m.snippet||"";
   const url=m.metadata?.gmail_url;
   $("#message-actions").innerHTML=`<div>${url?`<a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener">открыть в gmail</a>`:""}</div><div class="button-row"><button class="btn ghost" id="message-toggle-action">${m.actionable?"действие закрыто":"нужно действие"}</button><button class="btn primary" id="message-mark-read">${m.status==="unread"?"прочитано":"закрыть"}</button></div>`;
+  $("#message-reply").value="";
+  const queued=state.outbox.find(o=>o.source_message_id===id&&o.status==="queued");
+  if(queued){$("#message-reply").value=queued.body||"";$("#message-queue-reply").textContent="уже в очереди";$("#message-queue-reply").disabled=true}else{$("#message-queue-reply").textContent="отправить";$("#message-queue-reply").disabled=false}
+  $("#message-queue-reply").onclick=async()=>{
+    const body=$("#message-reply").value.trim();if(!body)return toast("напиши ответ",true);
+    const match=String(m.sender||"").match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+    const recipient=match?match[0]:String(m.sender||"").trim();
+    if(!recipient.includes("@"))return toast("не нашла email получателя",true);
+    const subject=/^re:/i.test(m.subject||"")?(m.subject||""):"Re: "+(m.subject||"");
+    try{await api("queue_email",{source_message_id:id,recipient,subject,body});toast("письмо поставлено в отправку");$("#message-queue-reply").textContent="в очереди";$("#message-queue-reply").disabled=true;await load()}catch{toast("не удалось поставить в очередь",true)}
+  };
   $("#message-dialog").showModal();
   $("#message-mark-read").onclick=async()=>{if(m.status==="unread"){await api("update_message",{id,patch:{status:"read"}});m.status="read";toast("прочитано");renderAll()}else $("#message-dialog").close()};
   $("#message-toggle-action").onclick=async()=>{await api("update_message",{id,patch:{actionable:!m.actionable}});m.actionable=!m.actionable;toast(m.actionable?"пометила как действие":"убрала из действий");renderAll();openMessage(id)};
