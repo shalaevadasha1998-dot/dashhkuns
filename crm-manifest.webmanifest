@@ -1,0 +1,47 @@
+{
+  "id": "/crm",
+  "name": "dashhkuns · producer os",
+  "short_name": "dashhkuns",
+  "description": "личная crm для проектов, задач, лидов и работы",
+  "lang": "ru",
+  "start_url": "/crm?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone"
+  ],
+  "background_color": "#f9f8f5",
+  "theme_color": "#101010",
+  "icons": [
+    {
+      "src": "/assets/crm-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/api/crm-icon?size=192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/api/crm-icon?size=512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "задачи",
+      "short_name": "задачи",
+      "url": "/crm#tasks"
+    },
+    {
+      "name": "лиды",
+      "short_name": "лиды",
+      "url": "/crm#leads"
+    }
+  ]
+}
