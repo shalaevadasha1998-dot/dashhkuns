@@ -74,6 +74,19 @@ const writeJSON=(key,value,store=localStorage)=>{try{store.setItem(key,JSON.stri
 const validStored=value=>value&&value.expiresAt>now();
 
 const params=new URLSearchParams(location.search);
+
+const INTERNAL_KEY='dashhkuns_internal_v1';
+try{
+  if(params.get('internal')==='1')localStorage.setItem(INTERNAL_KEY,'1');
+  if(params.get('internal')==='0')localStorage.removeItem(INTERNAL_KEY);
+}catch{}
+let isInternal=false;
+try{isInternal=localStorage.getItem(INTERNAL_KEY)==='1'}catch{}
+try{
+  if(isInternal)posthog.register({internal_traffic:true});
+  else posthog.unregister('internal_traffic');
+}catch{}
+
 let refData=readJSON('dashhkuns_ref_v1');
 if(!validStored(refData)){refData=null;try{localStorage.removeItem('dashhkuns_ref_v1')}catch{}}
 const incomingRef=(params.get('ref')||'').trim().toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,64);
@@ -140,12 +153,13 @@ const postIntake=async(payload,{keepalive=false}={})=>{
 
 const track=(eventName,data={})=>{
   const context=getContext();
-  postIntake({kind:'event',eventName,data,context},{keepalive:true}).catch(()=>{});
+  const enrichedData={...data,internalTraffic:isInternal};
+  postIntake({kind:'event',eventName,data:enrichedData,context},{keepalive:true}).catch(()=>{});
   try{
-    if(typeof window.va==='function')window.va('event',{name:eventName,data:{...data,path:context.path,utmSource:context.utmSource||undefined,utmCampaign:context.utmCampaign||undefined}});
+    if(typeof window.va==='function')window.va('event',{name:eventName,data:{...enrichedData,path:context.path,utmSource:context.utmSource||undefined,utmCampaign:context.utmCampaign||undefined}});
   }catch{}
   try{
-    if(window.posthog?.capture)window.posthog.capture(eventName,{...data,...context});
+    if(window.posthog?.capture)window.posthog.capture(eventName,{...enrichedData,...context});
   }catch{}
 };
 
