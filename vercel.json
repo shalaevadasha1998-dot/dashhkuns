@@ -79,6 +79,26 @@
       "permanent": true
     },
     {
+      "source": "/go/ig",
+      "destination": "/?utm_source=instagram&utm_medium=social&utm_campaign=profile",
+      "permanent": false
+    },
+    {
+      "source": "/go/tg",
+      "destination": "/?utm_source=telegram&utm_medium=social&utm_campaign=profile",
+      "permanent": false
+    },
+    {
+      "source": "/go/li",
+      "destination": "/?utm_source=linkedin&utm_medium=social&utm_campaign=profile",
+      "permanent": false
+    },
+    {
+      "source": "/go/email",
+      "destination": "/?utm_source=email&utm_medium=outreach&utm_campaign=producer_outreach",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [
         {
