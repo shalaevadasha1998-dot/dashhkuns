@@ -104,6 +104,26 @@
       "permanent": false
     },
     {
+      "source": "/go/prepropost",
+      "destination": "/?utm_source=prepropost&utm_medium=profile&utm_campaign=seo_profiles",
+      "permanent": false
+    },
+    {
+      "source": "/go/cinematch",
+      "destination": "/?utm_source=cinematch&utm_medium=profile&utm_campaign=seo_profiles",
+      "permanent": false
+    },
+    {
+      "source": "/go/yandex",
+      "destination": "/?utm_source=yandex_services&utm_medium=profile&utm_campaign=seo_profiles",
+      "permanent": false
+    },
+    {
+      "source": "/go/github",
+      "destination": "/?utm_source=github&utm_medium=profile&utm_campaign=seo_profiles",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [
         {
