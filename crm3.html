@@ -88,7 +88,13 @@ window.__CRM_PAGE_LOADED=true;
   window.addEventListener('unhandledrejection',function(e){show('promise: '+String(e.reason&&e.reason.message||e.reason||'unknown'));});
   setTimeout(function(){if(!window.__CRM_SCRIPT_LOADED)show('интерфейс не запустился. обнови страницу, этот текст можно прислать мне скрином.');},2500);
 })();
-</script></head>
+</script>  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="dashhkuns">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/crm-manifest.webmanifest?v=4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="/crm4.css?v=20261011-4">
+</head>
 <body class="crm-body">
   <main class="crm-login" id="login-screen">
     <section class="crm-login-card">
@@ -598,5 +604,6 @@ $("#global-fab").onclick=()=>state.section==="leads"?openLead():openTask();
   }
 })();
 </script>
+<script defer src="/crm4.js?v=20261011-4"></script>
 </body>
 </html>
