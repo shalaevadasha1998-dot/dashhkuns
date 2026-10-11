@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>dashhkuns crm</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css?v=1">
+</head>
+<body>
+  <main class="login-screen" id="login-screen">
+    <section class="login-card">
+      <div class="logo">dash<span>h</span>kuns <b>crm</b></div>
+      <p class="eyebrow">private producer pipeline</p>
+      <h1>все лиды<br><i>в одном месте</i></h1>
+      <form id="login-form">
+        <label>
+          <span>пароль</span>
+          <input id="login-password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn acid" id="login-button" type="submit">войти</button>
+        <p class="error" id="login-error" hidden>неверный пароль</p>
+      </form>
+    </section>
+  </main>
+
+  <main class="app" id="app" hidden>
+    <header class="topbar">
+      <div>
+        <div class="logo">dash<span>h</span>kuns <b>crm</b></div>
+        <p id="sync-label">синхронизация…</p>
+      </div>
+      <button class="icon-btn" id="logout-button" type="button" aria-label="выйти">↗</button>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">producer control room</p>
+        <h1>что двигаем<br><i>сегодня</i></h1>
+      </div>
+      <button class="btn pink desktop-add" id="desktop-add" type="button">+ новый лид</button>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="toolbar">
+      <div class="view-switch" id="view-switch">
+        <button data-view="today" class="active">сегодня</button>
+        <button data-view="hot">горячие</button>
+        <button data-view="all">все</button>
+      </div>
+      <label class="search">
+        <span>⌕</span>
+        <input id="search-input" type="search" placeholder="компания, контакт, заметка">
+      </label>
+      <div class="chips" id="direction-chips"></div>
+    </section>
+
+    <section class="pipeline-head">
+      <div>
+        <p class="eyebrow" id="section-kicker">сегодня</p>
+        <h2 id="section-title">нужно сделать</h2>
+      </div>
+      <strong id="result-count">0</strong>
+    </section>
+
+    <section class="lead-list" id="lead-list">
+      <div class="empty">загружаю crm…</div>
+    </section>
+
+    <button class="fab" id="fab" type="button" aria-label="добавить лид">+</button>
+  </main>
+
+  <dialog class="sheet" id="lead-dialog">
+    <form method="dialog" class="sheet-shell" id="lead-form">
+      <header class="sheet-head">
+        <div>
+          <p class="eyebrow" id="dialog-kicker">лид</p>
+          <h2 id="dialog-title">новый контакт</h2>
+        </div>
+        <button type="button" class="icon-btn" id="close-dialog">×</button>
+      </header>
+
+      <div class="quick-status" id="quick-status">
+        <button type="button" data-status="waiting">ждём</button>
+        <button type="button" data-status="replied">ответили</button>
+        <button type="button" data-status="warm">горячий</button>
+        <button type="button" data-status="declined">нет</button>
+      </div>
+
+      <div class="form-grid">
+        <label class="wide"><span>компания *</span><input name="company" required></label>
+        <label><span>направление</span>
+          <select name="direction">
+            <option>producer jobs</option>
+            <option>producer sales</option>
+            <option>iGaming production</option>
+            <option>podcast venue</option>
+            <option>photo studio</option>
+          </select>
+        </label>
+        <label><span>приоритет</span>
+          <select name="priority">
+            <option value="high">high</option>
+            <option value="medium" selected>medium</option>
+            <option value="low">low</option>
+          </select>
+        </label>
+        <label class="wide"><span>контакт</span><input name="contact" placeholder="email / telegram / whatsapp"></label>
+        <label><span>канал</span><input name="channel" value="email"></label>
+        <label><span>статус</span>
+          <select name="status">
+            <option value="new">new</option>
+            <option value="waiting">waiting</option>
+            <option value="action needed">action needed</option>
+            <option value="replied">replied</option>
+            <option value="warm">warm</option>
+            <option value="auto-ack">auto-ack</option>
+            <option value="paid-only">paid-only</option>
+            <option value="declined">declined</option>
+            <option value="bounce">bounce</option>
+          </select>
+        </label>
+        <label><span>отправлено</span><input name="sent_at" type="date"></label>
+        <label><span>следующее действие</span><input name="next_action_at" type="date"></label>
+        <label class="wide"><span>последний ответ</span><textarea name="last_reply" rows="3"></textarea></label>
+        <label class="wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+        <label><span>сумма</span><input name="deal_value" inputmode="decimal" placeholder="0"></label>
+        <label><span>валюта</span><input name="currency" value="RUB"></label>
+        <label class="wide"><span>ссылка</span><input name="source_url" type="url" placeholder="https://"></label>
+      </div>
+
+      <section class="activity" id="activity-section" hidden>
+        <div class="activity-title">
+          <span>история</span>
+          <button type="button" class="mini-btn" id="copy-contact">копировать контакт</button>
+        </div>
+        <div id="activity-list"></div>
+        <div class="activity-add">
+          <input id="activity-input" placeholder="добавить заметку по контакту">
+          <button class="mini-btn" id="activity-add" type="button">добавить</button>
+        </div>
+      </section>
+
+      <footer class="sheet-actions">
+        <button type="button" class="btn ghost danger" id="delete-lead" hidden>удалить</button>
+        <button type="submit" class="btn acid" id="save-lead">сохранить</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="./app.js?v=1"></script>
+</body>
+</html>
