@@ -41,6 +41,7 @@ posthog.init('phc_tnecfXhXJbjga9GfMdDG8SSv8QNCLFLvPb4oeWCRKJqF',{
   autocapture:true,
   capture_pageview:true,
   capture_pageleave:true,
+  capture_performance:true,
   session_recording:{maskAllInputs:true}
 });
 
@@ -154,9 +155,26 @@ const pageEvents={
   '/services':'page_view_services',
   '/projects':'page_view_projects',
   '/about':'page_view_about',
-  '/contact':'page_view_contact'
+  '/contact':'page_view_contact',
+  '/insights':'page_view_insights',
+  '/creative-producer':'page_view_creative_producer',
+  '/creative-producer-moscow':'page_view_creative_producer_moscow',
+  '/project-launch':'page_view_project_launch',
+  '/reality-show-producer':'page_view_reality_show_producer',
+  '/en':'page_view_home_en',
+  '/en/services':'page_view_services_en',
+  '/en/projects':'page_view_projects_en',
+  '/en/about':'page_view_about_en',
+  '/en/contact':'page_view_contact_en'
 };
+track('site_page_view',{path});
 if(pageEvents[path])track(pageEvents[path]);
+
+[10,30,60,120].forEach(seconds=>{
+  setTimeout(()=>{
+    if(document.visibilityState==='visible')track('engaged_time',{seconds,path});
+  },seconds*1000);
+});
 
 document.querySelectorAll('.js-project-cta').forEach(el=>el.addEventListener('click',()=>track('cta_project_click',{label:(el.textContent||'').trim(),path:location.pathname})));
 
