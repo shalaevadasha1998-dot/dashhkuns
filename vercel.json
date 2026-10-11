@@ -144,15 +144,15 @@
           "value": "crm.dashhkuns.com"
         }
       ],
-      "destination": "/crm.html"
+      "destination": "/crm3.html"
     },
     {
       "source": "/crm",
-      "destination": "/crm.html"
+      "destination": "/crm3.html"
     },
     {
       "source": "/crm/",
-      "destination": "/crm.html"
+      "destination": "/crm3.html"
     },
     {
       "source": "/en/contact",
@@ -216,6 +216,23 @@
     }
   ],
   "headers": [
+    {
+      "source": "/crm3.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
     {
       "source": "/crm.html",
       "headers": [
