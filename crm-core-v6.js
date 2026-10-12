@@ -127,22 +127,49 @@ function goto(section){
   const fab=$("#global-fab");fab.textContent="+";
   window.scrollTo({top:0,behavior:"instant"});
 }
+window.__CRM_GOTO=goto;
 all("[data-section]").forEach(b=>b.addEventListener("click",()=>goto(b.dataset.section)));
 all("[data-goto]").forEach(b=>b.addEventListener("click",()=>goto(b.dataset.goto)));
 
-function stat(label,value,cl=""){return `<article class="crm-stat ${cl}"><strong>${value}</strong><span>${label}</span></article>`}
+function stat(label,value,cl="",target="",hint=""){
+  return target
+    ? `<button class="crm-stat crm-stat-link ${cl}" type="button" data-dashboard-target="${target}" title="${esc(hint||label)}"><strong>${value}</strong><span>${label} ↗</span></button>`
+    : `<article class="crm-stat ${cl}"><strong>${value}</strong><span>${label}</span></article>`;
+}
+$("#today-stats").addEventListener("click",e=>{
+  const b=e.target.closest("[data-dashboard-target]");if(!b)return;
+  const target=b.dataset.dashboardTarget;
+  if(target==="tasks-open"||target==="tasks-today"||target==="tasks-done"){
+    state.taskView=target==="tasks-today"?"today":target==="tasks-done"?"done":"open";
+    state.taskProject="all";
+    all("[data-task-view]").forEach(x=>x.classList.toggle("active",x.dataset.taskView===state.taskView));
+    goto("tasks");renderTasks();
+  }else if(target==="inbox-unread"){
+    state.messageView="unread";
+    all("[data-message-view]").forEach(x=>x.classList.toggle("active",x.dataset.messageView==="unread"));
+    goto("inbox");renderInbox();
+  }else if(target==="leads-hot"){
+    state.leadView="hot";
+    all("[data-lead-view]").forEach(x=>x.classList.toggle("active",x.dataset.leadView==="hot"));
+    goto("leads");renderLeads();
+  }
+});
+window.__CRM_TASK_VIEW=(view,projectId="all")=>{
+  state.taskView=view;state.taskProject=projectId;
+  all("[data-task-view]").forEach(x=>x.classList.toggle("active",x.dataset.taskView===view));
+  goto("tasks");renderTasks();
+};
 
 function renderToday(){
   const open=state.tasks.filter(isTaskOpen).length;
   const due=state.tasks.filter(isTaskDue).length;
   const unread=state.messages.filter(m=>m.status==="unread").length;
   const hot=state.leads.filter(isLeadHot).length;
-  $("#today-stats").innerHTML=stat("открыто",open)+stat("сегодня",due,"due")+stat("ответы",unread)+stat("горячие",hot,"hot");
+  $("#today-stats").innerHTML=stat("не выполнено",open,"","tasks-open","все незавершённые задачи, включая отложенные")+stat("к сроку",due,"due","tasks-today","сегодня и просроченные")+stat("непрочитано",unread,"","inbox-unread","непрочитанные входящие")+stat("приоритетные лиды",hot,"hot","leads-hot","высокий приоритет или статус: тёплый / ответил / требует действия");
 
   const priority={high:0,medium:1,low:2};
-  let tasks=state.tasks.filter(t=>isTaskDue(t)||(["high"].includes(t.priority)&&isTaskOpen(t)&&t.status!=="backlog"))
+  let tasks=state.tasks.filter(isTaskDue)
     .sort((a,b)=>(isTaskOverdue(b)-isTaskOverdue(a))||((priority[a.priority]??9)-(priority[b.priority]??9))||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
-  tasks=tasks.slice(0,12);
   $("#today-task-count").textContent=tasks.length;
   $("#today-tasks").innerHTML=tasks.length?tasks.map(taskRow).join(""):`<div class="crm-empty">на сегодня пусто. это хорошо.</div>`;
   bindTaskRows("#today-tasks");
@@ -152,7 +179,7 @@ function renderToday(){
   all("#today-messages [data-message-id]").forEach(el=>el.onclick=()=>openMessage(el.dataset.messageId));
 
   const now=Date.now();
-  const events=state.events.filter(e=>new Date(e.ends_at||e.starts_at).getTime()>=now).slice(0,6);
+  const events=state.events.filter(e=>new Date(e.ends_at||e.starts_at).getTime()>=now).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at)).slice(0,6);
   $("#today-events").innerHTML=events.length?events.map(e=>`<div class="crm-mini-item"><strong>${esc(e.title)}</strong><p>${esc(e.location||projectName(e.project_id)||"")}</p><time>${fmtDateLong(e.starts_at)}</time></div>`).join(""):`<div class="crm-mini-item"><p>в календаре пусто</p></div>`;
 
   const waitingTasks=state.tasks.filter(t=>t.status==="waiting").slice(0,5);
@@ -181,14 +208,25 @@ function bindTaskRows(root){
   all(root+" [data-edit-task]").forEach(b=>b.onclick=()=>openTask(b.dataset.editTask));
 }
 async function toggleTask(id,done){
-  try{await api("update_task",{id,patch:{status:done?"done":"todo"}});toast(done?"готово ✓":"вернула в работу");await load()}catch{toast("не сохранилось",true)}
+  const task=state.tasks.find(t=>t.id===id);if(!task)return;
+  const previous=task.status,completed=task.completed_at;
+  task.status=done?"done":"todo";task.completed_at=done?new Date().toISOString():null;
+  renderAll();
+  try{
+    await api("update_task",{id,patch:{status:task.status}});
+    toast(done?"в архиве выполненных ✓":"возвращено в работу");
+    await load();
+  }catch{
+    task.status=previous;task.completed_at=completed;
+    renderAll();toast("изменение не сохранилось, попробуй ещё раз",true)
+  }
 }
 
 function renderTasks(){
   const projectFilter=$("#task-project-filter");projectFilter.value=state.taskProject;
   const q=normalize(state.taskSearch);
   let rows=state.tasks.filter(t=>{
-    if(state.taskView==="open"&&["done","backlog"].includes(t.status))return false;
+    if(state.taskView==="open"&&t.status==="done")return false;
     if(state.taskView==="today"&&!isTaskDue(t))return false;
     if(state.taskView==="waiting"&&t.status!=="waiting")return false;
     if(state.taskView==="backlog"&&t.status!=="backlog")return false;
@@ -197,7 +235,10 @@ function renderTasks(){
     if(q&&!normalize([t.title,t.description,t.waiting_on,projectName(t.project_id)].join(" ")).includes(q))return false;
     return true;
   });
-  const rank={high:0,medium:1,low:2};rows.sort((a,b)=>(rank[a.priority]-rank[b.priority])||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
+  const rank={high:0,medium:1,low:2};
+  rows.sort((a,b)=>state.taskView==="done"
+    ? String(b.completed_at||b.updated_at||"").localeCompare(String(a.completed_at||a.updated_at||""))
+    : (rank[a.priority]??9)-(rank[b.priority]??9)||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
   $("#task-board").innerHTML=rows.length?rows.map(t=>`<article class="crm-task-card priority-${esc(t.priority)} status-${esc(t.status)}">
     <input class="crm-check" type="checkbox" data-task-check="${t.id}" ${t.status==="done"?"checked":""}>
     <div><button class="crm-text-btn crm-task-title" data-edit-task="${t.id}">${esc(t.title)}</button>
@@ -269,7 +310,7 @@ function renderProjects(){
 function leadScore(l){let s=0;if(isLeadDue(l))s+=100;if(l.status==="warm")s+=80;if(l.status==="replied")s+=60;if(l.priority==="high")s+=30;return s}
 function renderLeads(){
   const active=state.leads.filter(l=>!CLOSED_LEADS.has(l.status)).length,due=state.leads.filter(isLeadDue).length,hot=state.leads.filter(isLeadHot).length,replies=state.leads.filter(l=>["replied","warm","auto-ack","paid-only"].includes(l.status)).length;
-  $("#lead-stats").innerHTML=stat("в работе",active)+stat("сегодня",due,"due")+stat("горячие",hot,"hot")+stat("ответы",replies);
+  $("#lead-stats").innerHTML=stat("в работе",active)+stat("сегодня",due,"due")+stat("в приоритете",hot,"hot")+stat("ответы",replies);
   renderLeadChips();
   const q=normalize(state.leadSearch);
   let rows=state.leads.filter(l=>{
