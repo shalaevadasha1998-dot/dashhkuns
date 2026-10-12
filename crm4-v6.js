@@ -71,7 +71,7 @@
       const r=await fetch("/api/crm-ai",{cache:"no-store"}),data=await r.json();
       configured=Boolean(data.configured);checked=true;
       indicator.textContent=configured?"ии подключена":"нужен ключ ии";
-      indicator.title=configured?"серверная модель доступна":"модель готова к подключению через OPENAI_API_KEY";
+      indicator.title=configured?"серверная модель доступна":"модель готова к подключению через CRM";
     }catch{indicator.textContent="проверка недоступна"}
   }
   function openAssistant(){
@@ -102,7 +102,7 @@
     if(!prompt||busy)return;
     const token=typeof window.__CRM_AUTH_TOKEN==='function'?window.__CRM_AUTH_TOKEN():null;
     if(!token){bubble("для работы ии нужно войти в crm","error");return}
-    if(!configured){await status();if(!configured){bubble("интерфейс ии готов, но серверный ключ OPENAI_API_KEY пока не настроен. ключ не вводи в чат или в браузер: он должен храниться в переменных окружения vercel.","error");return}}
+    if(!configured){await status();if(!configured){bubble("интерфейс ии готов, но серверный ключ CRM пока не настроен. ключ не вводи в чат или в браузер: он должен храниться в переменных окружения vercel.","error");return}}
     const previous=history.slice(-8);
     bubble(prompt,"user");input.value="";
     const loading=bubble("анализирую твою crm…","assistant loading");
@@ -116,7 +116,7 @@
       const data=await response.json().catch(()=>({}));
       if(!response.ok){
         if(response.status===401){indicator.textContent="войти заново";throw new Error("сессия crm истекла: выйди и войди заново")}
-        if(data.error==="ai_not_configured"){configured=false;indicator.textContent="нужен ключ ии";throw new Error("для ответа ии пока не задан серверный OPENAI_API_KEY")}
+        if(data.error==="ai_not_configured"){configured=false;indicator.textContent="нужен ключ ии";throw new Error("для ответа ии пока не задан серверный CRM")}
         throw new Error(data.error==="ai_provider_unavailable"?"проверь ключ, биллинг и модель в vercel":"ошибка соединения с ии. попробуй ещё раз");
       }
       loading.textContent=data.answer;
