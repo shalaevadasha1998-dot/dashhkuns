@@ -147,8 +147,11 @@ const postIntake=async(payload,{keepalive=false}={})=>{
     body:JSON.stringify(payload),
     keepalive
   });
-  if(!response.ok)throw new Error('intake_'+response.status);
-  return response.json();
+  const result=await response.json();
+  if(!response.ok||result.ok!==true||(payload.kind==='lead'&&!result.id)){
+    throw new Error('intake_'+response.status+'_'+String(result.error||'invalid_acknowledgement'));
+  }
+  return result;
 };
 
 const track=(eventName,data={})=>{
@@ -571,7 +574,7 @@ const loadBookingAvailability=async()=>{
       .map(day=>({
         date:day.date,
         slots:day.slots.slice(0,40).filter(slot=>
-          typeof slot.start==='string'&&!Number.isNaN(new Date(slot.start).getTime())&&new Date(slot.start).getTime()>Date.now()
+          typeof slot.start==='string'&&!Number.isNaN(new Date(slot.start).getTime())&&new Date(slot.start).getTime()>Date.now()+12*3600000
         ).map(slot=>({start:slot.start,time:typeof slot.time==='string'?slot.time.slice(0,5):''}))
       }))
       .filter(day=>day.date>=bookingWindowStart&&day.date<=bookingWindowEnd&&day.slots.length>0);
@@ -606,13 +609,32 @@ bookingForm?.addEventListener('submit',async event=>{
   const start=bookingSelected;
   const honeypot=String(form.get('companyWebsite')||'');
   try{
-    if(honeypot)return;
+    if(honeypot){throw new Error('invalid_submission');}
     const response=await fetch(BOOKING_API,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({action:'book',name,email,details,start,contact:email})
     });
     const result=await response.json();
+    if(result.inquirySaved===true){
+      // The appointment was not created. Keep the request and display the real status.
+      bookingForm.hidden=true;
+      if(bookingCalendar)bookingCalendar.hidden=true;
+      if(bookingSuccess){
+        bookingSuccess.hidden=false;
+        const statusLabel=bookingSuccess.querySelector('span');
+        const statusHeading=bookingSuccess.querySelector('h2');
+        if(statusLabel)statusLabel.textContent=IS_EN?'request received':'заявка сохранена';
+        if(statusHeading)statusHeading.textContent=IS_EN?'let’s arrange your call':'согласуем время созвона';
+      }
+      const copy=document.getElementById('booking-success-copy');
+      if(copy)copy.textContent=IS_EN
+        ?'your request was saved, but the calendar booking was not confirmed. i’ll email you to arrange a time.'
+        :'заявка сохранена, но время в календаре не забронировано. я напишу тебе на email, чтобы согласовать созвон.';
+      if(bookingMeetLink)bookingMeetLink.hidden=true;
+      bookingSuccess?.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+      return;
+    }
     if(!response.ok||!result.ok){
       const err=new Error(result.error||'booking_failed');
       err.code=result.error||'booking_failed';
