@@ -73,7 +73,7 @@
     if(create){
       if(typeof window.__CRM_NEW_TASK_FOR==="function")window.__CRM_NEW_TASK_FOR(apartmentId);
       else openOS("home");
-    }else window.__CRM_TASK_VIEW?.("open",apartmentId);
+    }else window.__CRM_TASK_VIEW?.("home","all");
   }
   function openArchive(){window.__CRM_TASK_VIEW?.("done","all")}
   page.addEventListener("click",e=>{
@@ -104,14 +104,14 @@
     apartmentId=apartment?.id||"";
     const activeTasks=tasks.filter(t=>t.status!=="done");
     const done=tasks.filter(t=>t.status==="done").length;
-    const apartmentTasks=activeTasks.filter(t=>t.project_id===apartmentId).length;
+    const apartmentTasks=activeTasks.filter(t=>projects.find(p=>p.id===t.project_id)?.category==="home").length;
     const now=Date.now();
     const upcoming=events.filter(e=>new Date(e.ends_at||e.starts_at).getTime()>=now).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
     const past=events.filter(e=>new Date(e.ends_at||e.starts_at).getTime()<now).sort((a,b)=>new Date(b.starts_at)-new Date(a.starts_at));
     const cards=[
       {action:"site",title:number(website.tracked_events),label:"событий сайта за 7 дней",cls:"green"},
       {action:"calendar",title:number(events.length),label:"встреч и событий в календаре",cls:""},
-      {action:"apartment",title:number(apartmentTasks),label:"задач по квартире",cls:""},
+      {action:"apartment",title:number(apartmentTasks),label:"задач по дому и квартире",cls:""},
       {action:"archive",title:number(done),label:"выполнено · архив",cls:"pink"}
     ];
     document.getElementById("crm-os-tiles").innerHTML=cards.map(c=>'<button class="crm-os-tile '+c.cls+'" type="button" data-os-action="'+c.action+'"><strong>'+c.title+'</strong><span>'+c.label+' ↗</span></button>').join("");
@@ -132,7 +132,7 @@
     document.getElementById("crm-os-upcoming").innerHTML=eventCards(upcoming);
     document.getElementById("crm-os-past").innerHTML=eventCards(past);
     document.getElementById("crm-os-home-tasks").innerHTML=apartment
-      ? '<p>открытые задачи квартиры: <b>'+number(apartmentTasks)+'</b></p>'
+      ? '<p>открытые домашние задачи: <b>'+number(apartmentTasks)+'</b></p>'
       : '<p class="crm-os-muted">проект «квартира / быт» пока не появился в списке. обнови crm.</p>';
   }
   window.addEventListener("crm:snapshot",e=>{snapshot=e.detail.data;render(snapshot)});
