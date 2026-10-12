@@ -142,6 +142,14 @@
   ],
   "rewrites": [
     {
+      "source": "/crm-app/",
+      "destination": "/crm-app/index.html"
+    },
+    {
+      "source": "/crm-app",
+      "destination": "/crm-app/index.html"
+    },
+    {
       "source": "/",
       "has": [
         {
@@ -149,15 +157,15 @@
           "value": "crm.dashhkuns.com"
         }
       ],
-      "destination": "/crm-safe.html"
+      "destination": "/crm-app/index.html"
     },
     {
       "source": "/crm",
-      "destination": "/crm-safe.html"
+      "destination": "/crm-app/index.html"
     },
     {
       "source": "/crm/",
-      "destination": "/crm-safe.html"
+      "destination": "/crm-app/index.html"
     },
     {
       "source": "/en/contact",
@@ -221,6 +229,71 @@
     }
   ],
   "headers": [
+    {
+      "source": "/crm-app/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/crm-app/manifest.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/crm-app/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/crm-app",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/crm-app/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    },
     {
       "source": "/api/crm-connection",
       "headers": [
