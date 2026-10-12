@@ -35,7 +35,7 @@
  toggle.innerHTML="🔔 алерты <strong hidden>0</strong>";
  topbar.insertBefore(toggle,document.querySelector("#logout-button"));
  const modal=document.createElement("dialog");modal.className="crm-alert-modal";
- modal.innerHTML='<div class="crm-alert-head"><h2>алерты crm</h2><button type="button" class="crm-alert-close" aria-label="закрыть">×</button></div><p class="crm-alert-sub">обновление каждые 45 секунд, пока crm открыта. фоновые push после закрытия приложения пока не настроены.</p><div class="crm-alert-actions"><button type="button" id="crm-alert-permission">уведомлять на iphone</button><button type="button" id="crm-alert-refresh">обновить сейчас</button></div><div class="crm-alert-items"></div>';
+ modal.innerHTML='<div class="crm-alert-head"><h2>алерты crm</h2><button type="button" class="crm-alert-close" aria-label="закрыть">×</button></div><p class="crm-alert-sub">обновление каждые 45 секунд, пока crm открыта. источники: данные crm. автоматическая загрузка из gmail, календаря и chatgpt пока не подключена; фоновые push после закрытия приложения тоже.</p><div class="crm-alert-actions"><button type="button" id="crm-alert-permission">уведомлять на iphone</button><button type="button" id="crm-alert-refresh">обновить сейчас</button></div><div class="crm-alert-items"></div>';
  document.body.appendChild(modal);
  toggle.addEventListener("click",()=>{if(app.hidden)return;if(!modal.open)modal.showModal();renderAlerts(window.__CRM_CURRENT_SNAPSHOT)});
  modal.querySelector(".crm-alert-close").addEventListener("click",()=>modal.close());
@@ -63,11 +63,13 @@
    const unread=events.filter(a=>!a.read_at);
    const today=new Date().toLocaleDateString("en-CA",{timeZone:"Europe/Moscow"});
    const overdue=(snapshot.tasks||[]).filter(t=>t.due_at&&t.due_at<today&&t.status!=="done").length;
-   const messages=(snapshot.messages||[]).filter(m=>m.status==="unread").length;
+   const messages=(snapshot.messages||[]).filter(m=>m.status==="unread");
+   const alertedMessageIds=new Set(events.map(a=>a.source_id).filter(Boolean));
+   const uncoveredMessages=messages.filter(m=>!alertedMessageIds.has(m.id)).slice(0,15);
    const badge=toggle.querySelector("strong");
-   badge.textContent=String(unread.length+overdue);
-   badge.hidden=unread.length+overdue===0;
-   toggle.title=unread.length+" непрочитанных событий · "+overdue+" просроченных задач · "+messages+" непрочитанных сообщений";
+   badge.textContent=String(unread.length+overdue+uncoveredMessages.length);
+   badge.hidden=unread.length+overdue+uncoveredMessages.length===0;
+   toggle.title=unread.length+" непрочитанных событий · "+overdue+" просроченных задач · "+messages.length+" непрочитанных сообщений";
    const fresh=events.filter(a=>!known.has(a.id)&&!a.read_at);
    events.forEach(a=>known.add(a.id));
    if(initialized&&document.visibilityState==="visible"&&!app.hidden)fresh.slice(0,3).forEach(notify);
@@ -79,7 +81,15 @@
      const p=document.createElement("p");p.textContent="открой раздел задач и разбери сроки";
      el.append(h,p);list.append(el);
    }
-   if(!events.length&&!overdue){
+   for(const m of uncoveredMessages){
+     const el=document.createElement("article");el.className="crm-alert-item";
+     const h=document.createElement("h3");h.textContent="непрочитанное сообщение: "+(m.subject||"без темы");
+     const p=document.createElement("p");p.textContent=m.sender||"почта";
+     const goto=document.createElement("button");goto.className="crm-alert-ack";goto.textContent="открыть входящие";
+     goto.addEventListener("click",()=>{modal.close();document.querySelector('[data-section="inbox"]')?.click()});
+     el.append(h,p,goto);list.append(el);
+   }
+   if(!events.length&&!overdue&&!uncoveredMessages.length){
      const el=document.createElement("p");el.className="crm-alert-empty";
      el.textContent="новых событий пока нет. при поступлении новых данных в crm они появятся здесь.";
      list.append(el);
