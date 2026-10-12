@@ -352,6 +352,11 @@ function openTask(id=null){
   for(const [k,v] of Object.entries(defaults))if(taskForm.elements[k])taskForm.elements[k].value=t?.[k]??v;
   taskDialog.showModal();
 }
+window.__CRM_NEW_TASK_FOR=(projectId)=>{
+  openTask();
+  if(taskForm.elements.project_id)taskForm.elements.project_id.value=projectId;
+  if(taskForm.elements.category)taskForm.elements.category.value="home";
+};
 taskForm.addEventListener("submit",async e=>{
   e.preventDefault();const fd=new FormData(taskForm),task={};for(const [k,v] of fd.entries())task[k]=String(v).trim()||null;
   try{if(state.editingTask)await api("update_task",{id:state.editingTask,patch:task});else await api("create_task",{task});taskDialog.close();toast("задача сохранена");await load()}catch{toast("не сохранилось",true)}
