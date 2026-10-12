@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ff3fad">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>dashhkuns crm · v6</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles-v2.css?v=20261011-crm-os">
+  <style id="crm-inline-style">
+.crm-body{background:var(--white);min-height:100vh}
+.crm-brand{gap:0}.crm-brand small{margin-left:9px;padding:4px 8px;border:1px solid var(--black);border-radius:999px;background:var(--acid);font-size:8px;letter-spacing:.08em;text-transform:uppercase}
+.crm-login{min-height:100svh;display:grid;grid-template-columns:1.05fr .95fr;background:var(--white)}
+.crm-login-card{display:flex;flex-direction:column;justify-content:center;padding:clamp(34px,6vw,96px);border-right:1px solid var(--black);position:relative}
+.crm-login-card .crm-brand{position:absolute;top:28px;left:clamp(24px,6vw,96px)}
+.crm-login-card h1{max-width:10ch;margin:34px 0 20px;font-size:clamp(54px,7vw,104px)}
+.crm-login-copy{max-width:540px;margin-bottom:32px;font-size:16px;color:rgba(8,8,8,.62)}
+.crm-login-form{width:min(100%,480px);display:grid;gap:13px}.crm-login-btn{width:100%}.crm-error{font-size:12px;color:#b90035}
+.crm-login-art{display:flex;align-items:stretch;padding:24px;background:var(--black)}
+.crm-poster{width:100%;min-height:560px;border:1px solid var(--black);border-radius:var(--radius);background:var(--pink);box-shadow:10px 10px 0 var(--acid);padding:clamp(28px,4vw,54px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.crm-poster>span{font-size:10px;font-weight:800;letter-spacing:.11em}.crm-poster strong{font-size:clamp(58px,6vw,102px);line-height:.82;letter-spacing:-.075em}.crm-poster i{font-family:var(--serif);font-size:clamp(48px,4vw,74px)}
+.crm-field{display:grid;gap:7px}.crm-field>span{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.crm-field input,.crm-field select,.crm-field textarea,.crm-search input,.crm-select{width:100%;min-height:46px;border:1px solid var(--black);border-radius:14px;background:var(--white);color:var(--black);padding:11px 13px;outline:none}
+.crm-field textarea{resize:vertical}.crm-field input:focus,.crm-field select:focus,.crm-field textarea:focus,.crm-search input:focus,.crm-select:focus{box-shadow:4px 4px 0 var(--acid)}
+.crm-app{min-height:100vh;padding-bottom:84px}
+.crm-topbar{position:sticky;top:0;z-index:50;height:70px;padding:0 var(--gutter);display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:24px;border-bottom:1px solid var(--black);background:rgba(255,255,255,.97);backdrop-filter:blur(14px)}
+.crm-desktop-nav{display:flex;justify-content:center;gap:4px}.crm-desktop-nav button{border:0;background:transparent;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:800;opacity:.52}.crm-desktop-nav button.active{background:var(--black);color:var(--white);opacity:1}
+.crm-sync{display:flex;align-items:center;gap:7px;font-size:10px;color:rgba(8,8,8,.55)}.crm-dot{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 0 4px rgba(36,232,107,.15)}
+.crm-round{width:42px;height:42px;border:1px solid var(--black);border-radius:50%;background:var(--white);font-size:22px}.crm-round:hover{background:var(--acid)}
+.crm-page{min-height:calc(100vh - 70px)}
+.crm-hero,.crm-section-hero{padding:clamp(54px,7vw,92px) var(--gutter) 42px;display:flex;align-items:end;justify-content:space-between;gap:30px;border-bottom:1px solid var(--black)}
+.crm-hero h1,.crm-section-hero h1{max-width:10ch;font-size:clamp(60px,7vw,112px)}.crm-section-hero h1{margin:0}
+.crm-stats{padding:22px var(--gutter);display:grid;grid-template-columns:repeat(4,1fr);gap:12px;background:var(--black);color:var(--white)}
+.crm-stat{min-height:130px;border:1px solid rgba(255,255,255,.35);border-radius:var(--radius-sm);padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.crm-stat strong{font-size:clamp(42px,5vw,72px);line-height:.85;letter-spacing:-.07em}.crm-stat span{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.crm-stat.due{background:var(--acid);color:var(--black);border-color:var(--acid)}.crm-stat.hot{background:var(--pink);color:var(--black);border-color:var(--pink)}.crm-stat.due span,.crm-stat.hot span{color:rgba(8,8,8,.6)}
+.crm-dashboard-grid{padding:34px var(--gutter) var(--section);display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+.crm-panel{min-width:0;border:1px solid var(--black);border-radius:var(--radius);padding:24px;background:var(--white)}.crm-panel-wide{grid-row:span 3}
+.crm-panel-head{display:flex;align-items:end;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--black);margin-bottom:12px}.crm-panel-head h2{font-size:clamp(34px,4vw,58px)}.crm-panel-head>span{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--pink)}
+.crm-text-btn{border:0;background:transparent;font-size:11px;font-weight:800;padding:8px}
+.crm-task-list{display:grid}.crm-task-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:15px 0;border-bottom:1px solid rgba(8,8,8,.18)}.crm-task-row:last-child{border-bottom:0}
+.crm-check{appearance:none;width:25px;height:25px;border:1px solid var(--black);border-radius:50%;background:var(--white);display:grid;place-items:center;margin:2px 0 0}.crm-check:checked{background:var(--acid)}.crm-check:checked::after{content:"✓";font-size:15px;font-weight:800}
+.crm-task-main button{border:0;background:transparent;padding:0;text-align:left;font-weight:800;font-size:15px;line-height:1.25}.crm-task-main p{margin:5px 0 0;font-size:11px;color:rgba(8,8,8,.55);line-height:1.45}.crm-task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.crm-due{font-family:var(--serif);font-style:italic;font-size:18px;white-space:nowrap}.crm-due.overdue{color:var(--pink)}
+.crm-pill{display:inline-flex;align-items:center;min-height:24px;padding:3px 8px;border:1px solid var(--black);border-radius:999px;font-size:8px;font-weight:800;text-transform:uppercase}.crm-pill.acid{background:var(--acid)}.crm-pill.pink{background:var(--pink)}.crm-pill.dark{background:var(--black);color:var(--white)}
+.crm-mini-list{display:grid}.crm-mini-item{padding:13px 0;border-bottom:1px solid rgba(8,8,8,.16);cursor:pointer}.crm-mini-item:last-child{border-bottom:0}.crm-mini-item strong{display:block;font-size:14px}.crm-mini-item p{margin:4px 0 0;font-size:11px;color:rgba(8,8,8,.58);line-height:1.4}.crm-mini-item time{display:block;margin-top:5px;font-size:9px;font-weight:800;text-transform:uppercase}
+.crm-controls{padding:20px var(--gutter);display:grid;grid-template-columns:auto minmax(240px,420px);gap:12px;align-items:center;border-bottom:1px solid var(--black)}.crm-controls-tasks{grid-template-columns:auto minmax(240px,420px) minmax(180px,260px)}
+.crm-tabs{display:flex;border:1px solid var(--black);border-radius:999px;overflow:hidden}.crm-tabs button{min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--black);background:var(--white);font-weight:800;font-size:11px}.crm-tabs button:last-child{border-right:0}.crm-tabs button.active{background:var(--black);color:var(--white)}
+.crm-search{display:flex;align-items:center;gap:8px}.crm-search>span{font-size:22px}.crm-search input{min-height:44px;border-radius:999px}
+.crm-chips{grid-column:1/-1;display:flex;gap:8px;overflow:auto;scrollbar-width:none}.crm-chips::-webkit-scrollbar{display:none}.crm-chip{white-space:nowrap;padding:8px 12px;border:1px solid var(--black);border-radius:999px;background:var(--white);font-size:10px;font-weight:800}.crm-chip.active{background:var(--acid)}
+.crm-task-board{padding:30px var(--gutter) var(--section);display:grid;gap:10px}.crm-task-card{border:1px solid var(--black);border-radius:18px;padding:15px 17px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:start}.crm-task-card.priority-high{box-shadow:5px 5px 0 var(--pink)}.crm-task-card.status-waiting{background:#fff8ed}.crm-task-card.status-backlog{opacity:.68}.crm-task-card.status-done{opacity:.42}.crm-task-card.status-done .crm-task-title{text-decoration:line-through}
+.crm-task-title{font-size:17px;font-weight:800;line-height:1.2}.crm-task-desc{margin-top:4px;font-size:11px;color:rgba(8,8,8,.56);line-height:1.45}.crm-task-side{text-align:right}
+.crm-message-list{padding:30px var(--gutter) var(--section);display:grid;gap:10px}.crm-message-card{border:1px solid var(--black);border-radius:var(--radius);padding:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;background:var(--white);cursor:pointer}.crm-message-card.unread{box-shadow:7px 7px 0 var(--acid)}.crm-message-card.actionable{border-width:2px}.crm-message-card h3{margin:10px 0 8px;font-size:clamp(24px,3vw,40px)}.crm-message-card p{font-size:12px;color:rgba(8,8,8,.6);line-height:1.5}.crm-message-side{text-align:right}.crm-message-side time{font-size:10px;font-weight:800}.crm-message-side span{display:block;margin-top:8px}
+.crm-project-grid{padding:30px var(--gutter) var(--section);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.crm-project-card{min-height:310px;border:1px solid var(--black);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;background:var(--white);cursor:pointer}.crm-project-card.priority-high{box-shadow:8px 8px 0 var(--pink)}.crm-project-card.status-paused,.crm-project-card.status-later{opacity:.62}.crm-project-card .crm-project-top{display:flex;justify-content:space-between;gap:10px}.crm-project-card h3{margin:38px 0 14px;font-size:clamp(34px,4vw,56px)}.crm-project-card .crm-project-goal{font-size:12px;line-height:1.5;color:rgba(8,8,8,.6)}.crm-project-next{margin-top:auto;padding-top:18px;border-top:1px solid var(--black);font-size:12px}.crm-project-next strong{display:block;margin-bottom:5px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}.crm-project-count{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--pink)}
+.crm-leads{padding:30px var(--gutter) var(--section);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.crm-lead{min-height:260px;border:1px solid var(--black);border-radius:var(--radius);padding:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;background:var(--white);transition:transform .15s,box-shadow .15s;cursor:pointer}.crm-lead:hover{transform:translateY(-3px);box-shadow:8px 8px 0 var(--acid)}.crm-lead.priority-high{box-shadow:7px 7px 0 var(--pink)}.crm-lead.is-due{border-width:2px}.crm-lead.is-warm{background:#fff6fb}.crm-lead h3{margin:22px 0 8px;font-size:clamp(28px,3vw,44px);line-height:.9}.crm-contact{font-size:12px;color:rgba(8,8,8,.55);overflow-wrap:anywhere}.crm-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}.crm-tag{display:inline-flex;min-height:27px;align-items:center;padding:4px 9px;border:1px solid var(--black);border-radius:999px;background:var(--white);font-size:9px;font-weight:800;text-transform:uppercase}.crm-tag.status-warm,.crm-tag.status-replied{background:var(--pink)}.crm-tag.status-action-needed{background:var(--acid)}.crm-tag.status-bounce,.crm-tag.status-declined{background:var(--black);color:var(--white)}.crm-date{text-align:right}.crm-date b{display:block;font-family:var(--serif);font-style:italic;font-size:28px;font-weight:400}.crm-date span{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.crm-date.overdue b{color:var(--pink)}.crm-note{grid-column:1/-1;margin-top:auto;padding-top:16px;border-top:1px solid var(--black);font-size:11px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(8,8,8,.6)}
+.crm-empty{padding:46px;border:1px dashed var(--black);border-radius:var(--radius);text-align:center;grid-column:1/-1}.crm-mobile-nav{display:none}.crm-fab{display:none}
+.crm-dialog{width:min(760px,calc(100% - 20px));max-height:92svh;padding:0;border:1px solid var(--black);border-radius:28px;background:var(--white);color:var(--black);box-shadow:12px 12px 0 var(--pink)}.crm-dialog::backdrop{background:rgba(8,8,8,.76)}.crm-sheet{padding:24px}.crm-sheet-head{position:sticky;top:0;z-index:2;padding:4px 0 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(12px)}.crm-sheet-head h2{font-size:46px}.crm-quick{display:flex;gap:7px;overflow:auto;margin:0 0 18px}.crm-quick button,.crm-mini{border:1px solid var(--black);border-radius:999px;background:var(--white);padding:8px 11px;font-size:10px;font-weight:800}.crm-quick button:hover,.crm-mini:hover{background:var(--acid)}
+.crm-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.crm-form-grid .wide{grid-column:1/-1}.crm-sheet-actions{position:sticky;bottom:0;padding:18px 0 2px;display:flex;justify-content:flex-end;gap:8px;background:linear-gradient(transparent,var(--white) 26%)}.crm-danger{color:#9d0030}
+.crm-message-full-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.crm-message-full-body{white-space:pre-wrap;font-size:13px;line-height:1.65;padding:18px;border:1px solid var(--black);border-radius:18px;background:#fff}.crm-message-dialog .crm-sheet-actions{justify-content:space-between}
+.crm-toast{position:fixed;z-index:100;left:50%;bottom:26px;transform:translateX(-50%);padding:11px 16px;border:1px solid var(--black);border-radius:999px;background:var(--acid);font-size:11px;font-weight:800;box-shadow:5px 5px 0 var(--pink)}
+@media(max-width:1040px){.crm-project-grid,.crm-leads{grid-template-columns:repeat(2,minmax(0,1fr))}.crm-dashboard-grid{grid-template-columns:1fr}.crm-panel-wide{grid-row:auto}.crm-controls-tasks{grid-template-columns:1fr 1fr}.crm-select{grid-column:1/-1}}
+@media(max-width:820px){.crm-login{grid-template-columns:1fr}.crm-login-card{min-height:100svh;border-right:0}.crm-login-art{display:none}.crm-desktop-nav{display:none}.crm-topbar{grid-template-columns:1fr auto auto}.crm-stats{grid-template-columns:repeat(2,1fr)}.crm-controls{grid-template-columns:1fr}.crm-controls-tasks{grid-template-columns:1fr}.crm-chips{grid-column:auto}.crm-project-grid,.crm-leads{grid-template-columns:1fr}}
+@media(max-width:640px){.crm-app{padding-bottom:88px}.crm-topbar{padding:0 18px;height:64px}.crm-sync{display:none}.crm-hero,.crm-section-hero{padding:42px 18px 28px}.crm-hero h1,.crm-section-hero h1{font-size:58px}.crm-new-task-desktop,.crm-section-hero>.btn{display:none}.crm-stats{padding:12px 18px;gap:8px}.crm-stat{min-height:104px;padding:14px}.crm-stat strong{font-size:46px}.crm-dashboard-grid{padding:22px 18px 110px;gap:10px}.crm-panel{padding:18px}.crm-panel-head h2{font-size:38px}.crm-controls{padding:14px 18px}.crm-tabs{overflow:auto;scrollbar-width:none}.crm-tabs::-webkit-scrollbar{display:none}.crm-tabs button{padding:0 12px;white-space:nowrap}.crm-task-board,.crm-message-list,.crm-project-grid,.crm-leads{padding:20px 18px 110px}.crm-task-card{grid-template-columns:auto minmax(0,1fr);}.crm-task-card .crm-task-side{grid-column:2;text-align:left}.crm-message-card{grid-template-columns:1fr}.crm-message-side{text-align:left}.crm-mobile-nav{position:fixed;z-index:45;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));height:68px;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;border:1px solid var(--black);border-radius:22px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 10px 40px rgba(0,0,0,.12)}.crm-mobile-nav button{border:0;border-radius:16px;background:transparent;font-size:9px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.crm-mobile-nav button span{font-size:16px}.crm-mobile-nav button.active{background:var(--black);color:var(--white)}.crm-fab{display:block;position:fixed;z-index:46;right:18px;bottom:calc(86px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border:1px solid var(--black);border-radius:50%;background:var(--pink);font-size:34px;box-shadow:5px 5px 0 var(--acid)}.crm-dialog{width:calc(100% - 12px);margin:auto 6px 80px;border-radius:26px 26px 18px 18px}.crm-sheet{padding:18px}.crm-sheet-head h2{font-size:36px}.crm-form-grid{grid-template-columns:1fr}.crm-form-grid .wide{grid-column:auto}.crm-login-card{padding:26px 20px}.crm-login-card .crm-brand{left:20px;top:24px}.crm-login-card h1{font-size:55px}.crm-login-copy{font-size:14px}}
+
+.crm-reply-box{margin-top:16px;padding:18px;border:1px solid var(--black);border-radius:18px;background:#fff8fb}
+.crm-reply-box textarea{width:100%;border:1px solid var(--black);border-radius:14px;padding:13px;background:var(--white);color:var(--black);font:inherit;resize:vertical;outline:none}
+.crm-reply-box textarea:focus{box-shadow:4px 4px 0 var(--acid)}
+.crm-reply-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.crm-reply-actions span{font-size:10px;line-height:1.4;color:rgba(8,8,8,.55)}
+@media(max-width:640px){.crm-reply-actions{align-items:stretch;flex-direction:column}.crm-reply-actions .btn{width:100%}}
+
+/* honor HTML hidden on Safari even when custom selectors specify display:grid/flex */
+[hidden]{display:none!important}
+#login-screen[hidden],#app[hidden],.crm-page[hidden]{display:none!important}
+</style>
+<script>
+window.__CRM_PAGE_LOADED=true;
+(function(){
+  function show(msg){
+    var old=document.getElementById('crm-diag-banner'); if(old) old.remove();
+    var b=document.createElement('div'); b.id='crm-diag-banner';
+    b.style.cssText='position:fixed;z-index:99999;left:10px;right:10px;top:10px;padding:12px 14px;border:1px solid #080808;border-radius:14px;background:#d7ff39;color:#080808;font:700 12px/1.4 Manrope,Arial,sans-serif;box-shadow:5px 5px 0 #ff3fad';
+    b.textContent='crm diagnostic: '+msg;
+    document.body.appendChild(b);
+  }
+  window.addEventListener('error',function(e){show((e.message||'javascript error')+(e.filename?' · '+e.filename+':'+e.lineno:''));});
+  window.addEventListener('unhandledrejection',function(e){show('promise: '+String(e.reason&&e.reason.message||e.reason||'unknown'));});
+  setTimeout(function(){if(!window.__CRM_SCRIPT_LOADED)show('интерфейс не запустился. обнови страницу, этот текст можно прислать мне скрином.');},2500);
+})();
+</script>  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="dashhkuns">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/crm-manifest.webmanifest?v=4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/api/crm-icon?size=180">
+  <link rel="stylesheet" href="/crm4.css?v=20261011-4">
+<meta name="app-build" content="crm-v6-20261012"><meta http-equiv="Cache-Control" content="no-store">
+</head>
+<body class="crm-body">
+  <main class="crm-login" id="login-screen">
+    <section class="crm-login-card">
+      <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <p class="kicker">private producer operating system</p>
+      <h1>вся работа<br><span class="serif accent-pop">в одной голове</span></h1>
+      <p class="crm-login-copy">проекты, задачи, ответы, лиды, календарь и всё, что раньше жило по чатам.</p>
+      <form id="login-form" class="crm-login-form" onsubmit="return false">
+        <label class="crm-field"><span>пароль</span><input id="login-password" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary crm-login-btn" id="login-button" type="button" disabled>загружаю…</button>
+        <p class="crm-error" id="login-script-status" role="status">подключаю crm v6… если надпись не исчезает, напиши мне «v6 не загружается».</p>
+        <p class="crm-error" id="login-error" hidden>пароль не подошёл</p>
+      </form>
+    </section>
+    <aside class="crm-login-art" aria-hidden="true">
+      <div class="crm-poster"><span>producer os / 02</span><strong>не помнить<br>всё самой</strong><i>dashhkuns</i></div>
+    </aside>
+  </main>
+
+  <main class="crm-app" id="app" hidden>
+    <header class="crm-topbar">
+      <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <nav class="crm-desktop-nav" id="desktop-nav">
+        <button data-section="today" class="active">сегодня</button>
+        <button data-section="tasks">задачи</button>
+        <button data-section="inbox">ответы</button>
+        <button data-section="projects">проекты</button>
+        <button data-section="leads">лиды</button>
+      </nav>
+      <div class="crm-sync"><span class="crm-dot"></span><span id="sync-label">синхронизация…</span></div>
+      <button class="crm-round" id="logout-button" type="button" aria-label="выйти">↗</button>
+    </header>
+
+    <section class="crm-page crm-page-today" data-page="today">
+      <section class="crm-hero">
+        <div><p class="kicker">producer control room</p><h1>что двигаем<br><span class="serif accent-pop">сегодня</span></h1></div>
+        <button class="btn primary crm-new-task-desktop" type="button" data-open-task>+ задача</button>
+      </section>
+      <section class="crm-stats" id="today-stats"></section>
+      <section class="crm-dashboard-grid">
+        <article class="crm-panel crm-panel-wide">
+          <div class="crm-panel-head"><div><p class="kicker">action</p><h2>сделать</h2></div><span id="today-task-count"></span></div>
+          <div id="today-tasks" class="crm-task-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">inbox</p><h2>ответы</h2></div><button class="crm-text-btn" data-goto="inbox">все →</button></div>
+          <div id="today-messages" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">calendar</p><h2>ближайшее</h2></div></div>
+          <div id="today-events" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">waiting</p><h2>ждём</h2></div></div>
+          <div id="today-waiting" class="crm-mini-list"></div>
+        </article>
+      </section>
+    </section>
+
+    <section class="crm-page" data-page="tasks" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all tasks</p><h1>задачи</h1></div><button class="btn primary" type="button" data-open-task>+ новая</button>
+      </section>
+      <section class="crm-controls crm-controls-tasks">
+        <div class="crm-tabs" id="task-tabs">
+          <button data-task-view="open" class="active">открытые</button>
+          <button data-task-view="today">сегодня</button>
+          <button data-task-view="waiting">ждём</button>
+          <button data-task-view="backlog">потом</button>
+          <button data-task-view="done">готово</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="task-search" type="search" placeholder="найти задачу"></label>
+        <select class="crm-select" id="task-project-filter"><option value="all">все проекты</option></select>
+      </section>
+      <section class="crm-task-board" id="task-board"></section>
+    </section>
+
+    <section class="crm-page" data-page="inbox" hidden>
+      <section class="crm-section-hero"><div><p class="kicker">gmail + outreach</p><h1>ответы</h1></div></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="message-tabs">
+          <button data-message-view="all" class="active">все</button>
+          <button data-message-view="unread">непрочитанные</button>
+          <button data-message-view="actionable">нужно действие</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="message-search" type="search" placeholder="отправитель, тема, текст"></label>
+      </section>
+      <section class="crm-message-list" id="message-list"></section>
+    </section>
+
+    <section class="crm-page" data-page="projects" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all moving parts</p><h1>проекты</h1></div><button class="btn primary" id="new-project-button" type="button">+ проект</button>
+      </section>
+      <section class="crm-project-grid" id="project-grid"></section>
+    </section>
+
+    <section class="crm-page" data-page="leads" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">sales pipeline</p><h1>лиды</h1></div><button class="btn primary" type="button" data-open-lead>+ новый лид</button>
+      </section>
+      <section class="crm-stats" id="lead-stats"></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="lead-tabs">
+          <button data-lead-view="today" class="active">сегодня</button>
+          <button data-lead-view="hot">горячие</button>
+          <button data-lead-view="all">все</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="lead-search" type="search" placeholder="компания, контакт, заметка"></label>
+        <div class="crm-chips" id="lead-direction-chips"></div>
+      </section>
+      <section class="crm-leads" id="lead-list"></section>
+    </section>
+
+    <nav class="crm-mobile-nav" id="mobile-nav">
+      <button data-section="today" class="active"><span>●</span>сегодня</button>
+      <button data-section="tasks"><span>✓</span>задачи</button>
+      <button data-section="inbox"><span>↩</span>ответы</button>
+      <button data-section="projects"><span>▦</span>проекты</button>
+      <button data-section="leads"><span>↗</span>лиды</button>
+    </nav>
+    <button class="crm-fab" id="global-fab" type="button">+</button>
+  </main>
+
+  <dialog class="crm-dialog" id="task-dialog">
+    <form method="dialog" class="crm-sheet" id="task-form">
+      <header class="crm-sheet-head"><div><p class="kicker">task</p><h2 id="task-dialog-title">новая задача</h2></div><button type="button" class="crm-round" data-close-dialog="task-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>задача *</span><input name="title" required></label>
+        <label class="crm-field wide"><span>описание</span><textarea name="description" rows="3"></textarea></label>
+        <label class="crm-field"><span>проект</span><select name="project_id" id="task-project-select"><option value="">без проекта</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="todo">todo</option><option value="doing">doing</option><option value="waiting">waiting</option><option value="backlog">backlog</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>срок</span><input name="due_at" type="date"></label>
+        <label class="crm-field"><span>кто делает</span><select name="owner"><option value="dora">я</option><option value="chatgpt">chatgpt</option><option value="external">кто-то другой</option></select></label>
+        <label class="crm-field"><span>ждём от</span><input name="waiting_on" placeholder="имя / команда"></label>
+        <label class="crm-field wide"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-task" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="project-dialog">
+    <form method="dialog" class="crm-sheet" id="project-form">
+      <header class="crm-sheet-head"><div><p class="kicker">project</p><h2 id="project-dialog-title">проект</h2></div><button type="button" class="crm-round" data-close-dialog="project-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>название *</span><input name="name" required></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="active">active</option><option value="later">later</option><option value="paused">paused</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium">medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+        <label class="crm-field"><span>дедлайн</span><input name="deadline" type="date"></label>
+        <label class="crm-field wide"><span>цель</span><textarea name="goal" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>следующий шаг</span><textarea name="next_action" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="lead-dialog">
+    <form method="dialog" class="crm-sheet" id="lead-form">
+      <header class="crm-sheet-head"><div><p class="kicker">lead</p><h2 id="lead-dialog-title">новый лид</h2></div><button type="button" class="crm-round" data-close-dialog="lead-dialog">×</button></header>
+      <div class="crm-quick" id="quick-status">
+        <button type="button" data-status="waiting">ждём</button><button type="button" data-status="replied">ответили</button><button type="button" data-status="warm">горячий</button><button type="button" data-status="declined">нет</button>
+      </div>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>компания *</span><input name="company" required></label>
+        <label class="crm-field"><span>направление</span><select name="direction"><option>producer jobs</option><option>producer sales</option><option>iGaming production</option><option>podcast venue</option><option>photo studio</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field wide"><span>контакт</span><input name="contact"></label>
+        <label class="crm-field"><span>канал</span><input name="channel" value="email"></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="new">new</option><option value="waiting">waiting</option><option value="action needed">action needed</option><option value="replied">replied</option><option value="warm">warm</option><option value="auto-ack">auto-ack</option><option value="paid-only">paid-only</option><option value="declined">declined</option><option value="bounce">bounce</option></select></label>
+        <label class="crm-field"><span>отправлено</span><input name="sent_at" type="date"></label>
+        <label class="crm-field"><span>следующее действие</span><input name="next_action_at" type="date"></label>
+        <label class="crm-field wide"><span>последний ответ</span><textarea name="last_reply" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-lead" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog crm-message-dialog" id="message-dialog">
+    <section class="crm-sheet">
+      <header class="crm-sheet-head"><div><p class="kicker" id="message-channel">email</p><h2 id="message-subject">ответ</h2></div><button type="button" class="crm-round" data-close-dialog="message-dialog">×</button></header>
+      <div class="crm-message-full-meta" id="message-full-meta"></div>
+      <div class="crm-message-full-body" id="message-full-body"></div>
+      <section class="crm-reply-box">
+        <p class="kicker">ответ из crm</p>
+        <textarea id="message-reply" rows="5" placeholder="напиши ответ здесь"></textarea>
+        <div class="crm-reply-actions">
+          <span>после «отправить» письмо попадёт в очередь и уйдёт через gmail</span>
+          <button class="btn primary" id="message-queue-reply" type="button">отправить</button>
+        </div>
+      </section>
+      <footer class="crm-sheet-actions" id="message-actions"></footer>
+    </section>
+  </dialog>
+
+  <div class="crm-toast" id="toast" hidden></div>
+  <script defer src="/crm-core-v6.js?v=20261012-6"></script>
+<script defer src="/crm4-v6.js?v=20261012-6"></script>
+</body>
+</html>
