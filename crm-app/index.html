@@ -3915,10 +3915,10 @@ $("#global-fab").onclick=()=>state.section==="leads"?openLead():openTask();
      node("google calendar","через chatgpt","partial",(s.events||[]).length+" событий в базе crm. прямую фоновую двустороннюю синхронизацию ещё нужно подключить."),
      node("напоминания о сроках",recentRun?"выполнялись":"расписание не подтверждено",recentRun?"ok":"off","последний серверный запуск: "+time(newestRun)+". событий в журнале: "+(s.alerts||[]).length+"."),
      node("уведомления iphone","пока при открытом приложении","partial","для уведомлений при закрытой pwa нужен web push, подписка устройства и серверная доставка."),
-     node("синхронизация источников",(h.sync_failed||0)?"есть ошибки":"журнал доступен",(h.sync_failed||0)?"off":"partial",(h.sync_failed||0)+" ошибок среди последних операций синхронизации; "+(h.sync_recent||0)+" завершено.")
+     node("очередь dashhkuns os",(h.sync_failed||0)?"есть ошибки":"журнал доступен",(h.sync_failed||0)?"off":"partial",(h.sync_failed||0)+" ошибок среди последних операций os; "+(h.sync_recent||0)+" завершено. почтовые действия здесь не учитываются.")
    );
    const summary=sent+" автоответов подтверждено · "+approval+" решений ждут тебя · "+(h.sync_failed||0)+" ошибок синхронизации";
-   banner.querySelector("#crm-rel-summary").textContent=summary;
+   banner.querySelector("#crm-rel-summary").textContent=summary.replace("ошибок синхронизации","ошибок в очереди os");
    section.querySelector("#crm-reliability-update").textContent="последняя проверка crm: "+time(h.checked_at||new Date().toISOString());
  }
  async function notificationTest(button){
