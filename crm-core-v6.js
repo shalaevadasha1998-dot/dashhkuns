@@ -92,17 +92,30 @@ const loginReadyButton=document.getElementById("login-button");
 if(loginReadyButton){loginReadyButton.disabled=false;loginReadyButton.textContent="войти";}
 $("#logout-button").addEventListener("click",()=>{dropToken();showLogin()});
 
+let snapshotPromise=null;
 async function load(){
-  $("#sync-label").textContent="обновляю…";
-  try{
-    const data=await api("snapshot");
-    Object.assign(state,{
-      projects:data.projects||[],tasks:data.tasks||[],leads:data.leads||[],messages:data.messages||[],events:data.events||[],briefings:data.briefings||[],outbox:data.outbox||[]
-    });
-    $("#sync-label").textContent="обновлено сейчас";
-    renderAll();
-  }catch(e){$("#sync-label").textContent="ошибка синхронизации";toast("не удалось обновить crm",true)}
+  if(snapshotPromise)return snapshotPromise;
+  snapshotPromise=(async()=>{
+    $("#sync-label").textContent="обновляю…";
+    try{
+      const data=await api("snapshot");
+      Object.assign(state,{
+        projects:data.projects||[],tasks:data.tasks||[],leads:data.leads||[],messages:data.messages||[],events:data.events||[],briefings:data.briefings||[],outbox:data.outbox||[],alerts:data.alerts||[]
+      });
+      $("#sync-label").textContent="синхронизировано · "+new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+      renderAll();
+      window.__CRM_CURRENT_SNAPSHOT={...data,alerts:data.alerts||[]};
+      window.dispatchEvent(new CustomEvent("crm:snapshot",{detail:{data:window.__CRM_CURRENT_SNAPSHOT,at:Date.now()}}));
+      return data;
+    }catch(e){
+      $("#sync-label").textContent="ошибка синхронизации";
+      toast("crm не обновилась. проверь сеть",true);
+      return null;
+    }finally{snapshotPromise=null}
+  })();
+  return snapshotPromise;
 }
+window.__CRM_REFRESH=()=>token()?load():Promise.resolve(null);
 function renderAll(){
   populateProjectSelects();
   renderToday();renderTasks();renderInbox();renderProjects();renderLeads();
