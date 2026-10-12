@@ -1,6 +1,6 @@
 /* dashhkuns crm app shell. private CRM data and API responses are never cached. */
-const CACHE="dashhkuns-crm-shell-v4-20261011b";
-const SHELL=["/crm","/crm3.html","/crm4.css","/crm4.js","/crm-manifest.webmanifest","/assets/crm-icon.svg"];
+const CACHE="dashhkuns-crm-shell-v5-loginfix-20261012";
+const SHELL=["/crm","/crm3.html","/crm-core.js","/crm4.css","/crm4.js","/crm-manifest.webmanifest","/assets/crm-icon.svg"];
 const ALLOW=new Set([...SHELL,"/styles-v2.css"]);
 self.addEventListener("install",event=>{
   event.waitUntil((async()=>{
