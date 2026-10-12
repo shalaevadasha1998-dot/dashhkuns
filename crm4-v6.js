@@ -55,7 +55,7 @@
   document.body.append(network);
   const log=q("#crm-ai-log"),input=q("#crm-ai-input"),send=q("#crm-ai-send"),indicator=q("#crm-ai-status");
   const history=[];
-  let busy=false,checked=false,configured=false;
+  let busy=false,checked=false,configured=false,keyChecking=false;
   function bubble(text,role){
     const el=document.createElement("div");
     el.className="crm-ai-bubble "+role;
@@ -70,8 +70,8 @@
     try{
       const r=await fetch("/api/crm-ai",{cache:"no-store"}),data=await r.json();
       configured=Boolean(data.configured);checked=true;
-      indicator.textContent=configured?"ии подключена":"нужен ключ ии";
-      indicator.title=configured?"серверная модель доступна":"модель готова к подключению через CRM";
+      indicator.textContent=configured?"ии подключена":data.key_status==="invalid_format"?"неверный формат ключа":"нужен ключ ии";
+      indicator.title=configured?"серверная модель доступна":"серверная переменная crm";
     }catch{indicator.textContent="проверка недоступна"}
   }
   function openAssistant(){
@@ -99,10 +99,12 @@
   q("#crm-ai-form").addEventListener("submit",async event=>{
     event.preventDefault();
     const prompt=input.value.trim();
-    if(!prompt||busy)return;
+    if(!prompt||busy||keyChecking)return;
+    keyChecking=true;
     const token=typeof window.__CRM_AUTH_TOKEN==='function'?window.__CRM_AUTH_TOKEN():null;
-    if(!token){bubble("для работы ии нужно войти в crm","error");return}
-    if(!configured){await status();if(!configured){bubble("интерфейс ии готов, но серверный ключ CRM пока не настроен. ключ не вводи в чат или в браузер: он должен храниться в переменных окружения vercel.","error");return}}
+    if(!token){keyChecking=false;bubble("для работы ии нужно войти в crm","error");return}
+    if(!configured){await status();if(!configured){keyChecking=false;bubble("ии не подключена. проверь секретную переменную crm на сервере, не вставляй ключ в чат.","error");return}}
+    keyChecking=false;
     const previous=history.slice(-8);
     bubble(prompt,"user");input.value="";
     const loading=bubble("анализирую твою crm…","assistant loading");
@@ -116,7 +118,7 @@
       const data=await response.json().catch(()=>({}));
       if(!response.ok){
         if(response.status===401){indicator.textContent="войти заново";throw new Error("сессия crm истекла: выйди и войди заново")}
-        if(data.error==="ai_not_configured"){configured=false;indicator.textContent="нужен ключ ии";throw new Error("для ответа ии пока не задан серверный CRM")}
+        if(data.error==="ai_not_configured"){configured=false;indicator.textContent="нужен ключ ии";throw new Error("для ответа ии не настроен серверный ключ crm")}
         throw new Error(data.error==="ai_provider_unavailable"?"проверь ключ, биллинг и модель в vercel":"ошибка соединения с ии. попробуй ещё раз");
       }
       loading.textContent=data.answer;
