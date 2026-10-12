@@ -52,7 +52,7 @@ const normalize=(v)=>String(v||"").toLowerCase();
 async function api(action,payload={}){
   const headers={"Content-Type":"application/json","apikey":APIKEY};
   if(action!=="login"&&token())headers.Authorization="Bearer "+token();
-  const res=await fetch(API,{method:"POST",headers,body:JSON.stringify({action,...payload}),cache:"no-store",signal:AbortSignal.timeout(16000)});
+  const res=await fetch(API,{method:"POST",headers,body:JSON.stringify({action,...payload}),cache:"no-store"});
   const data=await res.json().catch(()=>({}));
   if(res.status===401&&action!=="login"){dropToken();showLogin();throw new Error("unauthorized")}
   if(!res.ok)throw new Error(data.detail||data.error||"request_failed");
