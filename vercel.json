@@ -4,6 +4,16 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/crm/",
+      "destination": "/crm-app/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/crm",
+      "destination": "/crm-app/index.html",
+      "permanent": false
+    },
+    {
       "source": "/crm.html",
       "destination": "/crm",
       "permanent": false
@@ -157,14 +167,6 @@
           "value": "crm.dashhkuns.com"
         }
       ],
-      "destination": "/crm-app/index.html"
-    },
-    {
-      "source": "/crm",
-      "destination": "/crm-app/index.html"
-    },
-    {
-      "source": "/crm/",
       "destination": "/crm-app/index.html"
     },
     {
