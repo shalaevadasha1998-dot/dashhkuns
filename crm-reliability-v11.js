@@ -27,7 +27,7 @@
  ].join("\n");document.head.appendChild(css);
  const section=document.createElement("section");
  section.className="crm-reliability";section.id="crm-os-automation";
- section.innerHTML='<p class="kicker">контроль системы</p><h3>автоматизация</h3><p class="crm-reliability-note">статусы рассчитаны по реальной базе. внешний gmail, календарь и фоновые push требуют собственных подключений к серверу crm.</p><div class="crm-reliability-grid" id="crm-reliability-grid"></div><div class="crm-reliability-actions"><button type="button" data-rel-action="refresh">обновить статусы</button><button type="button" data-rel-action="notification" class="secondary">проверить уведомление на iphone</button></div><p class="crm-reliability-note" id="crm-reliability-test-result">тест отправляет уведомление только по твоему нажатию и не означает, что серверный push уже работает.</p><p class="crm-reliability-note" id="crm-reliability-update"></p>';
+ section.innerHTML='<p class="kicker">контроль системы</p><h3>автоматизация</h3><p class="crm-reliability-note">статусы рассчитаны по реальной базе. внешний gmail, календарь и фоновые push требуют собственных подключений к серверу crm.</p><div class="crm-reliability-grid" id="crm-reliability-grid"></div><div class="crm-reliability-actions"><button type="button" data-rel-action="refresh">обновить статусы</button><button type="button" data-rel-action="scan" class="secondary">проверить дедлайны</button><button type="button" data-rel-action="notification" class="secondary">проверить уведомление на iphone</button></div><p class="crm-reliability-note" id="crm-reliability-test-result">тест отправляет уведомление только по твоему нажатию и не означает, что серверный push уже работает.</p><p class="crm-reliability-note" id="crm-reliability-update"></p>';
  os.appendChild(section);
  const banner=document.createElement("section");banner.className="crm-reliability-banner";
  banner.innerHTML='<h3>автоматизация · контроль</h3><p id="crm-rel-summary">проверяю журналы и подключения…</p><button type="button" id="crm-rel-open">открыть состояние системы ↗</button>';
@@ -103,6 +103,38 @@
       Promise.resolve(window.__CRM_REFRESH?.()).finally(()=>{button.disabled=false});
    }
  });
+ let lastScan=0,scanBusy=false;
+ async function scanReminders(userTriggered=false){
+   if(scanBusy||document.visibilityState==="hidden"||!navigator.onLine)return;
+   const app=document.querySelector("#app");
+   if(!app||app.hidden)return;
+   const now=Date.now();
+   if(!userTriggered&&now-lastScan<15*60*1000)return;
+   lastScan=now;scanBusy=true;
+   const outcome=section.querySelector("#crm-reliability-test-result");
+   try{
+     const token=window.__CRM_AUTH_TOKEN?.();
+     if(!token)throw Error("выполни вход в crm");
+     const response=await fetch("/api/crm-connection",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action:"check_reminders"}),cache:"no-store"});
+     if(!response.ok)throw Error("код "+response.status);
+     const result=await response.json();
+     if(userTriggered){
+       const numbers=result.generated||{};
+       const created=(numbers.task_reminders||0)+(numbers.event_day_reminders||0)+(numbers.event_soon_reminders||0);
+       outcome.textContent="проверка завершена: "+created+" новых напоминаний. повторы не создаются.";
+     }
+     await window.__CRM_REFRESH?.();
+   }catch(error){
+     if(userTriggered)outcome.textContent="не удалось проверить сроки: "+String(error?.message||"ошибка сети");
+   }finally{scanBusy=false}
+ }
+ section.addEventListener("click",e=>{
+   if(e.target.closest('[data-rel-action="scan"]'))scanReminders(true);
+ });
  window.addEventListener("crm:snapshot",e=>render(e.detail.data));
  render(window.__CRM_CURRENT_SNAPSHOT);
+ // Run the reminder scanner while the CRM is open. This is not a background server scheduler.
+ setTimeout(()=>scanReminders(false),8000);
+ setInterval(()=>scanReminders(false),15*60*1000);
+ window.addEventListener("focus",()=>scanReminders(false));
 })();
