@@ -1,0 +1,39 @@
+{
+  "id": "/crm-app/",
+  "name": "dashhkuns crm",
+  "short_name": "dashhkuns crm",
+  "description": "личная crm для проектов, задач, лидов и ии-оператора",
+  "lang": "ru",
+  "start_url": "/crm-app/index.html?source=pwa-v7",
+  "scope": "/crm-app/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f9f8f5",
+  "theme_color": "#ff3fad",
+  "icons": [
+    {
+      "src": "/api/crm-icon?size=192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/api/crm-icon?size=512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "задачи",
+      "short_name": "задачи",
+      "url": "/crm-app/index.html#tasks"
+    },
+    {
+      "name": "лиды",
+      "short_name": "лиды",
+      "url": "/crm-app/index.html#leads"
+    }
+  ]
+}

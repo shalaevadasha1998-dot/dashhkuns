@@ -1,0 +1,3413 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ff3fad">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>dashhkuns crm</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style id="pwa-v7-base">
+/* dashhkuns visual system v2
+   locked palette: #ff3fad / #24e86b / #080808 / #ffffff
+   one deliberate gradient only: acid green -> neon pink
+*/
+
+*,
+*::before,
+*::after{box-sizing:border-box}
+
+:root{
+  --pink:#ff3fad;
+  --acid:#24e86b;
+  --black:#080808;
+  --white:#ffffff;
+  --line:#080808;
+  --muted:rgba(8,8,8,.58);
+  --muted-white:rgba(255,255,255,.66);
+  --radius:24px;
+  --radius-sm:16px;
+  --gutter:clamp(22px,4.5vw,72px);
+  --section:clamp(76px,7vw,116px);
+  --gradient:linear-gradient(135deg,#24e86b 0%,#ff3fad 100%);
+  --sans:Manrope,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif
+}
+
+html{
+  width:100%;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%
+}
+
+body{
+  margin:0;
+  width:100%;
+  min-width:0;
+  overflow-x:hidden;
+  background:var(--white);
+  color:var(--black);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.45
+}
+
+body.menu-open{overflow:hidden}
+
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit}
+button{color:inherit}
+[hidden]{display:none!important}
+::selection{background:var(--acid);color:var(--black)}
+.pointer-glow{display:none!important}
+
+h1,h2,h3,p{margin:0}
+h1,h2,h3{
+  font-weight:800;
+  letter-spacing:-.055em;
+  line-height:.92;
+  word-break:normal;
+  overflow-wrap:normal;
+  -webkit-hyphens:none;
+  hyphens:none
+}
+h1{font-size:clamp(64px,7vw,122px)}
+h2{font-size:clamp(48px,5.4vw,88px)}
+h3{font-size:clamp(30px,3.2vw,50px)}
+
+.serif{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.055em
+}
+.accent-pop{color:var(--pink)}
+.kicker,
+.case-kicker,
+.project-meta,
+.num,
+.no{
+  font-size:11px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:lowercase
+}
+.kicker{margin-bottom:16px}
+
+.reveal{
+  opacity:1;
+  transform:none
+}
+.motion-ready .reveal{
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .5s ease,transform .5s ease
+}
+.motion-ready .reveal.visible{
+  opacity:1;
+  transform:none
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  height:70px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:24px;
+  padding:0 var(--gutter);
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--black);
+  backdrop-filter:blur(14px)
+}
+.brand{
+  display:inline-flex;
+  align-items:center;
+  min-width:0;
+  white-space:nowrap;
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:-.055em
+}
+.brand>span:not(.brand-state){
+  display:inline-block;
+  color:var(--pink);
+  animation:brandSignal 4.4s ease-in-out infinite
+}
+.brand-state{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:22px;
+  margin-left:10px;
+  padding:0 8px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--acid);
+  color:var(--black)!important;
+  font-size:8px!important;
+  font-weight:800!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase;
+  transition:opacity .16s ease,transform .16s ease,background .2s ease
+}
+.brand-state-out{opacity:0;transform:translateY(3px)}
+
+@keyframes brandSignal{
+  0%,44%,100%{color:var(--pink)}
+  54%,88%{color:var(--acid)}
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:26px
+}
+.nav a{
+  position:relative;
+  padding:7px 0;
+  font-size:12px;
+  font-weight:700;
+  opacity:.58
+}
+.nav a:hover,
+.nav a.active{opacity:1}
+.nav a.active::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:1px;
+  height:3px;
+  border-radius:999px;
+  background:var(--acid)
+}
+
+.top-cta{
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 20px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--black);
+  color:var(--white);
+  font-size:11px;
+  font-weight:800;
+  box-shadow:4px 4px 0 var(--pink)
+}
+.top-cta:hover{
+  background:var(--acid);
+  color:var(--black);
+  box-shadow:4px 4px 0 var(--pink)
+}
+
+.menu-btn{
+  display:none;
+  border:0;
+  background:transparent;
+  padding:8px 0;
+  font-size:12px;
+  font-weight:800
+}
+.mobile-menu{display:none}
+
+.btn{
+  min-height:54px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 24px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  color:var(--black);
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:-.02em;
+  cursor:pointer;
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease
+}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{
+  background:var(--pink);
+  box-shadow:0 5px 0 var(--acid)
+}
+.btn.primary:hover{
+  background:var(--acid);
+  box-shadow:0 5px 0 var(--pink)
+}
+.btn.ghost:hover{background:var(--acid)}
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center
+}
+
+.site-footer{
+  min-height:96px;
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:24px;
+  align-items:center;
+  padding:28px var(--gutter);
+  background:var(--black);
+  color:var(--white);
+  font-size:12px
+}
+.site-footer a{font-size:16px;font-weight:700}
+.site-footer span{opacity:.58}
+
+.mobile-swipe-note{
+  display:none;
+  margin:0 0 14px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em
+}
+
+/* shared section framing */
+.section-title{
+  display:grid;
+  grid-template-columns:minmax(150px,.34fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,64px);
+  align-items:start;
+  margin-bottom:42px
+}
+.section-title h2{max-width:13ch}
+.home-section-cta{margin-top:28px}
+
+/* home hero */
+.hero{
+  position:relative;
+  isolation:isolate;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);
+  gap:clamp(32px,4vw,68px);
+  align-items:center;
+  min-height:calc(100svh - 70px);
+  padding:clamp(72px,7vw,118px) var(--gutter);
+  overflow:hidden;
+  background:var(--white)
+}
+.hero::before,
+.hero::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:10px;
+  z-index:3
+}
+.hero::before{left:0;background:var(--pink)}
+.hero::after{right:0;background:var(--acid)}
+.hero-motion{
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  overflow:hidden;
+  opacity:.055;
+  background:var(--white);
+  filter:grayscale(1) contrast(1.05)
+}
+.hero-motion-video{
+  width:100%;
+  height:100%;
+  object-fit:cover
+}
+.hero-motion::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,.76)
+}
+.hero-copy,
+.hero-art{min-width:0}
+.hero-copy{position:relative;z-index:1}
+.hero-copy .kicker{margin-bottom:28px}
+.hero h1{max-width:10ch}
+.hero-first-line,
+.hero-second-line{display:block}
+.hero-first-line{
+  font-size:clamp(48px,4.1vw,72px);
+  line-height:1;
+  letter-spacing:-.055em
+}
+.hero-second-line{
+  margin-top:8px;
+  font-size:clamp(72px,6.4vw,112px);
+  line-height:.86
+}
+.hero-commercial{
+  margin-top:26px;
+  max-width:650px;
+  font-size:15px;
+  line-height:1.45
+}
+.hero-commercial span{
+  display:inline-block;
+  padding:3px 8px 4px;
+  border-radius:7px;
+  background:var(--acid);
+  font-weight:800
+}
+.hero-lead{
+  margin-top:28px;
+  font-size:clamp(18px,1.45vw,22px);
+  font-weight:800;
+  letter-spacing:-.035em;
+  color:rgba(8,8,8,.62)
+}
+.hero-categories{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:24px
+}
+.hero-categories span{
+  padding:8px 12px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  font-size:11px
+}
+.hero-categories span:nth-child(2n){background:var(--acid)}
+.hero .button-row{margin-top:30px}
+
+.hero-photo-card .tap-gallery{
+  height:min(660px,70svh);
+  min-height:520px
+}
+.tap-gallery{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--black);
+  box-shadow:10px 10px 0 var(--pink);
+  cursor:pointer
+}
+.tap-gallery img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity .35s ease
+}
+.tap-gallery img.active{opacity:1}
+.tap-gallery-top{
+  position:absolute;
+  z-index:3;
+  top:18px;
+  left:18px;
+  right:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  color:var(--white)
+}
+.tap-cue{
+  padding:8px 12px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--acid);
+  color:var(--black);
+  font-size:10px;
+  font-weight:800
+}
+.tap-count{
+  font-size:10px;
+  font-weight:700;
+  text-shadow:0 1px 8px rgba(0,0,0,.45)
+}
+.photo-brand{
+  position:absolute;
+  z-index:3;
+  left:24px;
+  right:24px;
+  bottom:22px;
+  color:var(--white);
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:clamp(52px,5vw,86px);
+  line-height:.8;
+  letter-spacing:-.06em
+}
+.photo-brand span{color:var(--acid);animation:brandSignal 4.4s ease-in-out infinite}
+
+/* selected work */
+.home-selected-work{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.project-stack{
+  display:grid;
+  gap:18px
+}
+.project-row{
+  min-height:470px;
+  display:grid;
+  grid-template-columns:minmax(0,1.04fr) minmax(340px,.96fr);
+  overflow:hidden;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--white)
+}
+.project-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  padding:clamp(28px,4vw,54px)
+}
+.project-meta{color:rgba(8,8,8,.52)}
+.project-copy h3{
+  max-width:11ch;
+  margin:44px 0 20px
+}
+.project-fragments{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px
+}
+.project-fragments span,
+.mini-tags span{
+  display:inline-flex;
+  align-items:center;
+  min-height:29px;
+  padding:5px 10px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  color:var(--black);
+  font-size:10px;
+  font-weight:800
+}
+.project-fragments span:nth-child(3n+2),
+.mini-tags span:nth-child(3n+2){background:var(--acid)}
+.project-fragments span:nth-child(3n),
+.mini-tags span:nth-child(3n){background:var(--pink)}
+.project-role{
+  margin-top:auto;
+  padding-top:20px;
+  border-top:1px solid var(--black);
+  font-size:12px;
+  line-height:1.5
+}
+.project-role strong{font-weight:800}
+.project-cover{
+  position:relative;
+  min-width:0;
+  padding:clamp(26px,3vw,44px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border-left:1px solid var(--black);
+  overflow:hidden
+}
+.project-cover>span{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em
+}
+.project-cover>strong{
+  max-width:10ch;
+  margin:auto 0;
+  font-size:clamp(52px,5vw,82px);
+  line-height:.9;
+  letter-spacing:-.06em
+}
+.cover-one{background:var(--pink)}
+.cover-two{background:var(--acid)}
+.cover-three{background:var(--black);color:var(--white)}
+.cover-four{background:var(--pink)}
+.cover-five{background:var(--acid)}
+
+.portfolio-poster{
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:20px;
+  background:var(--black);
+  color:var(--white)
+}
+.poster-index{
+  color:var(--acid);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.11em
+}
+.portfolio-lockup{
+  align-self:center;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  overflow:visible
+}
+.portfolio-lockup span{
+  display:block;
+  position:static;
+  margin:0;
+  width:auto;
+  transform:none
+}
+.portfolio-main{
+  color:var(--white);
+  font-size:clamp(48px,5vw,76px);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.06em
+}
+.portfolio-serif{
+  color:var(--pink);
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:clamp(44px,4.7vw,70px);
+  line-height:1.02;
+  letter-spacing:-.055em
+}
+.portfolio-acid{
+  align-self:flex-start;
+  max-width:100%;
+  padding:8px 12px 10px;
+  background:var(--acid);
+  color:var(--black);
+  font-size:clamp(32px,4vw,56px);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.055em
+}
+.poster-route{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.35);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em
+}
+
+/* proof */
+.home-proof{
+  position:relative;
+  padding:var(--section) var(--gutter);
+  overflow:hidden;
+  background:var(--black);
+  color:var(--white)
+}
+.home-proof::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:10px;
+  background:var(--gradient)
+}
+.home-proof .accent-pop{color:var(--acid)}
+.home-proof .section-title h2{
+  max-width:10ch;
+  font-size:clamp(58px,6vw,96px)
+}
+.trust-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px
+}
+.trust-grid article{
+  min-height:210px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:24px;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:var(--radius-sm)
+}
+.trust-grid strong{
+  color:var(--acid);
+  font-size:clamp(52px,5vw,78px);
+  line-height:.82;
+  letter-spacing:-.06em
+}
+.trust-grid p{
+  max-width:16ch;
+  color:var(--muted-white);
+  font-size:12px
+}
+
+/* capabilities, only deliberate gradient on the site */
+.home-capabilities{
+  padding:var(--section) var(--gutter);
+  background:var(--gradient);
+  color:var(--black)
+}
+.home-capabilities .accent-pop{color:var(--black)}
+.home-service-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px
+}
+.service-card{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--white)
+}
+.service-card-media{
+  height:220px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:20px;
+  border-bottom:1px solid var(--black)
+}
+.service-card-media span{font-size:10px;font-weight:800}
+.service-card-media strong{
+  font-size:clamp(32px,3.2vw,48px);
+  line-height:.88;
+  letter-spacing:-.055em
+}
+.service-card-media em{
+  max-width:18ch;
+  font-size:11px;
+  font-style:normal
+}
+.media-01{background:var(--white)}
+.media-04{background:var(--acid)}
+.media-03{background:var(--black);color:var(--white)}
+.service-card-body{
+  min-height:235px;
+  display:flex;
+  flex-direction:column;
+  padding:22px;
+  background:var(--white)
+}
+.service-card-body h3{
+  margin:36px 0 18px;
+  font-size:clamp(28px,2.5vw,38px)
+}
+.mini-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:auto
+}
+
+/* method */
+.home-method{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.expertise-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  border-top:1px solid var(--black)
+}
+.expertise-grid article{
+  min-height:310px;
+  display:flex;
+  flex-direction:column;
+  padding:28px 24px 24px 0;
+  border-right:1px solid var(--black)
+}
+.expertise-grid article:last-child{border-right:0}
+.expertise-grid article:nth-child(2){
+  padding-left:24px;
+  background:var(--acid)
+}
+.expertise-grid article:nth-child(3){
+  padding-left:24px;
+  background:var(--black);
+  color:var(--white)
+}
+.expertise-grid article>span{
+  font-size:10px;
+  font-weight:800;
+  opacity:.55
+}
+.expertise-grid h3{margin:auto 0 12px}
+.expertise-grid p{
+  font-size:12px;
+  font-weight:800;
+  opacity:.58
+}
+
+/* about on home */
+.home-about{
+  display:grid;
+  grid-template-columns:.78fr 1.22fr;
+  gap:clamp(38px,5vw,76px);
+  align-items:center;
+  padding:var(--section) var(--gutter);
+  background:var(--black);
+  color:var(--white)
+}
+.home-about .about-visual{height:clamp(430px,42vw,570px)}
+.home-about .about-visual img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 28%;
+  border:1px solid var(--white);
+  border-radius:var(--radius);
+  box-shadow:10px 10px 0 var(--pink)
+}
+.home-about .about-copy{min-width:0}
+.home-about .about-copy h2{max-width:12ch}
+.home-about .about-copy p{
+  max-width:30ch;
+  margin-top:24px;
+  color:var(--muted-white);
+  font-size:18px
+}
+.home-about .button-row{margin-top:28px}
+.home-about .btn.ghost{background:var(--white)}
+
+/* final CTA */
+.home-final-cta,
+.cta-band{
+  padding:var(--section) var(--gutter);
+  background:var(--acid);
+  color:var(--black)
+}
+.home-final-cta h2,
+.cta-band h2{max-width:14ch}
+.home-final-cta .accent-pop,
+.compact-cta .accent-pop{color:var(--black)}
+.home-final-cta .button-row,
+.cta-band .button-row{margin-top:34px}
+.home-final-cta .btn.primary{
+  background:var(--black);
+  color:var(--white);
+  border-color:var(--black);
+  box-shadow:0 5px 0 var(--pink)
+}
+.home-final-cta .btn.ghost{
+  background:var(--white);
+  color:var(--black)
+}
+
+/* page hero */
+.page-hero{
+  position:relative;
+  min-height:500px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(260px,.5fr);
+  gap:40px;
+  align-items:end;
+  padding:clamp(86px,8vw,132px) var(--gutter) clamp(58px,6vw,90px);
+  overflow:hidden;
+  background:var(--pink);
+  color:var(--black);
+  border-bottom:1px solid var(--black)
+}
+.page-hero h1{max-width:10ch}
+.page-hero>p{
+  align-self:end;
+  max-width:38ch;
+  font-size:clamp(18px,1.6vw,24px);
+  font-weight:600;
+  letter-spacing:-.03em
+}
+.stamp{
+  position:absolute;
+  top:28px;
+  right:var(--gutter);
+  min-width:110px;
+  padding:12px 14px;
+  border:1px solid var(--black);
+  border-radius:var(--radius-sm);
+  background:var(--acid);
+  font-size:10px;
+  font-weight:800;
+  line-height:1.25
+}
+
+/* services */
+.services-commercial,
+.compact-pricing{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr auto;
+  gap:28px;
+  align-items:end;
+  padding:clamp(58px,6vw,86px) var(--gutter);
+  background:var(--white);
+  color:var(--black);
+  border-bottom:1px solid var(--black)
+}
+.services-commercial h2{font-size:clamp(46px,5vw,76px)}
+.commercial-prices{
+  display:grid;
+  gap:8px
+}
+.commercial-prices span{
+  padding:10px 14px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  font-size:11px;
+  font-weight:700
+}
+.services-compact{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.services-rail{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px
+}
+.service-compact{
+  min-width:0;
+  min-height:520px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  padding:18px;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--white)
+}
+.service-compact h3{
+  min-height:2em;
+  font-size:clamp(26px,2.2vw,36px)
+}
+.service-compact-poster{
+  min-height:220px;
+  display:flex;
+  align-items:flex-end;
+  padding:18px;
+  border:1px solid var(--black);
+  border-radius:18px;
+  font-size:clamp(28px,2.5vw,40px);
+  font-weight:800;
+  line-height:.9;
+  letter-spacing:-.055em
+}
+.service-compact-poster.pink{background:var(--pink)}
+.service-compact-poster.acid{background:var(--acid)}
+.service-compact-poster.black{background:var(--black);color:var(--white)}
+.service-compact .mini-tags{margin-top:auto}
+.compact-process{
+  padding:clamp(74px,7vw,108px) var(--gutter);
+  background:var(--black);
+  color:var(--white)
+}
+.compact-process h2{max-width:14ch}
+.compact-process .accent-pop{color:var(--acid)}
+.compact-process .button-row{margin-top:28px}
+
+/* projects */
+.projects-page,
+.projects-compact{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.projects-rail{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px
+}
+.project-compact{
+  min-width:0;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:minmax(300px,auto) 250px;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--white)
+}
+.project-compact-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  padding:22px
+}
+.project-compact-info h2{
+  max-width:10ch;
+  font-size:clamp(30px,2.7vw,42px)
+}
+.project-compact-info .role{
+  margin-top:auto;
+  padding-top:15px;
+  border-top:1px solid var(--black);
+  font-size:10px;
+  line-height:1.5
+}
+.project-compact-poster{
+  display:flex;
+  align-items:flex-end;
+  padding:22px;
+  border-top:1px solid var(--black);
+  font-size:clamp(38px,3.5vw,56px);
+  font-weight:800;
+  line-height:.88;
+  letter-spacing:-.06em
+}
+.project-compact-poster.pink{background:var(--pink)}
+.project-compact-poster.acid{background:var(--acid)}
+.project-compact-poster.black{background:var(--black);color:var(--white)}
+.compact-cta{background:var(--acid)}
+
+/* about page */
+.about-page,
+.about-compact{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:minmax(360px,.85fr) minmax(0,1.15fr);
+  gap:clamp(38px,5vw,76px);
+  align-items:center
+}
+.about-gallery{min-width:0}
+.about-tap-gallery{height:min(650px,70svh);min-height:520px}
+.about-text{min-width:0}
+.about-text .mega{
+  max-width:10ch;
+  font-size:clamp(56px,5.8vw,92px);
+  font-weight:800;
+  line-height:.9;
+  letter-spacing:-.06em
+}
+.about-lines{
+  display:grid;
+  margin-top:32px;
+  border-top:1px solid var(--black)
+}
+.about-lines span{
+  padding:16px 0;
+  border-bottom:1px solid var(--black);
+  font-size:clamp(18px,1.5vw,23px);
+  font-weight:700;
+  letter-spacing:-.035em
+}
+.career{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.career-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr))
+}
+.career-grid article{
+  min-height:270px;
+  display:flex;
+  flex-direction:column;
+  padding:24px;
+  border:1px solid var(--black);
+  border-right:0
+}
+.career-grid article:last-child{border-right:1px solid var(--black)}
+.career-grid article:nth-child(2){background:var(--pink)}
+.career-grid article:nth-child(3){background:var(--black);color:var(--white)}
+.career-grid article:nth-child(4){background:var(--acid)}
+.career-grid article>span{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em
+}
+.career-grid h3{margin:auto 0 12px}
+.career-grid p{font-size:12px;font-weight:700}
+.about-values,
+.compact-values{
+  padding:var(--section) var(--gutter);
+  background:var(--acid);
+  color:var(--black)
+}
+.about-values h2{max-width:15ch}
+.about-values .button-row{margin-top:30px}
+
+/* contact */
+.contact-page{
+  display:grid;
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(34px,5vw,76px);
+  align-items:start;
+  padding:clamp(84px,8vw,124px) var(--gutter) var(--section);
+  background:var(--white)
+}
+.contact-copy{
+  position:sticky;
+  top:108px;
+  min-width:0
+}
+.contact-copy h1{max-width:9ch}
+.contact-lead{
+  max-width:36ch;
+  margin-top:26px;
+  font-size:clamp(17px,1.5vw,22px);
+  font-weight:600;
+  letter-spacing:-.03em
+}
+.contact-choice-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:30px 0
+}
+.contact-choice{
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:18px;
+  padding:20px;
+  border:1px solid var(--black);
+  border-radius:var(--radius-sm)
+}
+.contact-choice-pink{background:var(--pink)}
+.contact-choice-acid{background:var(--acid)}
+.contact-choice>span{font-size:10px;font-weight:800}
+.contact-choice strong{
+  font-size:clamp(27px,2.5vw,38px);
+  line-height:.95;
+  letter-spacing:-.05em
+}
+.contact-choice small{font-size:10px;font-weight:700}
+.contact-budget{
+  display:grid;
+  gap:6px;
+  padding-top:20px;
+  border-top:1px solid var(--black)
+}
+.contact-budget span,
+.contact-budget small{font-size:10px}
+.contact-budget strong{font-size:18px}
+.contact-action-panel{
+  grid-column:2;
+  overflow:hidden;
+  margin-bottom:20px;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--white)
+}
+.lead-panel{box-shadow:8px 8px 0 var(--pink)}
+.booking-panel{box-shadow:8px 8px 0 var(--acid)}
+.project-form{
+  display:grid;
+  gap:18px;
+  width:100%;
+  padding:clamp(26px,4vw,50px)
+}
+.project-form h2{max-width:10ch}
+.field{display:grid;gap:8px}
+.field label{font-size:10px;font-weight:800;letter-spacing:.08em}
+.field input,
+.field textarea{
+  width:100%;
+  min-height:52px;
+  padding:14px;
+  border:1px solid var(--black);
+  border-radius:14px;
+  background:var(--white);
+  color:var(--black);
+  outline:0
+}
+.field textarea{min-height:132px;resize:vertical}
+.field input:focus,
+.field textarea:focus{outline:3px solid var(--acid);outline-offset:0}
+.booking-request-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px
+}
+.form-submit-row{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-top:8px
+}
+.form-note{max-width:26ch;font-size:10px;color:var(--muted)}
+.form-error{
+  padding:12px 14px;
+  border:1px solid var(--black);
+  border-radius:12px;
+  background:var(--pink);
+  font-size:12px
+}
+.hp-field{
+  position:absolute!important;
+  left:-9999px!important;
+  width:1px!important;
+  height:1px!important;
+  overflow:hidden!important
+}
+.form-success{padding:clamp(28px,4vw,50px)}
+.lead-success{background:var(--pink)}
+.booking-success{background:var(--acid)}
+
+/* long-form / SEO pages */
+.people-card{
+  min-height:470px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:clamp(28px,4vw,48px);
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--pink)
+}
+.people-card h3{max-width:10ch}
+.people-card-list{
+  display:grid;
+  gap:8px
+}
+.people-card-list span{
+  padding:12px 14px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  font-size:11px;
+  font-weight:700
+}
+.manifesto{
+  display:grid;
+  border-top:1px solid var(--black)
+}
+.manifesto-row{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  gap:24px;
+  padding:22px 0;
+  border-bottom:1px solid var(--black)
+}
+.manifesto-row>span{font-size:10px;font-weight:800}
+.manifesto-row p{max-width:52ch;font-size:18px}
+.proof-band{
+  display:grid;
+  grid-template-columns:.7fr 1.3fr;
+  gap:48px;
+  padding:var(--section) var(--gutter);
+  background:var(--black);
+  color:var(--white);
+  border-top:10px solid var(--acid)
+}
+.proof-band .accent-pop{color:var(--pink)}
+.proof-title h2{max-width:10ch}
+.proof-copy p{
+  max-width:52ch;
+  color:var(--muted-white);
+  font-size:18px
+}
+.proof-copy .button-row{margin-top:28px}
+
+/* legacy case cards used by insights */
+.case-page{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,.8fr);
+  overflow:hidden;
+  margin-bottom:14px;
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  background:var(--white)
+}
+.case-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  padding:clamp(26px,4vw,48px)
+}
+.case-info h2{max-width:11ch;margin:32px 0 20px}
+.case-info p{max-width:54ch}
+.case-kicker{color:var(--muted)}
+.role{
+  margin-top:auto;
+  padding-top:20px;
+  border-top:1px solid var(--black);
+  font-size:11px
+}
+.case-cover{
+  min-height:420px;
+  padding:28px;
+  border-left:1px solid var(--black)
+}
+.case-punch{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between
+}
+.case-punch strong{
+  max-width:10ch;
+  margin:auto 0;
+  font-size:clamp(42px,4vw,66px);
+  line-height:.9;
+  letter-spacing:-.055em
+}
+.poster-reality{background:var(--acid)}
+
+/* 404 */
+body>h1{
+  margin:20vh var(--gutter) 0;
+  max-width:10ch
+}
+body>.button-row{margin:30px var(--gutter) 20vh}
+
+/* responsive */
+@media(max-width:1100px){
+  .nav{display:none}
+  .menu-btn{display:block;justify-self:end}
+  .topbar{grid-template-columns:auto 1fr auto}
+  .top-cta{display:none}
+  .mobile-menu{
+    position:fixed;
+    z-index:99;
+    top:70px;
+    left:0;
+    right:0;
+    bottom:0;
+    display:none;
+    padding:24px var(--gutter) 40px;
+    background:var(--black);
+    color:var(--white)
+  }
+  .mobile-menu.open{display:grid;align-content:start;gap:0}
+  .mobile-menu>a{
+    padding:18px 0;
+    border-bottom:1px solid rgba(255,255,255,.22);
+    font-size:24px;
+    font-weight:700
+  }
+  .mobile-menu .mobile-project,
+  .mobile-menu .mobile-book{
+    margin-top:12px;
+    padding:16px 18px;
+    border:1px solid var(--white);
+    border-radius:999px;
+    color:var(--black)
+  }
+  .mobile-menu .mobile-project{background:var(--pink)}
+  .mobile-menu .mobile-book{background:var(--acid)}
+  .services-commercial{grid-template-columns:1fr}
+  .services-rail{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .projects-rail{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .contact-page{grid-template-columns:1fr}
+  .contact-copy{position:static}
+  .contact-action-panel{grid-column:1}
+}
+
+@media(max-width:760px){
+  :root{
+    --gutter:20px;
+    --section:68px;
+    --radius:22px
+  }
+  .topbar{
+    height:64px;
+    grid-template-columns:auto 1fr auto;
+    gap:12px;
+    padding:0 18px
+  }
+  .brand{font-size:20px}
+  .brand-state{
+    min-height:20px;
+    margin-left:7px;
+    padding:0 6px;
+    font-size:7px!important
+  }
+  .menu-btn{font-size:11px}
+  .mobile-menu{top:64px}
+
+  h1{font-size:clamp(54px,14vw,70px)}
+  h2{font-size:clamp(42px,11.5vw,56px)}
+  h3{font-size:clamp(30px,9vw,40px)}
+  .section-title{
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-bottom:28px
+  }
+  .section-title h2{max-width:100%}
+  .button-row{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%
+  }
+  .btn{width:100%}
+  .mobile-swipe-note{display:block}
+
+  .hero{
+    grid-template-columns:1fr;
+    min-height:0;
+    gap:30px;
+    padding:58px var(--gutter) 64px
+  }
+  .hero::before,
+  .hero::after{width:7px}
+  .hero-motion{display:none}
+  .hero-copy .kicker{margin-bottom:24px}
+  .hero h1{max-width:100%}
+  .hero-first-line{
+    font-size:clamp(28px,8.1vw,34px);
+    line-height:1.02
+  }
+  .hero-second-line{
+    margin-top:8px;
+    font-size:clamp(52px,13.8vw,64px);
+    line-height:.9
+  }
+  .hero-commercial{font-size:14px}
+  .hero-lead{font-size:17px}
+  .hero-categories{gap:7px}
+  .hero-categories span{padding:7px 10px;font-size:10px}
+  .hero-photo-card .tap-gallery{
+    height:50svh;
+    min-height:390px;
+    max-height:500px
+  }
+  .photo-brand{font-size:58px}
+
+  .project-stack,
+  .home-service-grid,
+  .expertise-grid,
+  .services-rail,
+  .projects-rail,
+  .career-grid{
+    display:flex!important;
+    gap:12px!important;
+    width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:0 2px 10px!important
+  }
+  .project-stack::-webkit-scrollbar,
+  .home-service-grid::-webkit-scrollbar,
+  .expertise-grid::-webkit-scrollbar,
+  .services-rail::-webkit-scrollbar,
+  .projects-rail::-webkit-scrollbar,
+  .career-grid::-webkit-scrollbar{display:none}
+
+  .project-row{
+    flex:0 0 86%;
+    width:86%;
+    max-width:86%;
+    grid-template-columns:1fr;
+    min-height:0;
+    scroll-snap-align:start
+  }
+  .project-copy{
+    min-height:310px;
+    padding:22px
+  }
+  .project-copy h3{margin:32px 0 18px;line-height:1}
+  .project-cover{
+    min-height:285px;
+    padding:20px;
+    border-left:0;
+    border-top:1px solid var(--black)
+  }
+  .project-cover>strong{
+    font-size:clamp(38px,10vw,46px);
+    line-height:.94
+  }
+  .portfolio-poster{
+    min-height:285px;
+    padding:20px;
+    gap:14px
+  }
+  .portfolio-main{font-size:38px}
+  .portfolio-serif{font-size:36px}
+  .portfolio-acid{
+    max-width:100%;
+    padding:7px 10px 9px;
+    font-size:28px;
+    white-space:normal
+  }
+  .poster-route{gap:12px;font-size:8px}
+
+  .trust-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px
+  }
+  .trust-grid article{
+    min-height:145px;
+    padding:18px
+  }
+  .trust-grid strong{font-size:46px}
+  .trust-grid p{font-size:11px}
+  .home-proof .section-title h2{max-width:100%;font-size:50px}
+
+  .service-card{
+    flex:0 0 84%;
+    width:84%;
+    max-width:84%;
+    scroll-snap-align:start
+  }
+  .service-card-media{height:190px}
+  .service-card-body{min-height:220px;padding:20px}
+  .service-card-body h3{margin:28px 0 16px}
+
+  .expertise-grid{border-top:0}
+  .expertise-grid article{
+    flex:0 0 82%;
+    width:82%;
+    max-width:82%;
+    min-height:280px;
+    padding:22px!important;
+    border:1px solid var(--black)!important;
+    border-radius:var(--radius);
+    background:var(--white);
+    color:var(--black);
+    scroll-snap-align:start
+  }
+  .expertise-grid article:nth-child(2){background:var(--acid)}
+  .expertise-grid article:nth-child(3){background:var(--black);color:var(--white)}
+  .expertise-grid h3{margin:auto 0 12px}
+
+  .home-about{
+    grid-template-columns:1fr;
+    gap:32px
+  }
+  .home-about .about-visual{height:330px}
+  .home-about .about-copy h2{max-width:100%}
+  .home-about .about-copy p{font-size:16px}
+
+  .home-final-cta,
+  .cta-band{padding:68px var(--gutter)}
+  .home-final-cta h2,
+  .cta-band h2{max-width:100%}
+
+  .page-hero{
+    min-height:0;
+    grid-template-columns:1fr;
+    gap:26px;
+    padding:58px var(--gutter) 52px
+  }
+  .page-hero h1{max-width:100%}
+  .page-hero>p{max-width:28ch;font-size:16px}
+  .stamp{
+    position:static;
+    width:max-content;
+    min-width:0;
+    padding:9px 11px
+  }
+
+  .services-commercial,
+  .compact-pricing{
+    grid-template-columns:1fr;
+    gap:22px;
+    padding:54px var(--gutter)
+  }
+  .commercial-prices span{font-size:10px}
+  .service-compact{
+    flex:0 0 84%;
+    width:84%;
+    max-width:84%;
+    min-height:470px;
+    scroll-snap-align:start
+  }
+  .service-compact-poster{min-height:190px}
+
+  .project-compact{
+    flex:0 0 86%;
+    width:86%;
+    max-width:86%;
+    grid-template-rows:minmax(300px,auto) 230px;
+    scroll-snap-align:start
+  }
+  .project-compact-info h2{font-size:34px}
+  .project-compact-poster{font-size:42px}
+
+  .about-grid{
+    grid-template-columns:1fr;
+    gap:30px
+  }
+  .about-tap-gallery{
+    height:58svh;
+    min-height:440px
+  }
+  .about-text .mega{
+    max-width:100%;
+    font-size:52px
+  }
+  .career-grid article{
+    flex:0 0 82%;
+    width:82%;
+    max-width:82%;
+    min-height:230px;
+    border:1px solid var(--black)!important;
+    scroll-snap-align:start
+  }
+
+  .contact-page{
+    grid-template-columns:1fr;
+    gap:22px;
+    padding:58px var(--gutter) 68px
+  }
+  .contact-copy h1{max-width:100%}
+  .contact-choice-grid{grid-template-columns:1fr}
+  .contact-choice{min-height:145px}
+  .contact-action-panel{width:100%;box-shadow:5px 5px 0 var(--pink)}
+  .booking-panel{box-shadow:5px 5px 0 var(--acid)}
+  .project-form{padding:24px 18px}
+  .project-form h2{max-width:100%;font-size:44px}
+  .booking-request-grid{grid-template-columns:1fr}
+  .form-submit-row{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px
+  }
+
+  .people-card{min-height:370px;padding:22px}
+  .manifesto-row{
+    grid-template-columns:42px 1fr;
+    gap:14px
+  }
+  .manifesto-row p{font-size:16px}
+  .proof-band{
+    grid-template-columns:1fr;
+    gap:26px
+  }
+  .case-page{
+    grid-template-columns:1fr
+  }
+  .case-info{padding:22px}
+  .case-cover{
+    min-height:320px;
+    border-left:0;
+    border-top:1px solid var(--black)
+  }
+}
+
+@media(max-width:360px){
+  .brand-state{display:none!important}
+  .project-row{flex-basis:88%;width:88%;max-width:88%}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .motion-ready .reveal{opacity:1;transform:none;transition:none}
+  .brand>span:not(.brand-state),
+  .photo-brand span{animation:none}
+  .brand-state{display:none!important}
+}
+
+
+/* v2 completion: long-form and 404 */
+.people-card-kicker{
+  margin:0;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.11em
+}
+.about-text>.kicker{margin-bottom:18px}
+.about-text>p:not(.kicker):not(.mega){
+  max-width:56ch;
+  margin-top:18px;
+  color:rgba(8,8,8,.7);
+  font-size:17px;
+  line-height:1.6
+}
+.manifesto{margin-top:30px}
+.manifesto-row strong{
+  display:block;
+  max-width:46ch;
+  font-size:17px;
+  line-height:1.35;
+  letter-spacing:-.025em
+}
+.career:not(.career-compact) .career-grid{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr))
+}
+.career-compact .career-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))
+}
+.proof-copy p+p{margin-top:16px}
+
+.not-found{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  padding:var(--section) var(--gutter);
+  background:var(--pink);
+  color:var(--black)
+}
+.not-found h1{
+  max-width:9ch;
+  margin:0;
+  font-size:clamp(72px,10vw,150px)
+}
+.not-found>p:not(.kicker){
+  max-width:38ch;
+  margin-top:26px;
+  font-size:clamp(17px,1.5vw,22px)
+}
+.not-found .button-row{margin-top:30px}
+
+@media(max-width:760px){
+  .about-text>p:not(.kicker):not(.mega){
+    font-size:16px;
+    line-height:1.55
+  }
+  .manifesto{margin-top:24px}
+  .manifesto-row strong{font-size:15px}
+  .career:not(.career-compact) .career-grid{
+    display:flex!important
+  }
+  .not-found{
+    justify-content:flex-start;
+    padding-top:18svh
+  }
+  .not-found h1{
+    max-width:100%;
+    font-size:clamp(58px,16vw,82px)
+  }
+}
+
+
+/* v2 mobile Safari type safety */
+@media(max-width:760px){
+  h1{line-height:.98;overflow:visible}
+  h2{line-height:.98;overflow:visible}
+  h3{line-height:1;overflow:visible}
+  .hero-first-line{line-height:1.06}
+  .hero-second-line{line-height:.96;overflow:visible}
+  .project-cover>strong{line-height:1;overflow:visible}
+  .trust-grid strong{line-height:.96;overflow:visible}
+  .service-card-media strong{line-height:1;overflow:visible}
+  .service-card-body h3{line-height:1;overflow:visible}
+  .expertise-grid h3{line-height:1;overflow:visible}
+  .portfolio-main{line-height:1.08;overflow:visible}
+  .portfolio-serif{line-height:1.08;overflow:visible}
+  .portfolio-acid{line-height:1.06;overflow:visible}
+}
+
+
+/* ui polish 2026-10-07: optical brand-state alignment */
+.brand-state{
+  align-self:center;
+  position:relative;
+  top:1px
+}
+@media(max-width:760px){
+  .brand-state{
+    margin-left:12px;
+    top:1px
+  }
+}
+
+
+/* ui3 2026-10-07: fixed mobile header + tighter internal heroes */
+.stamp{display:none!important}
+
+@media(max-width:760px){
+  body{
+    padding-top:64px
+  }
+  .topbar{
+    position:fixed!important;
+    top:0;
+    left:0;
+    right:0;
+    z-index:120
+  }
+  .mobile-menu{
+    top:64px
+  }
+  .compact-page-hero{
+    padding:38px var(--gutter) 40px!important;
+    gap:16px!important
+  }
+  .compact-page-hero h1{
+    font-size:clamp(50px,13vw,62px)!important;
+    line-height:.94!important
+  }
+  .compact-page-hero>p{
+    max-width:30ch!important;
+    font-size:15px!important;
+    line-height:1.42!important
+  }
+  .projects-compact .section-title,
+  .services-compact .section-title{
+    margin-bottom:22px!important
+  }
+  .projects-compact .section-title h2{
+    font-size:clamp(40px,10.8vw,52px)!important
+  }
+  .compact-cta h2{
+    font-size:clamp(42px,11.2vw,54px)!important
+  }
+}
+
+
+/* 2026-10-07 final polish: quieter, tighter, aligned */
+.brand{
+  align-items:center!important;
+  line-height:1!important
+}
+.brand-state{
+  height:22px!important;
+  min-height:22px!important;
+  margin-left:8px!important;
+  padding:0 7px!important;
+  align-self:center!important;
+  line-height:20px!important;
+  transform:translateY(0)
+}
+.brand-state-out{
+  opacity:0;
+  transform:translateY(2px)
+}
+.brand>span:not(.brand-state),
+.photo-brand span{
+  animation-duration:8.4s!important
+}
+
+.hero .btn.primary{
+  min-height:56px
+}
+.hero .btn.ghost{
+  min-height:48px;
+  padding-left:20px;
+  padding-right:20px;
+  font-size:12px;
+  background:#fff;
+  box-shadow:none
+}
+
+.hero-categories{
+  gap:7px
+}
+.hero-categories span{
+  min-height:27px;
+  padding:5px 9px;
+  background:#fff!important;
+  font-size:9px;
+  font-weight:650;
+  opacity:.82
+}
+.hero-categories span:nth-child(2){
+  background:var(--acid)!important;
+  opacity:1
+}
+
+@media(max-width:760px){
+  .hero{
+    gap:24px;
+    padding:46px var(--gutter) 50px
+  }
+  .hero-copy .kicker{
+    margin-bottom:18px
+  }
+  .hero-commercial{
+    margin-top:20px
+  }
+  .hero-lead{
+    margin-top:20px
+  }
+  .hero-categories{
+    margin-top:18px
+  }
+  .hero .button-row{
+    margin-top:24px;
+    gap:10px
+  }
+  .hero .btn.primary{
+    min-height:54px
+  }
+  .hero .btn.ghost{
+    width:92%;
+    min-height:46px;
+    justify-self:center;
+    font-size:12px
+  }
+  .hero-photo-card .tap-gallery{
+    height:48svh;
+    min-height:370px;
+    max-height:470px
+  }
+
+  .brand-state{
+    height:20px!important;
+    min-height:20px!important;
+    margin-left:7px!important;
+    padding:0 6px!important;
+    line-height:18px!important;
+    font-size:7px!important
+  }
+
+  .hero-categories span{
+    min-height:25px;
+    padding:4px 8px;
+    font-size:9px
+  }
+
+  .project-row{
+    grid-template-rows:310px 285px!important
+  }
+  .project-copy{
+    min-height:0!important;
+    height:310px!important
+  }
+  .project-copy h3{
+    min-height:3em;
+    margin:28px 0 16px!important
+  }
+  .project-fragments{
+    min-height:58px;
+    align-content:flex-start
+  }
+  .project-role{
+    min-height:56px;
+    display:flex;
+    align-items:flex-end
+  }
+  .project-cover{
+    min-height:0!important;
+    height:285px!important
+  }
+  .portfolio-poster{
+    min-height:0!important;
+    height:285px!important
+  }
+}
+
+@media(max-width:430px){
+  .hero-first-line{font-size:clamp(28px,7.9vw,33px)}
+  .hero-second-line{font-size:clamp(50px,13.2vw,61px)}
+  .project-copy h3{font-size:clamp(31px,8.6vw,38px)}
+}
+@media(max-width:390px){
+  .hero{padding-top:42px}
+  .hero-first-line{font-size:clamp(27px,7.8vw,31px)}
+  .hero-second-line{font-size:clamp(49px,13vw,58px)}
+}
+@media(max-width:375px){
+  .hero-first-line{font-size:28px}
+  .hero-second-line{font-size:49px}
+  .hero-commercial{font-size:13px}
+  .project-copy h3{font-size:31px}
+}
+
+
+/* 2026-10-07 selected-work mobile repair: content first, equal deck */
+@media(max-width:760px){
+  .home-selected-work .project-stack{
+    align-items:stretch!important
+  }
+
+  .home-selected-work .project-row{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(360px,auto) 285px!important;
+    height:auto!important;
+    min-height:645px!important;
+    align-self:stretch!important
+  }
+
+  .home-selected-work .project-copy{
+    display:grid!important;
+    grid-template-rows:auto auto auto 1fr auto!important;
+    align-content:start!important;
+    gap:0!important;
+    height:auto!important;
+    min-height:360px!important;
+    padding:22px!important;
+    overflow:visible!important
+  }
+
+  .home-selected-work .project-meta{
+    min-height:34px!important;
+    font-size:10px!important;
+    line-height:1.35!important
+  }
+
+  .home-selected-work .project-copy h3{
+    min-height:0!important;
+    margin:24px 0 16px!important;
+    font-size:clamp(31px,8.5vw,38px)!important;
+    line-height:1!important
+  }
+
+  .home-selected-work .project-fragments{
+    min-height:0!important;
+    margin:0 0 18px!important;
+    gap:7px!important;
+    align-content:start!important
+  }
+
+  .home-selected-work .project-fragments span{
+    min-height:28px!important;
+    padding:5px 9px!important;
+    font-size:10px!important;
+    line-height:1!important
+  }
+
+  .home-selected-work .project-role{
+    grid-row:5!important;
+    min-height:0!important;
+    margin-top:16px!important;
+    padding-top:16px!important;
+    display:block!important;
+    align-items:initial!important;
+    font-size:11px!important;
+    line-height:1.45!important;
+    overflow:visible!important
+  }
+
+  .home-selected-work .project-role strong{
+    display:inline!important
+  }
+
+  .home-selected-work .project-cover,
+  .home-selected-work .portfolio-poster{
+    height:285px!important;
+    min-height:285px!important;
+    overflow:hidden!important
+  }
+
+  .home-selected-work .project-cover>strong{
+    margin:auto 0!important;
+    max-width:10ch!important
+  }
+}
+
+@media(max-width:390px){
+  .home-selected-work .project-row{
+    grid-template-rows:minmax(370px,auto) 285px!important;
+    min-height:655px!important
+  }
+  .home-selected-work .project-copy{
+    min-height:370px!important
+  }
+}
+
+
+/* 2026-10-08 language switch */
+.lang-switch{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  min-height:34px;
+  padding:3px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  white-space:nowrap
+}
+.lang-switch a{
+  min-width:31px;
+  height:26px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 7px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.06em;
+  line-height:1
+}
+.lang-switch a.active{
+  background:var(--acid);
+  color:var(--black)
+}
+.lang-switch .lang-sep{
+  display:none
+}
+@media(min-width:1101px){
+  .topbar{
+    grid-template-columns:auto 1fr auto auto
+  }
+}
+@media(max-width:1100px){
+  .topbar{
+    grid-template-columns:auto 1fr auto auto
+  }
+  .brand{grid-column:1}
+  .lang-switch{grid-column:3}
+  .menu-btn{grid-column:4}
+}
+@media(max-width:760px){
+  .topbar{
+    gap:8px;
+    padding-left:18px;
+    padding-right:14px
+  }
+  .lang-switch{
+    min-height:30px;
+    padding:2px
+  }
+  .lang-switch a{
+    min-width:27px;
+    height:24px;
+    padding:0 5px;
+    font-size:8px
+  }
+}
+
+
+/* 2026-10-08 single-click language toggle */
+.lang-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-height:34px;
+  padding:3px 8px;
+  border:1px solid var(--black);
+  border-radius:999px;
+  background:var(--white);
+  color:var(--black);
+  white-space:nowrap;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.06em;
+  line-height:1;
+  cursor:pointer;
+  transition:background .18s ease,transform .18s ease
+}
+.lang-toggle:hover{
+  background:var(--acid);
+  transform:translateY(-1px)
+}
+.lang-toggle span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:24px;
+  height:26px;
+  border-radius:999px
+}
+.lang-toggle .is-current{
+  background:var(--acid)
+}
+.lang-toggle .lang-slash{
+  min-width:auto;
+  height:auto;
+  opacity:.45
+}
+@media(min-width:1101px){
+  .topbar{
+    grid-template-columns:auto 1fr auto auto
+  }
+}
+@media(max-width:1100px){
+  .topbar{
+    grid-template-columns:auto 1fr auto auto
+  }
+  .brand{grid-column:1}
+  .lang-toggle{grid-column:3}
+  .menu-btn{grid-column:4}
+}
+@media(max-width:760px){
+  .lang-toggle{
+    min-height:30px;
+    padding:2px 6px;
+    gap:3px;
+    font-size:8px
+  }
+  .lang-toggle span{
+    min-width:21px;
+    height:24px
+  }
+}
+
+
+/* 2026-10-08 authority / business proof */
+.authority-proof{
+  padding:var(--section) var(--gutter);
+  background:var(--black);
+  color:var(--white)
+}
+.authority-proof .section-title{margin-bottom:34px}
+.authority-proof .kicker{color:rgba(255,255,255,.58)}
+.authority-proof .accent-pop{color:var(--pink)}
+.authority-metrics{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1px;
+  border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.28)
+}
+.authority-metric{
+  min-height:230px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:26px;
+  background:var(--black)
+}
+.authority-metric strong{
+  display:block;
+  font-size:clamp(48px,5.2vw,82px);
+  line-height:.9;
+  letter-spacing:-.065em
+}
+.authority-metric:nth-child(2) strong{color:var(--acid)}
+.authority-metric:nth-child(3) strong{color:var(--pink)}
+.authority-metric:nth-child(4) strong{color:var(--acid)}
+.authority-metric:nth-child(5) strong{color:var(--pink)}
+.authority-metric p{
+  max-width:26ch;
+  color:rgba(255,255,255,.7);
+  font-size:12px;
+  line-height:1.5
+}
+
+.business-case{
+  padding:var(--section) var(--gutter);
+  background:var(--white)
+}
+.business-case-head{
+  display:grid;
+  grid-template-columns:minmax(160px,.35fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,64px);
+  align-items:start;
+  margin-bottom:34px
+}
+.business-case-head h2{max-width:12ch}
+.business-case-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  border:1px solid var(--black);
+  border-radius:var(--radius);
+  overflow:hidden
+}
+.business-case-grid article{
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  padding:28px;
+  border-right:1px solid var(--black)
+}
+.business-case-grid article:last-child{border-right:0}
+.business-case-grid article>span{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em
+}
+.business-case-grid article>p{
+  margin-top:auto;
+  max-width:34ch;
+  font-size:16px;
+  line-height:1.5
+}
+.business-case-result{
+  background:var(--acid)
+}
+.business-case-result strong{
+  margin:auto 0 12px;
+  font-size:clamp(72px,7vw,112px);
+  line-height:.86;
+  letter-spacing:-.07em
+}
+.business-case-result p{margin-top:0!important}
+
+.position-strip{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);
+  border-top:1px solid var(--black);
+  border-bottom:1px solid var(--black);
+  background:var(--pink)
+}
+.position-copy{
+  padding:var(--section) var(--gutter)
+}
+.position-copy h2{
+  max-width:13ch;
+  margin-top:16px
+}
+.position-copy>p:last-child{
+  max-width:62ch;
+  margin-top:26px;
+  font-size:17px;
+  line-height:1.6
+}
+.active-projects{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:34px;
+  border-left:1px solid var(--black);
+  background:var(--acid)
+}
+.active-projects span{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.12em
+}
+.active-projects strong{
+  font-size:clamp(110px,13vw,210px);
+  line-height:.72;
+  letter-spacing:-.09em
+}
+.active-projects p{
+  max-width:14ch;
+  font-size:18px;
+  font-weight:800
+}
+
+.principle-band{
+  padding:var(--section) var(--gutter);
+  background:var(--pink);
+  border-top:1px solid var(--black);
+  border-bottom:1px solid var(--black)
+}
+.principle-band h2{
+  max-width:14ch;
+  margin-top:14px
+}
+.principle-band>p:last-child{
+  max-width:60ch;
+  margin-top:24px;
+  font-size:17px;
+  line-height:1.6
+}
+
+@media(max-width:900px){
+  .authority-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .business-case-head{grid-template-columns:1fr;gap:12px}
+  .business-case-grid{grid-template-columns:1fr}
+  .business-case-grid article{
+    min-height:220px;
+    border-right:0;
+    border-bottom:1px solid var(--black)
+  }
+  .business-case-grid article:last-child{border-bottom:0}
+  .position-strip{grid-template-columns:1fr}
+  .active-projects{
+    min-height:270px;
+    border-left:0;
+    border-top:1px solid var(--black)
+  }
+}
+@media(max-width:760px){
+  .authority-proof,
+  .business-case,
+  .principle-band{
+    padding:68px var(--gutter)
+  }
+  .authority-metrics{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    border:0;
+    background:transparent;
+    padding-bottom:8px
+  }
+  .authority-metrics::-webkit-scrollbar{display:none}
+  .authority-metric{
+    flex:0 0 82%;
+    width:82%;
+    min-height:235px;
+    border:1px solid rgba(255,255,255,.28);
+    scroll-snap-align:start
+  }
+  .authority-metric strong{font-size:58px}
+  .business-case-grid article{
+    min-height:235px;
+    padding:22px
+  }
+  .business-case-grid article>p{font-size:15px}
+  .business-case-result strong{font-size:82px}
+  .position-copy{padding:68px var(--gutter)}
+  .position-copy h2{max-width:100%}
+  .position-copy>p:last-child{font-size:15px}
+  .active-projects{
+    min-height:230px;
+    padding:24px var(--gutter)
+  }
+  .active-projects strong{font-size:120px}
+  .principle-band h2{max-width:100%}
+  .principle-band>p:last-child{font-size:15px}
+}
+
+
+/* 2026-10-08 casing system: lowercase by default, project titles are the exception */
+header,
+nav,
+main,
+footer{
+  text-transform:lowercase
+}
+input,
+textarea,
+select,
+option{
+  text-transform:none
+}
+.project-name-caps{
+  text-transform:uppercase!important
+}
+.brand-state{
+  text-transform:lowercase!important
+}
+
+/* calendar booking: actual availability, accessible day and time selection */
+#booking [hidden]{display:none!important}
+.booking-panel{display:flex;flex-direction:column;gap:20px}
+.booking-calendar-intro{padding:30px 30px 0}
+.booking-calendar-intro h2{font-size:clamp(36px,3.7vw,57px);line-height:1.04;margin:16px 0}
+.booking-timezone{font-size:13px;line-height:1.5;color:rgba(0,0,0,.7);max-width:52ch}
+.booking-calendar{padding:0 30px}
+.booking-loading,.booking-empty,.booking-fetch-error{font-size:14px;line-height:1.55;padding:22px 0}
+.booking-section-label{font-size:11px;font-weight:800;letter-spacing:.07em;margin:16px 0 10px}
+.booking-days{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;padding:4px 2px 12px}
+.booking-day,.booking-slot{appearance:none;cursor:pointer;border:1px solid var(--black);background:var(--white);color:var(--black);font:inherit;font-weight:800;text-transform:lowercase;transition:background .16s ease,border-color .16s ease}
+.booking-day{min-width:122px;min-height:50px;padding:10px 12px;border-radius:12px;scroll-snap-align:start;font-size:12px;white-space:nowrap}
+.booking-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.booking-slot{min-height:48px;border-radius:10px;font-size:15px}
+.booking-day:hover,.booking-slot:hover{background:var(--acid)}
+.booking-day.active,.booking-slot.active{background:var(--acid);border-width:2px}
+.booking-day:focus-visible,.booking-slot:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.booking-form{padding-top:20px!important;border-top:1px solid rgba(0,0,0,.15)}
+.booking-picked{display:flex;flex-wrap:wrap;gap:8px;padding:13px 16px;background:var(--acid);border:1px solid var(--black);border-radius:10px;margin-bottom:20px;font-size:13px}
+.booking-picked strong{font-weight:800}
+.booking-fallback{padding:0 30px 28px;font-size:13px;line-height:1.6}
+.booking-fallback a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.booking-fallback a:hover{color:#b81766}
+.booking-fetch-error .booking-retry{margin-top:12px;min-height:44px}
+@media(max-width:760px){
+  .booking-panel{gap:14px}
+  .booking-calendar-intro{padding:22px 18px 0}
+  .booking-calendar-intro h2{font-size:clamp(32px,9vw,43px);line-height:1.06}
+  .booking-calendar{padding:0 18px}
+  .booking-days{gap:7px}
+  .booking-day{min-width:110px}
+  .booking-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .booking-fallback{padding:0 18px 22px}
+}
+@media(max-width:360px){.booking-slots{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+/* 2026-10-08: month calendar popover replacing the native date input */
+.booking-date-control{
+  position:relative;
+  padding:0 30px;
+  min-width:0
+}
+.booking-date-control .booking-section-label{display:block;margin:0 0 9px}
+.booking-calendar-trigger{
+  width:100%;
+  max-width:390px;
+  min-height:56px;
+  border:1px solid var(--black);
+  border-radius:12px;
+  background:var(--white);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-align:left;
+  gap:12px;
+  padding:12px 16px;
+  color:var(--black);
+  font:inherit;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.35;
+  cursor:pointer;
+  text-transform:lowercase
+}
+.booking-calendar-trigger-icon{font-size:25px;line-height:1;color:var(--black)}
+.booking-calendar-trigger-arrow{font-size:18px;margin-left:auto}
+.booking-calendar-trigger:hover{background:var(--acid)}
+.booking-calendar-trigger:focus-visible,
+.booking-month-arrow:focus-visible,
+.booking-month-day:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.booking-month-popover{
+  width:100%;
+  max-width:390px;
+  margin-top:10px;
+  padding:18px;
+  border:1px solid var(--black);
+  border-radius:16px;
+  background:var(--white);
+  box-shadow:5px 5px 0 var(--black);
+  box-sizing:border-box
+}
+.booking-month-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:16px
+}
+.booking-month-name{
+  font-size:17px;
+  font-weight:800;
+  text-transform:lowercase;
+  letter-spacing:-.02em;
+  text-align:center
+}
+.booking-month-arrow{
+  appearance:none;
+  width:44px;
+  height:44px;
+  border:1px solid var(--black);
+  background:var(--white);
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  color:var(--black);
+  cursor:pointer;
+  font:inherit;
+  font-size:28px;
+  line-height:1
+}
+.booking-month-arrow:not(:disabled):hover{background:var(--acid)}
+.booking-month-arrow:disabled{opacity:.24;cursor:not-allowed}
+.booking-weekdays,.booking-month-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:5px;
+  align-items:center
+}
+.booking-weekdays{margin-bottom:5px}
+.booking-weekdays span{
+  text-align:center;
+  color:rgba(0,0,0,.55);
+  font-size:11px;
+  font-weight:800
+}
+.booking-month-day,.booking-calendar-gap{
+  min-width:0;
+  height:43px;
+  border-radius:9px
+}
+.booking-month-day{
+  position:relative;
+  appearance:none;
+  display:grid;
+  place-items:center;
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--black);
+  font:inherit;
+  font-size:14px;
+  font-weight:750;
+  cursor:pointer
+}
+.booking-month-day:disabled{
+  color:rgba(0,0,0,.28);
+  cursor:not-allowed
+}
+.booking-month-day.has-availability{
+  background:#f5f5f5;
+  border-color:var(--black)
+}
+.booking-month-day.has-availability:after{
+  content:'';
+  position:absolute;
+  bottom:3px;
+  left:50%;
+  width:5px;
+  height:5px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:var(--pink)
+}
+.booking-month-day.has-availability:hover{background:var(--acid)}
+.booking-month-day.is-selected{
+  background:var(--acid);
+  box-shadow:inset 0 0 0 1px var(--black)
+}
+.booking-month-day.is-today{border-style:dashed}
+.booking-calendar-legend{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  line-height:1.5;
+  margin:14px 0 0;
+  color:rgba(0,0,0,.65)
+}
+.booking-legend-dot{width:9px;height:9px;background:var(--pink);border-radius:50%;flex:none}
+.booking-calendar[hidden],.booking-month-popover[hidden],.booking-options[hidden]{display:none!important}
+@media(max-width:760px){
+  .booking-date-control{padding:0 18px}
+  .booking-month-popover,.booking-calendar-trigger{max-width:100%}
+  .booking-month-popover{padding:14px}
+  .booking-weekdays,.booking-month-grid{gap:3px}
+  .booking-month-day,.booking-calendar-gap{height:42px}
+}
+@media(max-width:360px){
+  .booking-month-popover{padding:10px}
+  .booking-month-day,.booking-calendar-gap{height:39px}
+  .booking-calendar-trigger{font-size:13px}
+}
+
+</style>
+  <style id="crm-inline-style">
+.crm-body{background:var(--white);min-height:100vh}
+.crm-brand{gap:0}.crm-brand small{margin-left:9px;padding:4px 8px;border:1px solid var(--black);border-radius:999px;background:var(--acid);font-size:8px;letter-spacing:.08em;text-transform:uppercase}
+.crm-login{min-height:100svh;display:grid;grid-template-columns:1.05fr .95fr;background:var(--white)}
+.crm-login-card{display:flex;flex-direction:column;justify-content:center;padding:clamp(34px,6vw,96px);border-right:1px solid var(--black);position:relative}
+.crm-login-card .crm-brand{position:absolute;top:28px;left:clamp(24px,6vw,96px)}
+.crm-login-card h1{max-width:10ch;margin:34px 0 20px;font-size:clamp(54px,7vw,104px)}
+.crm-login-copy{max-width:540px;margin-bottom:32px;font-size:16px;color:rgba(8,8,8,.62)}
+.crm-login-form{width:min(100%,480px);display:grid;gap:13px}.crm-login-btn{width:100%}.crm-error{font-size:12px;color:#b90035}
+.crm-login-art{display:flex;align-items:stretch;padding:24px;background:var(--black)}
+.crm-poster{width:100%;min-height:560px;border:1px solid var(--black);border-radius:var(--radius);background:var(--pink);box-shadow:10px 10px 0 var(--acid);padding:clamp(28px,4vw,54px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.crm-poster>span{font-size:10px;font-weight:800;letter-spacing:.11em}.crm-poster strong{font-size:clamp(58px,6vw,102px);line-height:.82;letter-spacing:-.075em}.crm-poster i{font-family:var(--serif);font-size:clamp(48px,4vw,74px)}
+.crm-field{display:grid;gap:7px}.crm-field>span{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.crm-field input,.crm-field select,.crm-field textarea,.crm-search input,.crm-select{width:100%;min-height:46px;border:1px solid var(--black);border-radius:14px;background:var(--white);color:var(--black);padding:11px 13px;outline:none}
+.crm-field textarea{resize:vertical}.crm-field input:focus,.crm-field select:focus,.crm-field textarea:focus,.crm-search input:focus,.crm-select:focus{box-shadow:4px 4px 0 var(--acid)}
+.crm-app{min-height:100vh;padding-bottom:84px}
+.crm-topbar{position:sticky;top:0;z-index:50;height:70px;padding:0 var(--gutter);display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:24px;border-bottom:1px solid var(--black);background:rgba(255,255,255,.97);backdrop-filter:blur(14px)}
+.crm-desktop-nav{display:flex;justify-content:center;gap:4px}.crm-desktop-nav button{border:0;background:transparent;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:800;opacity:.52}.crm-desktop-nav button.active{background:var(--black);color:var(--white);opacity:1}
+.crm-sync{display:flex;align-items:center;gap:7px;font-size:10px;color:rgba(8,8,8,.55)}.crm-dot{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 0 4px rgba(36,232,107,.15)}
+.crm-round{width:42px;height:42px;border:1px solid var(--black);border-radius:50%;background:var(--white);font-size:22px}.crm-round:hover{background:var(--acid)}
+.crm-page{min-height:calc(100vh - 70px)}
+.crm-hero,.crm-section-hero{padding:clamp(54px,7vw,92px) var(--gutter) 42px;display:flex;align-items:end;justify-content:space-between;gap:30px;border-bottom:1px solid var(--black)}
+.crm-hero h1,.crm-section-hero h1{max-width:10ch;font-size:clamp(60px,7vw,112px)}.crm-section-hero h1{margin:0}
+.crm-stats{padding:22px var(--gutter);display:grid;grid-template-columns:repeat(4,1fr);gap:12px;background:var(--black);color:var(--white)}
+.crm-stat{min-height:130px;border:1px solid rgba(255,255,255,.35);border-radius:var(--radius-sm);padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.crm-stat strong{font-size:clamp(42px,5vw,72px);line-height:.85;letter-spacing:-.07em}.crm-stat span{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.crm-stat.due{background:var(--acid);color:var(--black);border-color:var(--acid)}.crm-stat.hot{background:var(--pink);color:var(--black);border-color:var(--pink)}.crm-stat.due span,.crm-stat.hot span{color:rgba(8,8,8,.6)}
+.crm-dashboard-grid{padding:34px var(--gutter) var(--section);display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+.crm-panel{min-width:0;border:1px solid var(--black);border-radius:var(--radius);padding:24px;background:var(--white)}.crm-panel-wide{grid-row:span 3}
+.crm-panel-head{display:flex;align-items:end;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--black);margin-bottom:12px}.crm-panel-head h2{font-size:clamp(34px,4vw,58px)}.crm-panel-head>span{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--pink)}
+.crm-text-btn{border:0;background:transparent;font-size:11px;font-weight:800;padding:8px}
+.crm-task-list{display:grid}.crm-task-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:15px 0;border-bottom:1px solid rgba(8,8,8,.18)}.crm-task-row:last-child{border-bottom:0}
+.crm-check{appearance:none;width:25px;height:25px;border:1px solid var(--black);border-radius:50%;background:var(--white);display:grid;place-items:center;margin:2px 0 0}.crm-check:checked{background:var(--acid)}.crm-check:checked::after{content:"✓";font-size:15px;font-weight:800}
+.crm-task-main button{border:0;background:transparent;padding:0;text-align:left;font-weight:800;font-size:15px;line-height:1.25}.crm-task-main p{margin:5px 0 0;font-size:11px;color:rgba(8,8,8,.55);line-height:1.45}.crm-task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.crm-due{font-family:var(--serif);font-style:italic;font-size:18px;white-space:nowrap}.crm-due.overdue{color:var(--pink)}
+.crm-pill{display:inline-flex;align-items:center;min-height:24px;padding:3px 8px;border:1px solid var(--black);border-radius:999px;font-size:8px;font-weight:800;text-transform:uppercase}.crm-pill.acid{background:var(--acid)}.crm-pill.pink{background:var(--pink)}.crm-pill.dark{background:var(--black);color:var(--white)}
+.crm-mini-list{display:grid}.crm-mini-item{padding:13px 0;border-bottom:1px solid rgba(8,8,8,.16);cursor:pointer}.crm-mini-item:last-child{border-bottom:0}.crm-mini-item strong{display:block;font-size:14px}.crm-mini-item p{margin:4px 0 0;font-size:11px;color:rgba(8,8,8,.58);line-height:1.4}.crm-mini-item time{display:block;margin-top:5px;font-size:9px;font-weight:800;text-transform:uppercase}
+.crm-controls{padding:20px var(--gutter);display:grid;grid-template-columns:auto minmax(240px,420px);gap:12px;align-items:center;border-bottom:1px solid var(--black)}.crm-controls-tasks{grid-template-columns:auto minmax(240px,420px) minmax(180px,260px)}
+.crm-tabs{display:flex;border:1px solid var(--black);border-radius:999px;overflow:hidden}.crm-tabs button{min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--black);background:var(--white);font-weight:800;font-size:11px}.crm-tabs button:last-child{border-right:0}.crm-tabs button.active{background:var(--black);color:var(--white)}
+.crm-search{display:flex;align-items:center;gap:8px}.crm-search>span{font-size:22px}.crm-search input{min-height:44px;border-radius:999px}
+.crm-chips{grid-column:1/-1;display:flex;gap:8px;overflow:auto;scrollbar-width:none}.crm-chips::-webkit-scrollbar{display:none}.crm-chip{white-space:nowrap;padding:8px 12px;border:1px solid var(--black);border-radius:999px;background:var(--white);font-size:10px;font-weight:800}.crm-chip.active{background:var(--acid)}
+.crm-task-board{padding:30px var(--gutter) var(--section);display:grid;gap:10px}.crm-task-card{border:1px solid var(--black);border-radius:18px;padding:15px 17px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:start}.crm-task-card.priority-high{box-shadow:5px 5px 0 var(--pink)}.crm-task-card.status-waiting{background:#fff8ed}.crm-task-card.status-backlog{opacity:.68}.crm-task-card.status-done{opacity:.42}.crm-task-card.status-done .crm-task-title{text-decoration:line-through}
+.crm-task-title{font-size:17px;font-weight:800;line-height:1.2}.crm-task-desc{margin-top:4px;font-size:11px;color:rgba(8,8,8,.56);line-height:1.45}.crm-task-side{text-align:right}
+.crm-message-list{padding:30px var(--gutter) var(--section);display:grid;gap:10px}.crm-message-card{border:1px solid var(--black);border-radius:var(--radius);padding:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;background:var(--white);cursor:pointer}.crm-message-card.unread{box-shadow:7px 7px 0 var(--acid)}.crm-message-card.actionable{border-width:2px}.crm-message-card h3{margin:10px 0 8px;font-size:clamp(24px,3vw,40px)}.crm-message-card p{font-size:12px;color:rgba(8,8,8,.6);line-height:1.5}.crm-message-side{text-align:right}.crm-message-side time{font-size:10px;font-weight:800}.crm-message-side span{display:block;margin-top:8px}
+.crm-project-grid{padding:30px var(--gutter) var(--section);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.crm-project-card{min-height:310px;border:1px solid var(--black);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;background:var(--white);cursor:pointer}.crm-project-card.priority-high{box-shadow:8px 8px 0 var(--pink)}.crm-project-card.status-paused,.crm-project-card.status-later{opacity:.62}.crm-project-card .crm-project-top{display:flex;justify-content:space-between;gap:10px}.crm-project-card h3{margin:38px 0 14px;font-size:clamp(34px,4vw,56px)}.crm-project-card .crm-project-goal{font-size:12px;line-height:1.5;color:rgba(8,8,8,.6)}.crm-project-next{margin-top:auto;padding-top:18px;border-top:1px solid var(--black);font-size:12px}.crm-project-next strong{display:block;margin-bottom:5px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}.crm-project-count{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--pink)}
+.crm-leads{padding:30px var(--gutter) var(--section);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.crm-lead{min-height:260px;border:1px solid var(--black);border-radius:var(--radius);padding:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;background:var(--white);transition:transform .15s,box-shadow .15s;cursor:pointer}.crm-lead:hover{transform:translateY(-3px);box-shadow:8px 8px 0 var(--acid)}.crm-lead.priority-high{box-shadow:7px 7px 0 var(--pink)}.crm-lead.is-due{border-width:2px}.crm-lead.is-warm{background:#fff6fb}.crm-lead h3{margin:22px 0 8px;font-size:clamp(28px,3vw,44px);line-height:.9}.crm-contact{font-size:12px;color:rgba(8,8,8,.55);overflow-wrap:anywhere}.crm-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}.crm-tag{display:inline-flex;min-height:27px;align-items:center;padding:4px 9px;border:1px solid var(--black);border-radius:999px;background:var(--white);font-size:9px;font-weight:800;text-transform:uppercase}.crm-tag.status-warm,.crm-tag.status-replied{background:var(--pink)}.crm-tag.status-action-needed{background:var(--acid)}.crm-tag.status-bounce,.crm-tag.status-declined{background:var(--black);color:var(--white)}.crm-date{text-align:right}.crm-date b{display:block;font-family:var(--serif);font-style:italic;font-size:28px;font-weight:400}.crm-date span{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.crm-date.overdue b{color:var(--pink)}.crm-note{grid-column:1/-1;margin-top:auto;padding-top:16px;border-top:1px solid var(--black);font-size:11px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(8,8,8,.6)}
+.crm-empty{padding:46px;border:1px dashed var(--black);border-radius:var(--radius);text-align:center;grid-column:1/-1}.crm-mobile-nav{display:none}.crm-fab{display:none}
+.crm-dialog{width:min(760px,calc(100% - 20px));max-height:92svh;padding:0;border:1px solid var(--black);border-radius:28px;background:var(--white);color:var(--black);box-shadow:12px 12px 0 var(--pink)}.crm-dialog::backdrop{background:rgba(8,8,8,.76)}.crm-sheet{padding:24px}.crm-sheet-head{position:sticky;top:0;z-index:2;padding:4px 0 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(12px)}.crm-sheet-head h2{font-size:46px}.crm-quick{display:flex;gap:7px;overflow:auto;margin:0 0 18px}.crm-quick button,.crm-mini{border:1px solid var(--black);border-radius:999px;background:var(--white);padding:8px 11px;font-size:10px;font-weight:800}.crm-quick button:hover,.crm-mini:hover{background:var(--acid)}
+.crm-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.crm-form-grid .wide{grid-column:1/-1}.crm-sheet-actions{position:sticky;bottom:0;padding:18px 0 2px;display:flex;justify-content:flex-end;gap:8px;background:linear-gradient(transparent,var(--white) 26%)}.crm-danger{color:#9d0030}
+.crm-message-full-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.crm-message-full-body{white-space:pre-wrap;font-size:13px;line-height:1.65;padding:18px;border:1px solid var(--black);border-radius:18px;background:#fff}.crm-message-dialog .crm-sheet-actions{justify-content:space-between}
+.crm-toast{position:fixed;z-index:100;left:50%;bottom:26px;transform:translateX(-50%);padding:11px 16px;border:1px solid var(--black);border-radius:999px;background:var(--acid);font-size:11px;font-weight:800;box-shadow:5px 5px 0 var(--pink)}
+@media(max-width:1040px){.crm-project-grid,.crm-leads{grid-template-columns:repeat(2,minmax(0,1fr))}.crm-dashboard-grid{grid-template-columns:1fr}.crm-panel-wide{grid-row:auto}.crm-controls-tasks{grid-template-columns:1fr 1fr}.crm-select{grid-column:1/-1}}
+@media(max-width:820px){.crm-login{grid-template-columns:1fr}.crm-login-card{min-height:100svh;border-right:0}.crm-login-art{display:none}.crm-desktop-nav{display:none}.crm-topbar{grid-template-columns:1fr auto auto}.crm-stats{grid-template-columns:repeat(2,1fr)}.crm-controls{grid-template-columns:1fr}.crm-controls-tasks{grid-template-columns:1fr}.crm-chips{grid-column:auto}.crm-project-grid,.crm-leads{grid-template-columns:1fr}}
+@media(max-width:640px){.crm-app{padding-bottom:88px}.crm-topbar{padding:0 18px;height:64px}.crm-sync{display:none}.crm-hero,.crm-section-hero{padding:42px 18px 28px}.crm-hero h1,.crm-section-hero h1{font-size:58px}.crm-new-task-desktop,.crm-section-hero>.btn{display:none}.crm-stats{padding:12px 18px;gap:8px}.crm-stat{min-height:104px;padding:14px}.crm-stat strong{font-size:46px}.crm-dashboard-grid{padding:22px 18px 110px;gap:10px}.crm-panel{padding:18px}.crm-panel-head h2{font-size:38px}.crm-controls{padding:14px 18px}.crm-tabs{overflow:auto;scrollbar-width:none}.crm-tabs::-webkit-scrollbar{display:none}.crm-tabs button{padding:0 12px;white-space:nowrap}.crm-task-board,.crm-message-list,.crm-project-grid,.crm-leads{padding:20px 18px 110px}.crm-task-card{grid-template-columns:auto minmax(0,1fr);}.crm-task-card .crm-task-side{grid-column:2;text-align:left}.crm-message-card{grid-template-columns:1fr}.crm-message-side{text-align:left}.crm-mobile-nav{position:fixed;z-index:45;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));height:68px;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;border:1px solid var(--black);border-radius:22px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 10px 40px rgba(0,0,0,.12)}.crm-mobile-nav button{border:0;border-radius:16px;background:transparent;font-size:9px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.crm-mobile-nav button span{font-size:16px}.crm-mobile-nav button.active{background:var(--black);color:var(--white)}.crm-fab{display:block;position:fixed;z-index:46;right:18px;bottom:calc(86px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border:1px solid var(--black);border-radius:50%;background:var(--pink);font-size:34px;box-shadow:5px 5px 0 var(--acid)}.crm-dialog{width:calc(100% - 12px);margin:auto 6px 80px;border-radius:26px 26px 18px 18px}.crm-sheet{padding:18px}.crm-sheet-head h2{font-size:36px}.crm-form-grid{grid-template-columns:1fr}.crm-form-grid .wide{grid-column:auto}.crm-login-card{padding:26px 20px}.crm-login-card .crm-brand{left:20px;top:24px}.crm-login-card h1{font-size:55px}.crm-login-copy{font-size:14px}}
+
+.crm-reply-box{margin-top:16px;padding:18px;border:1px solid var(--black);border-radius:18px;background:#fff8fb}
+.crm-reply-box textarea{width:100%;border:1px solid var(--black);border-radius:14px;padding:13px;background:var(--white);color:var(--black);font:inherit;resize:vertical;outline:none}
+.crm-reply-box textarea:focus{box-shadow:4px 4px 0 var(--acid)}
+.crm-reply-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.crm-reply-actions span{font-size:10px;line-height:1.4;color:rgba(8,8,8,.55)}
+@media(max-width:640px){.crm-reply-actions{align-items:stretch;flex-direction:column}.crm-reply-actions .btn{width:100%}}
+
+/* honor HTML hidden on Safari even when custom selectors specify display:grid/flex */
+[hidden]{display:none!important}
+#login-screen[hidden],#app[hidden],.crm-page[hidden]{display:none!important}
+</style>
+<script>
+window.__CRM_PAGE_LOADED=true;
+(function(){
+  function show(msg){
+    var old=document.getElementById('crm-diag-banner'); if(old) old.remove();
+    var b=document.createElement('div'); b.id='crm-diag-banner';
+    b.style.cssText='position:fixed;z-index:99999;left:10px;right:10px;top:10px;padding:12px 14px;border:1px solid #080808;border-radius:14px;background:#d7ff39;color:#080808;font:700 12px/1.4 Manrope,Arial,sans-serif;box-shadow:5px 5px 0 #ff3fad';
+    b.textContent='crm diagnostic: '+msg;
+    document.body.appendChild(b);
+  }
+  window.addEventListener('error',function(e){show((e.message||'javascript error')+(e.filename?' · '+e.filename+':'+e.lineno:''));});
+  window.addEventListener('unhandledrejection',function(e){show('promise: '+String(e.reason&&e.reason.message||e.reason||'unknown'));});
+  setTimeout(function(){if(!window.__CRM_SCRIPT_LOADED)show('интерфейс не запустился. обнови страницу, этот текст можно прислать мне скрином.');},2500);
+})();
+</script>  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="dashhkuns crm">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/crm-app/manifest.webmanifest?v=7">
+  <link rel="apple-touch-icon" sizes="180x180" href="/api/crm-icon?size=180">
+  <style id="pwa-v7-extras">
+
+/* crm v4 interface layer. crm3 remains the functional source of truth. */
+:root {color-scheme:light}
+.crm-body{overscroll-behavior-y:contain}
+.crm-topbar{grid-template-columns:auto 1fr auto auto auto auto;gap:12px}
+.crm-operator-btn,.crm-install-btn{appearance:none;border:1px solid #111;background:#ccff00;color:#111;font-weight:800;font-size:11px;letter-spacing:-.02em;border-radius:99px;padding:11px 16px;min-height:42px;white-space:nowrap;cursor:pointer;transition:transform .17s,box-shadow .17s}
+.crm-operator-btn:hover,.crm-install-btn:hover{transform:translateY(-2px);box-shadow:3px 3px 0 #ff3fad}
+.crm-install-btn{background:#fff}
+.crm-install-btn[hidden]{display:none!important}
+.crm-ai-floating{display:none;position:fixed;z-index:47;right:18px;bottom:calc(157px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:18px;border:1px solid #111;background:#ccff00;color:#111;box-shadow:4px 4px 0 #ff3fad;font-size:23px;font-weight:900;cursor:pointer}
+.crm-operator-modal{width:min(94vw,820px);max-width:820px;max-height:min(90dvh,860px);border:1px solid #111;border-radius:26px;background:#fafaf7;color:#111;padding:0;box-shadow:12px 12px 0 #ff3fad;overflow:hidden}
+.crm-operator-modal::backdrop,.crm-install-modal::backdrop{background:rgba(0,0,0,.65);backdrop-filter:blur(7px)}
+.crm-operator-shell{min-height:min(70dvh,700px);max-height:86dvh;display:flex;flex-direction:column}
+.crm-operator-head{padding:22px 24px 18px;background:#101010;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.crm-operator-title{font-size:clamp(25px,4vw,46px);letter-spacing:-.06em;line-height:.95;font-weight:900;margin:0}
+.crm-operator-sub{font-size:11px;opacity:.75;margin:8px 0 0}
+.crm-operator-x{width:42px;height:42px;border:1px solid rgba(255,255,255,.65);color:#fff;background:transparent;border-radius:50%;font-size:24px;cursor:pointer}
+.crm-ai-welcome{background:#ccff00;padding:18px 24px;display:flex;gap:16px;align-items:start;justify-content:space-between;border-bottom:1px solid #111}
+.crm-ai-welcome strong{display:block;font-size:14px}
+.crm-ai-welcome p{font-size:12px;line-height:1.45;margin:4px 0 0;max-width:500px}
+.crm-ai-status{font-size:10px;white-space:nowrap;border:1px solid #111;border-radius:30px;padding:5px 9px;background:white}
+.crm-ai-quick{display:flex;flex-wrap:wrap;gap:7px;padding:13px 24px;background:#fff;border-bottom:1px solid #ddd}
+.crm-ai-quick button{border:1px solid #111;border-radius:99px;background:#fff;padding:8px 11px;font-size:11px;font-weight:800;cursor:pointer}
+.crm-ai-quick button:hover{background:#ff3fad}
+.crm-ai-log{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:12px;min-height:155px;overscroll-behavior:contain}
+.crm-ai-bubble{max-width:88%;font-size:13px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px 16px;border:1px solid #111;border-radius:16px;background:#fff}
+.crm-ai-bubble.user{align-self:flex-end;background:#ccff00;border-bottom-right-radius:4px}
+.crm-ai-bubble.assistant{align-self:flex-start;border-bottom-left-radius:4px}
+.crm-ai-bubble.error{background:#ffe1e9;border-color:#b33}
+.crm-ai-bubble.loading{color:#666}
+.crm-ai-compose{border-top:1px solid #111;background:#fff;padding:13px 20px calc(14px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr auto;align-items:end;gap:10px}
+.crm-ai-compose textarea{resize:none;min-height:49px;max-height:145px;padding:12px 13px;border:1px solid #111;border-radius:14px;background:#fafaf7;outline:none;font:inherit;font-size:14px;line-height:1.45}
+.crm-ai-compose textarea:focus{box-shadow:3px 3px 0 #ccff00}
+.crm-ai-compose button{border:1px solid #111;border-radius:14px;background:#ff3fad;min-height:49px;padding:0 17px;font-weight:900;cursor:pointer}
+.crm-ai-compose button:disabled{opacity:.45;cursor:not-allowed}
+.crm-ai-footnote{padding:0 22px 11px;font-size:10px;color:#666;background:white}
+.crm-install-modal{border:1px solid #111;border-radius:24px;padding:28px;width:min(92vw,430px);background:#fafaf7;box-shadow:7px 7px 0 #ccff00}
+.crm-install-modal h2{font-size:34px;line-height:.95;letter-spacing:-.05em;margin:0 0 15px}
+.crm-install-modal p{font-size:14px;line-height:1.65}
+.crm-install-modal button{width:100%;border:1px solid #111;border-radius:14px;background:#ccff00;padding:13px;font-weight:900;margin-top:15px}
+.crm-pwa-network{position:fixed;z-index:105;top:78px;left:50%;transform:translateX(-50%);max-width:calc(100vw - 20px);background:#111;color:white;padding:10px 18px;border-radius:99px;font-size:12px;box-shadow:4px 4px 0 #ff3fad}
+.crm-pwa-network[hidden]{display:none}
+.crm-ai-today{border:1px solid #111;border-radius:15px;padding:16px 18px;background:#ccff00;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 0}
+.crm-ai-today b{font-size:15px;letter-spacing:-.02em}
+.crm-ai-today small{display:block;font-size:10px;margin-top:5px;opacity:.65}
+.crm-ai-today button{border:1px solid #111;border-radius:99px;background:#111;color:#fff;padding:11px 15px;font-weight:800;white-space:nowrap}
+@media(max-width:1050px){.crm-install-btn{display:none}}
+@media(max-width:820px){.crm-topbar{grid-template-columns:1fr auto auto;gap:8px}.crm-topbar>.crm-operator-btn,.crm-topbar>.crm-install-btn{display:none}}
+@media(max-width:640px){.crm-ai-floating{display:block}.crm-operator-modal{width:100vw;max-width:100vw;max-height:100dvh;height:100dvh;border:0;border-radius:0;box-shadow:none;margin:0}.crm-operator-shell{height:100dvh;max-height:100dvh;min-height:0}.crm-operator-head{padding:calc(19px + env(safe-area-inset-top,0px)) 18px 18px}.crm-ai-welcome{padding:15px 18px}.crm-ai-quick{padding:10px 18px;flex-wrap:nowrap;overflow-x:auto}.crm-ai-quick button{white-space:nowrap}.crm-ai-log{padding:15px 18px}.crm-ai-bubble{max-width:95%}.crm-ai-compose{padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px))}.crm-ai-footnote{padding:0 15px 10px}.crm-pwa-network{top:calc(69px + env(safe-area-inset-top,0px))}.crm-ai-today{flex-direction:column;align-items:stretch}.crm-ai-today button{width:100%}}
+
+/* keep install action visible on iphone: one tap to exact safari steps */
+@media(max-width:820px){
+ .crm-topbar>.crm-install-btn{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;padding:0;background:#ccff00;font-size:0}
+ .crm-topbar>.crm-install-btn::before{content:"↓";font-size:23px}
+}
+
+/* stand-alone app stability */
+html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}
+.crm-login[hidden],.crm-app[hidden],.crm-page[hidden]{display:none!important}
+.crm-pwa-build{font-size:11px;color:#666;font-weight:600;letter-spacing:.02em;margin-top:8px}
+</style>
+<meta name="app-build" content="crm-v7-ios-20261012"><meta http-equiv="Cache-Control" content="no-store">
+</head>
+<body class="crm-body">
+  <main class="crm-login" id="login-screen">
+    <section class="crm-login-card">
+      <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <p class="kicker">private producer operating system</p>
+      <p class="crm-pwa-build">crm v7 · ios pwa</p>
+      <h1>вся работа<br><span class="serif accent-pop">в одной голове</span></h1>
+      <p class="crm-login-copy">проекты, задачи, ответы, лиды, календарь и всё, что раньше жило по чатам.</p>
+      <form id="login-form" class="crm-login-form" onsubmit="return false">
+        <label class="crm-field"><span>пароль</span><input id="login-password" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary crm-login-btn" id="login-button" type="button" disabled>загружаю…</button>
+        <p class="crm-error" id="login-script-status" role="status">подключаю crm v6… если надпись не исчезает, напиши мне «v6 не загружается».</p>
+        <p class="crm-error" id="login-error" hidden>пароль не подошёл</p>
+      </form>
+    </section>
+    <aside class="crm-login-art" aria-hidden="true">
+      <div class="crm-poster"><span>producer os / 02</span><strong>не помнить<br>всё самой</strong><i>dashhkuns</i></div>
+    </aside>
+  </main>
+
+  <main class="crm-app" id="app" hidden>
+    <header class="crm-topbar">
+      <a class="brand crm-brand" href="/">dash<span>h</span>kuns <small>crm</small></a>
+      <nav class="crm-desktop-nav" id="desktop-nav">
+        <button data-section="today" class="active">сегодня</button>
+        <button data-section="tasks">задачи</button>
+        <button data-section="inbox">ответы</button>
+        <button data-section="projects">проекты</button>
+        <button data-section="leads">лиды</button>
+      </nav>
+      <div class="crm-sync"><span class="crm-dot"></span><span id="sync-label">синхронизация…</span></div>
+      <button class="crm-round" id="logout-button" type="button" aria-label="выйти">↗</button>
+    </header>
+
+    <section class="crm-page crm-page-today" data-page="today">
+      <section class="crm-hero">
+        <div><p class="kicker">producer control room</p><h1>что двигаем<br><span class="serif accent-pop">сегодня</span></h1></div>
+        <button class="btn primary crm-new-task-desktop" type="button" data-open-task>+ задача</button>
+      </section>
+      <section class="crm-stats" id="today-stats"></section>
+      <section class="crm-dashboard-grid">
+        <article class="crm-panel crm-panel-wide">
+          <div class="crm-panel-head"><div><p class="kicker">action</p><h2>сделать</h2></div><span id="today-task-count"></span></div>
+          <div id="today-tasks" class="crm-task-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">inbox</p><h2>ответы</h2></div><button class="crm-text-btn" data-goto="inbox">все →</button></div>
+          <div id="today-messages" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">calendar</p><h2>ближайшее</h2></div></div>
+          <div id="today-events" class="crm-mini-list"></div>
+        </article>
+        <article class="crm-panel">
+          <div class="crm-panel-head"><div><p class="kicker">waiting</p><h2>ждём</h2></div></div>
+          <div id="today-waiting" class="crm-mini-list"></div>
+        </article>
+      </section>
+    </section>
+
+    <section class="crm-page" data-page="tasks" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all tasks</p><h1>задачи</h1></div><button class="btn primary" type="button" data-open-task>+ новая</button>
+      </section>
+      <section class="crm-controls crm-controls-tasks">
+        <div class="crm-tabs" id="task-tabs">
+          <button data-task-view="open" class="active">открытые</button>
+          <button data-task-view="today">сегодня</button>
+          <button data-task-view="waiting">ждём</button>
+          <button data-task-view="backlog">потом</button>
+          <button data-task-view="done">готово</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="task-search" type="search" placeholder="найти задачу"></label>
+        <select class="crm-select" id="task-project-filter"><option value="all">все проекты</option></select>
+      </section>
+      <section class="crm-task-board" id="task-board"></section>
+    </section>
+
+    <section class="crm-page" data-page="inbox" hidden>
+      <section class="crm-section-hero"><div><p class="kicker">gmail + outreach</p><h1>ответы</h1></div></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="message-tabs">
+          <button data-message-view="all" class="active">все</button>
+          <button data-message-view="unread">непрочитанные</button>
+          <button data-message-view="actionable">нужно действие</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="message-search" type="search" placeholder="отправитель, тема, текст"></label>
+      </section>
+      <section class="crm-message-list" id="message-list"></section>
+    </section>
+
+    <section class="crm-page" data-page="projects" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">all moving parts</p><h1>проекты</h1></div><button class="btn primary" id="new-project-button" type="button">+ проект</button>
+      </section>
+      <section class="crm-project-grid" id="project-grid"></section>
+    </section>
+
+    <section class="crm-page" data-page="leads" hidden>
+      <section class="crm-section-hero">
+        <div><p class="kicker">sales pipeline</p><h1>лиды</h1></div><button class="btn primary" type="button" data-open-lead>+ новый лид</button>
+      </section>
+      <section class="crm-stats" id="lead-stats"></section>
+      <section class="crm-controls">
+        <div class="crm-tabs" id="lead-tabs">
+          <button data-lead-view="today" class="active">сегодня</button>
+          <button data-lead-view="hot">горячие</button>
+          <button data-lead-view="all">все</button>
+        </div>
+        <label class="crm-search"><span>⌕</span><input id="lead-search" type="search" placeholder="компания, контакт, заметка"></label>
+        <div class="crm-chips" id="lead-direction-chips"></div>
+      </section>
+      <section class="crm-leads" id="lead-list"></section>
+    </section>
+
+    <nav class="crm-mobile-nav" id="mobile-nav">
+      <button data-section="today" class="active"><span>●</span>сегодня</button>
+      <button data-section="tasks"><span>✓</span>задачи</button>
+      <button data-section="inbox"><span>↩</span>ответы</button>
+      <button data-section="projects"><span>▦</span>проекты</button>
+      <button data-section="leads"><span>↗</span>лиды</button>
+    </nav>
+    <button class="crm-fab" id="global-fab" type="button">+</button>
+  </main>
+
+  <dialog class="crm-dialog" id="task-dialog">
+    <form method="dialog" class="crm-sheet" id="task-form">
+      <header class="crm-sheet-head"><div><p class="kicker">task</p><h2 id="task-dialog-title">новая задача</h2></div><button type="button" class="crm-round" data-close-dialog="task-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>задача *</span><input name="title" required></label>
+        <label class="crm-field wide"><span>описание</span><textarea name="description" rows="3"></textarea></label>
+        <label class="crm-field"><span>проект</span><select name="project_id" id="task-project-select"><option value="">без проекта</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="todo">todo</option><option value="doing">doing</option><option value="waiting">waiting</option><option value="backlog">backlog</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>срок</span><input name="due_at" type="date"></label>
+        <label class="crm-field"><span>кто делает</span><select name="owner"><option value="dora">я</option><option value="chatgpt">chatgpt</option><option value="external">кто-то другой</option></select></label>
+        <label class="crm-field"><span>ждём от</span><input name="waiting_on" placeholder="имя / команда"></label>
+        <label class="crm-field wide"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-task" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="project-dialog">
+    <form method="dialog" class="crm-sheet" id="project-form">
+      <header class="crm-sheet-head"><div><p class="kicker">project</p><h2 id="project-dialog-title">проект</h2></div><button type="button" class="crm-round" data-close-dialog="project-dialog">×</button></header>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>название *</span><input name="name" required></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="active">active</option><option value="later">later</option><option value="paused">paused</option><option value="done">done</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium">medium</option><option value="low">low</option></select></label>
+        <label class="crm-field"><span>категория</span><select name="category"><option value="work">работа</option><option value="personal">личное</option><option value="home">дом</option></select></label>
+        <label class="crm-field"><span>дедлайн</span><input name="deadline" type="date"></label>
+        <label class="crm-field wide"><span>цель</span><textarea name="goal" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>следующий шаг</span><textarea name="next_action" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog" id="lead-dialog">
+    <form method="dialog" class="crm-sheet" id="lead-form">
+      <header class="crm-sheet-head"><div><p class="kicker">lead</p><h2 id="lead-dialog-title">новый лид</h2></div><button type="button" class="crm-round" data-close-dialog="lead-dialog">×</button></header>
+      <div class="crm-quick" id="quick-status">
+        <button type="button" data-status="waiting">ждём</button><button type="button" data-status="replied">ответили</button><button type="button" data-status="warm">горячий</button><button type="button" data-status="declined">нет</button>
+      </div>
+      <div class="crm-form-grid">
+        <label class="crm-field wide"><span>компания *</span><input name="company" required></label>
+        <label class="crm-field"><span>направление</span><select name="direction"><option>producer jobs</option><option>producer sales</option><option>iGaming production</option><option>podcast venue</option><option>photo studio</option></select></label>
+        <label class="crm-field"><span>приоритет</span><select name="priority"><option value="high">high</option><option value="medium" selected>medium</option><option value="low">low</option></select></label>
+        <label class="crm-field wide"><span>контакт</span><input name="contact"></label>
+        <label class="crm-field"><span>канал</span><input name="channel" value="email"></label>
+        <label class="crm-field"><span>статус</span><select name="status"><option value="new">new</option><option value="waiting">waiting</option><option value="action needed">action needed</option><option value="replied">replied</option><option value="warm">warm</option><option value="auto-ack">auto-ack</option><option value="paid-only">paid-only</option><option value="declined">declined</option><option value="bounce">bounce</option></select></label>
+        <label class="crm-field"><span>отправлено</span><input name="sent_at" type="date"></label>
+        <label class="crm-field"><span>следующее действие</span><input name="next_action_at" type="date"></label>
+        <label class="crm-field wide"><span>последний ответ</span><textarea name="last_reply" rows="3"></textarea></label>
+        <label class="crm-field wide"><span>заметки</span><textarea name="notes" rows="4"></textarea></label>
+      </div>
+      <footer class="crm-sheet-actions"><button type="button" class="btn ghost crm-danger" id="delete-lead" hidden>удалить</button><button type="submit" class="btn primary">сохранить</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="crm-dialog crm-message-dialog" id="message-dialog">
+    <section class="crm-sheet">
+      <header class="crm-sheet-head"><div><p class="kicker" id="message-channel">email</p><h2 id="message-subject">ответ</h2></div><button type="button" class="crm-round" data-close-dialog="message-dialog">×</button></header>
+      <div class="crm-message-full-meta" id="message-full-meta"></div>
+      <div class="crm-message-full-body" id="message-full-body"></div>
+      <section class="crm-reply-box">
+        <p class="kicker">ответ из crm</p>
+        <textarea id="message-reply" rows="5" placeholder="напиши ответ здесь"></textarea>
+        <div class="crm-reply-actions">
+          <span>после «отправить» письмо попадёт в очередь и уйдёт через gmail</span>
+          <button class="btn primary" id="message-queue-reply" type="button">отправить</button>
+        </div>
+      </section>
+      <footer class="crm-sheet-actions" id="message-actions"></footer>
+    </section>
+  </dialog>
+
+  <div class="crm-toast" id="toast" hidden></div>
+  <script id="pwa-v7-core">
+/* dashhkuns crm: external script for safari/pwa reliable login */
+const API="/api/crm-connection";
+const APIKEY="sb_publishable_nlajzfkH1tYEOAUZKcBvgg_5hbYJCM4";
+const TOKEN_KEY="dashhkuns_crm_token_v3";
+window.__CRM_SCRIPT_LOADED=true;
+const loginScriptStatus=document.getElementById("login-script-status");
+if(loginScriptStatus)loginScriptStatus.hidden=true;
+
+const CLOSED_LEADS=new Set(["bounce","declined"]);
+const DONE_TASKS=new Set(["done"]);
+
+const state={
+  section:"today",
+  projects:[],tasks:[],leads:[],messages:[],events:[],briefings:[],outbox:[],
+  taskView:"open",taskSearch:"",taskProject:"all",
+  messageView:"all",messageSearch:"",
+  leadView:"today",leadSearch:"",leadDirection:"all",
+  editingTask:null,editingLead:null,editingProject:null,currentMessage:null
+};
+
+const $=(s)=>document.querySelector(s);
+const all=(s)=>[...document.querySelectorAll(s)];
+const esc=(v)=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+let inMemorySession="";
+const token=()=>{
+  try { return localStorage.getItem(TOKEN_KEY)||sessionStorage.getItem(TOKEN_KEY)||inMemorySession||null; }
+  catch { try {return sessionStorage.getItem(TOKEN_KEY)||inMemorySession||null} catch {return inMemorySession||null} }
+};
+const saveToken=(value)=>{
+  inMemorySession=value;
+  try{localStorage.setItem(TOKEN_KEY,value)}catch{try{sessionStorage.setItem(TOKEN_KEY,value)}catch{}}
+};
+const dropToken=()=>{
+  inMemorySession="";
+  try{localStorage.removeItem(TOKEN_KEY)}catch{}
+  try{sessionStorage.removeItem(TOKEN_KEY)}catch{}
+};
+window.__CRM_AUTH_TOKEN=token;
+const moscowDate=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Moscow",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+const today=()=>moscowDate();
+const fmtDate=(v)=>{if(!v)return "—";const d=new Date(String(v).length===10?v+"T12:00:00":v);return new Intl.DateTimeFormat("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"short"}).format(d).replace(".","")};
+const fmtDateLong=(v)=>{if(!v)return "—";const d=new Date(v);return new Intl.DateTimeFormat("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(d).replace(".","")};
+const projectById=(id)=>state.projects.find(p=>p.id===id);
+const projectName=(id)=>projectById(id)?.name||"без проекта";
+const isTaskOpen=(t)=>!DONE_TASKS.has(t.status);
+const isTaskDue=(t)=>isTaskOpen(t)&&t.due_at&&t.due_at<=today();
+const isTaskOverdue=(t)=>isTaskOpen(t)&&t.due_at&&t.due_at<today();
+const isLeadDue=(l)=>l.next_action_at&&!CLOSED_LEADS.has(l.status)&&l.next_action_at<=today();
+const isLeadHot=(l)=>!CLOSED_LEADS.has(l.status)&&(l.priority==="high"||["warm","replied","action needed"].includes(l.status));
+const normalize=(v)=>String(v||"").toLowerCase();
+
+async function api(action,payload={}){
+  const headers={"Content-Type":"application/json","apikey":APIKEY};
+  if(action!=="login"&&token())headers.Authorization="Bearer "+token();
+  const res=await fetch(API,{method:"POST",headers,body:JSON.stringify({action,...payload}),cache:"no-store"});
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401&&action!=="login"){dropToken();showLogin();throw new Error("unauthorized")}
+  if(!res.ok)throw new Error(data.detail||data.error||"request_failed");
+  return data;
+}
+function toast(message,error=false){
+  const el=$("#toast");el.textContent=message;el.style.background=error?"#ff8baa":"var(--acid)";el.hidden=false;
+  clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200);
+}
+function showLogin(){ $("#app").hidden=true;$("#login-screen").hidden=false;setTimeout(()=>$("#login-password")?.focus(),80) }
+function showApp(){ $("#login-screen").hidden=true;$("#app").hidden=false }
+
+async function submitLogin(e){
+  e.preventDefault();
+  const button=$("#login-button"), error=$("#login-error");
+  error.hidden=true;
+  button.disabled=true;
+  button.textContent="проверяю пароль…";
+  try{
+    const response=await api("login",{password:$("#login-password").value});
+    saveToken(response.token);
+    $("#login-password").value="";
+    showApp();
+    await load();
+  }catch(cause){
+    const message=String(cause&&cause.message||cause||"");
+    error.textContent=message==="invalid_password"?"пароль не подошёл. проверь ввод и попробуй ещё раз.":message==="session_error"?"вход временно недоступен на сервере. попробуй ещё раз.":message==="crm_connection_failed"?"сервер crm сейчас недоступен. попробуй ещё раз через минуту.":message==="unauthorized"?"сессия истекла. войди заново.":"не удалось подключиться к crm. если остальные сайты открываются, проверь статус подключения crm.";
+    error.hidden=false;
+  }finally{
+    button.disabled=false;
+    button.textContent="войти";
+  }
+}
+$("#login-form").addEventListener("submit",submitLogin);
+$("#login-button").addEventListener("click",submitLogin);
+const loginReadyButton=document.getElementById("login-button");
+if(loginReadyButton){loginReadyButton.disabled=false;loginReadyButton.textContent="войти";}
+$("#logout-button").addEventListener("click",()=>{dropToken();showLogin()});
+
+async function load(){
+  $("#sync-label").textContent="обновляю…";
+  try{
+    const data=await api("snapshot");
+    Object.assign(state,{
+      projects:data.projects||[],tasks:data.tasks||[],leads:data.leads||[],messages:data.messages||[],events:data.events||[],briefings:data.briefings||[],outbox:data.outbox||[]
+    });
+    $("#sync-label").textContent="обновлено сейчас";
+    renderAll();
+  }catch(e){$("#sync-label").textContent="ошибка синхронизации";toast("не удалось обновить crm",true)}
+}
+function renderAll(){
+  populateProjectSelects();
+  renderToday();renderTasks();renderInbox();renderProjects();renderLeads();
+}
+function goto(section){
+  state.section=section;
+  all("[data-page]").forEach(p=>p.hidden=p.dataset.page!==section);
+  all("[data-section]").forEach(b=>b.classList.toggle("active",b.dataset.section===section));
+  const fab=$("#global-fab");fab.textContent="+";
+  window.scrollTo({top:0,behavior:"instant"});
+}
+all("[data-section]").forEach(b=>b.addEventListener("click",()=>goto(b.dataset.section)));
+all("[data-goto]").forEach(b=>b.addEventListener("click",()=>goto(b.dataset.goto)));
+
+function stat(label,value,cl=""){return `<article class="crm-stat ${cl}"><strong>${value}</strong><span>${label}</span></article>`}
+
+function renderToday(){
+  const open=state.tasks.filter(isTaskOpen).length;
+  const due=state.tasks.filter(isTaskDue).length;
+  const unread=state.messages.filter(m=>m.status==="unread").length;
+  const hot=state.leads.filter(isLeadHot).length;
+  $("#today-stats").innerHTML=stat("открыто",open)+stat("сегодня",due,"due")+stat("ответы",unread)+stat("горячие",hot,"hot");
+
+  const priority={high:0,medium:1,low:2};
+  let tasks=state.tasks.filter(t=>isTaskDue(t)||(["high"].includes(t.priority)&&isTaskOpen(t)&&t.status!=="backlog"))
+    .sort((a,b)=>(isTaskOverdue(b)-isTaskOverdue(a))||((priority[a.priority]??9)-(priority[b.priority]??9))||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
+  tasks=tasks.slice(0,12);
+  $("#today-task-count").textContent=tasks.length;
+  $("#today-tasks").innerHTML=tasks.length?tasks.map(taskRow).join(""):`<div class="crm-empty">на сегодня пусто. это хорошо.</div>`;
+  bindTaskRows("#today-tasks");
+
+  const messages=state.messages.filter(m=>m.direction==="inbound").slice(0,5);
+  $("#today-messages").innerHTML=messages.length?messages.map(m=>miniMessage(m)).join(""):`<div class="crm-mini-item"><p>новых ответов нет</p></div>`;
+  all("#today-messages [data-message-id]").forEach(el=>el.onclick=()=>openMessage(el.dataset.messageId));
+
+  const now=Date.now();
+  const events=state.events.filter(e=>new Date(e.ends_at||e.starts_at).getTime()>=now).slice(0,6);
+  $("#today-events").innerHTML=events.length?events.map(e=>`<div class="crm-mini-item"><strong>${esc(e.title)}</strong><p>${esc(e.location||projectName(e.project_id)||"")}</p><time>${fmtDateLong(e.starts_at)}</time></div>`).join(""):`<div class="crm-mini-item"><p>в календаре пусто</p></div>`;
+
+  const waitingTasks=state.tasks.filter(t=>t.status==="waiting").slice(0,5);
+  const waitingLeads=state.leads.filter(l=>l.status==="waiting"&&l.priority==="high").slice(0,3);
+  const chunks=[
+    ...waitingTasks.map(t=>`<div class="crm-mini-item" data-edit-task="${t.id}"><strong>${esc(t.title)}</strong><p>ждём: ${esc(t.waiting_on||"ответ")} · ${esc(projectName(t.project_id))}</p><time>${t.due_at?"до "+fmtDate(t.due_at):"без срока"}</time></div>`),
+    ...waitingLeads.map(l=>`<div class="crm-mini-item" data-edit-lead="${l.id}"><strong>${esc(l.company)}</strong><p>${esc(l.contact||"")} · ${esc(l.direction)}</p><time>follow-up ${fmtDate(l.next_action_at)}</time></div>`)
+  ];
+  $("#today-waiting").innerHTML=chunks.length?chunks.join(""):`<div class="crm-mini-item"><p>ничего критичного не ждём</p></div>`;
+  all("#today-waiting [data-edit-task]").forEach(el=>el.onclick=()=>openTask(el.dataset.editTask));
+  all("#today-waiting [data-edit-lead]").forEach(el=>el.onclick=()=>openLead(el.dataset.editLead));
+}
+function taskRow(t){
+  const p=projectById(t.project_id);
+  return `<div class="crm-task-row" data-task-row="${t.id}">
+    <input class="crm-check" type="checkbox" data-task-check="${t.id}" ${t.status==="done"?"checked":""}>
+    <div class="crm-task-main"><button type="button" data-edit-task="${t.id}">${esc(t.title)}</button>
+      ${t.description?`<p>${esc(t.description)}</p>`:""}
+      <div class="crm-task-meta">${p?`<span class="crm-pill">${esc(p.name)}</span>`:""}${t.waiting_on?`<span class="crm-pill pink">ждём: ${esc(t.waiting_on)}</span>`:""}<span class="crm-pill ${t.priority==="high"?"acid":""}">${esc(t.priority)}</span></div>
+    </div>
+    <div class="crm-due ${isTaskOverdue(t)?"overdue":""}">${fmtDate(t.due_at)}</div>
+  </div>`;
+}
+function bindTaskRows(root){
+  all(root+" [data-task-check]").forEach(cb=>cb.onchange=()=>toggleTask(cb.dataset.taskCheck,cb.checked));
+  all(root+" [data-edit-task]").forEach(b=>b.onclick=()=>openTask(b.dataset.editTask));
+}
+async function toggleTask(id,done){
+  try{await api("update_task",{id,patch:{status:done?"done":"todo"}});toast(done?"готово ✓":"вернула в работу");await load()}catch{toast("не сохранилось",true)}
+}
+
+function renderTasks(){
+  const projectFilter=$("#task-project-filter");projectFilter.value=state.taskProject;
+  const q=normalize(state.taskSearch);
+  let rows=state.tasks.filter(t=>{
+    if(state.taskView==="open"&&["done","backlog"].includes(t.status))return false;
+    if(state.taskView==="today"&&!isTaskDue(t))return false;
+    if(state.taskView==="waiting"&&t.status!=="waiting")return false;
+    if(state.taskView==="backlog"&&t.status!=="backlog")return false;
+    if(state.taskView==="done"&&t.status!=="done")return false;
+    if(state.taskProject!=="all"&&t.project_id!==state.taskProject)return false;
+    if(q&&!normalize([t.title,t.description,t.waiting_on,projectName(t.project_id)].join(" ")).includes(q))return false;
+    return true;
+  });
+  const rank={high:0,medium:1,low:2};rows.sort((a,b)=>(rank[a.priority]-rank[b.priority])||String(a.due_at||"9999").localeCompare(String(b.due_at||"9999")));
+  $("#task-board").innerHTML=rows.length?rows.map(t=>`<article class="crm-task-card priority-${esc(t.priority)} status-${esc(t.status)}">
+    <input class="crm-check" type="checkbox" data-task-check="${t.id}" ${t.status==="done"?"checked":""}>
+    <div><button class="crm-text-btn crm-task-title" data-edit-task="${t.id}">${esc(t.title)}</button>
+    ${t.description?`<div class="crm-task-desc">${esc(t.description)}</div>`:""}
+    <div class="crm-task-meta"><span class="crm-pill">${esc(projectName(t.project_id))}</span><span class="crm-pill">${esc(t.status)}</span>${t.waiting_on?`<span class="crm-pill pink">ждём: ${esc(t.waiting_on)}</span>`:""}</div></div>
+    <div class="crm-task-side"><div class="crm-due ${isTaskOverdue(t)?"overdue":""}">${fmtDate(t.due_at)}</div><span class="crm-pill ${t.priority==="high"?"acid":""}">${esc(t.priority)}</span></div>
+  </article>`).join(""):`<div class="crm-empty">ничего нет</div>`;
+  bindTaskRows("#task-board");
+}
+$("#task-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-task-view]");if(!b)return;state.taskView=b.dataset.taskView;all("[data-task-view]").forEach(x=>x.classList.toggle("active",x===b));renderTasks()});
+$("#task-search").addEventListener("input",e=>{state.taskSearch=e.target.value;renderTasks()});
+$("#task-project-filter").addEventListener("change",e=>{state.taskProject=e.target.value;renderTasks()});
+
+function miniMessage(m){return `<div class="crm-mini-item" data-message-id="${m.id}"><strong>${esc(m.sender||m.subject||"ответ")}</strong><p>${esc(m.snippet||m.subject||"")}</p><time>${fmtDateLong(m.received_at)} ${m.status==="unread"?"· новое":""}</time></div>`}
+function renderInbox(){
+  const q=normalize(state.messageSearch);
+  let rows=state.messages.filter(m=>{
+    if(state.messageView==="unread"&&m.status!=="unread")return false;
+    if(state.messageView==="actionable"&&!m.actionable)return false;
+    if(q&&!normalize([m.sender,m.subject,m.body,m.snippet].join(" ")).includes(q))return false;
+    return true;
+  });
+  $("#message-list").innerHTML=rows.length?rows.map(m=>`<article class="crm-message-card ${m.status==="unread"?"unread":""} ${m.actionable?"actionable":""}" data-message-id="${m.id}">
+    <div><p class="kicker">${esc(m.channel)} · ${esc(m.direction)}</p><h3>${esc(m.subject||"без темы")}</h3><p><strong>${esc(m.sender||"")}</strong></p><p>${esc(m.snippet||m.body||"")}</p></div>
+    <div class="crm-message-side"><time>${fmtDateLong(m.received_at)}</time>${m.actionable?`<span class="crm-pill acid">нужно действие</span>`:""}${m.status==="unread"?`<span class="crm-pill pink">новое</span>`:""}</div>
+  </article>`).join(""):`<div class="crm-empty">ответов по этому фильтру нет</div>`;
+  all("#message-list [data-message-id]").forEach(el=>el.onclick=()=>openMessage(el.dataset.messageId));
+}
+$("#message-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-message-view]");if(!b)return;state.messageView=b.dataset.messageView;all("[data-message-view]").forEach(x=>x.classList.toggle("active",x===b));renderInbox()});
+$("#message-search").addEventListener("input",e=>{state.messageSearch=e.target.value;renderInbox()});
+
+async function openMessage(id){
+  const m=state.messages.find(x=>x.id===id);if(!m)return;state.currentMessage=id;
+  $("#message-channel").textContent=m.channel||"email";$("#message-subject").textContent=m.subject||"ответ";
+  $("#message-full-meta").innerHTML=`<span class="crm-pill">${esc(m.sender||"")}</span><span class="crm-pill">${fmtDateLong(m.received_at)}</span>${m.actionable?`<span class="crm-pill acid">нужно действие</span>`:""}`;
+  $("#message-full-body").textContent=m.body||m.snippet||"";
+  const url=m.metadata?.gmail_url;
+  $("#message-actions").innerHTML=`<div>${url?`<a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener">открыть в gmail</a>`:""}</div><div class="button-row"><button class="btn ghost" id="message-toggle-action">${m.actionable?"действие закрыто":"нужно действие"}</button><button class="btn primary" id="message-mark-read">${m.status==="unread"?"прочитано":"закрыть"}</button></div>`;
+  $("#message-reply").value="";
+  const queued=state.outbox.find(o=>o.source_message_id===id&&o.status==="queued");
+  if(queued){$("#message-reply").value=queued.body||"";$("#message-queue-reply").textContent="уже в очереди";$("#message-queue-reply").disabled=true}else{$("#message-queue-reply").textContent="отправить";$("#message-queue-reply").disabled=false}
+  $("#message-queue-reply").onclick=async()=>{
+    const body=$("#message-reply").value.trim();if(!body)return toast("напиши ответ",true);
+    const match=String(m.sender||"").match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+    const recipient=match?match[0]:String(m.sender||"").trim();
+    if(!recipient.includes("@"))return toast("не нашла email получателя",true);
+    const subject=/^re:/i.test(m.subject||"")?(m.subject||""):"Re: "+(m.subject||"");
+    try{await api("queue_email",{source_message_id:id,recipient,subject,body});toast("письмо поставлено в отправку");$("#message-queue-reply").textContent="в очереди";$("#message-queue-reply").disabled=true;await load()}catch{toast("не удалось поставить в очередь",true)}
+  };
+  $("#message-dialog").showModal();
+  $("#message-mark-read").onclick=async()=>{if(m.status==="unread"){await api("update_message",{id,patch:{status:"read"}});m.status="read";toast("прочитано");renderAll()}else $("#message-dialog").close()};
+  $("#message-toggle-action").onclick=async()=>{await api("update_message",{id,patch:{actionable:!m.actionable}});m.actionable=!m.actionable;toast(m.actionable?"пометила как действие":"убрала из действий");renderAll();openMessage(id)};
+  if(m.status==="unread"){api("update_message",{id,patch:{status:"read"}}).then(()=>{m.status="read";renderToday();renderInbox()}).catch(()=>{})}
+}
+
+function renderProjects(){
+  const rows=[...state.projects].sort((a,b)=>(a.sort_order||100)-(b.sort_order||100));
+  $("#project-grid").innerHTML=rows.map(p=>{
+    const open=state.tasks.filter(t=>t.project_id===p.id&&isTaskOpen(t)&&t.status!=="backlog").length;
+    return `<article class="crm-project-card priority-${esc(p.priority)} status-${esc(p.status)}" data-project-id="${p.id}">
+      <div class="crm-project-top"><div><span class="crm-pill">${esc(p.status)}</span> <span class="crm-pill">${esc(p.category)}</span></div><span class="crm-project-count">${open}</span></div>
+      <h3>${esc(p.name)}</h3><p class="crm-project-goal">${esc(p.goal||"")}</p>
+      <div class="crm-project-next"><strong>следующий шаг ${p.deadline?"· "+fmtDate(p.deadline):""}</strong>${esc(p.next_action||"нет следующего действия")}</div>
+    </article>`;
+  }).join("");
+  all("#project-grid [data-project-id]").forEach(el=>el.onclick=()=>openProject(el.dataset.projectId));
+}
+
+function leadScore(l){let s=0;if(isLeadDue(l))s+=100;if(l.status==="warm")s+=80;if(l.status==="replied")s+=60;if(l.priority==="high")s+=30;return s}
+function renderLeads(){
+  const active=state.leads.filter(l=>!CLOSED_LEADS.has(l.status)).length,due=state.leads.filter(isLeadDue).length,hot=state.leads.filter(isLeadHot).length,replies=state.leads.filter(l=>["replied","warm","auto-ack","paid-only"].includes(l.status)).length;
+  $("#lead-stats").innerHTML=stat("в работе",active)+stat("сегодня",due,"due")+stat("горячие",hot,"hot")+stat("ответы",replies);
+  renderLeadChips();
+  const q=normalize(state.leadSearch);
+  let rows=state.leads.filter(l=>{
+    if(state.leadView==="today"&&!isLeadDue(l))return false;
+    if(state.leadView==="hot"&&!isLeadHot(l))return false;
+    if(state.leadDirection!=="all"&&l.direction!==state.leadDirection)return false;
+    if(q&&!normalize([l.company,l.contact,l.notes,l.last_reply,l.direction,l.status].join(" ")).includes(q))return false;
+    return true;
+  }).sort((a,b)=>leadScore(b)-leadScore(a)||String(a.company).localeCompare(String(b.company),"ru"));
+  $("#lead-list").innerHTML=rows.length?rows.map(leadCard).join(""):`<div class="crm-empty">здесь сейчас пусто</div>`;
+  all("#lead-list [data-lead-id]").forEach(el=>el.onclick=()=>openLead(el.dataset.leadId));
+}
+function leadCard(l){return `<article class="crm-lead priority-${esc(l.priority)} ${isLeadDue(l)?"is-due":""} ${["warm","replied"].includes(l.status)?"is-warm":""}" data-lead-id="${l.id}">
+  <div><p class="kicker">${esc(l.direction)}</p><h3>${esc(l.company)}</h3><div class="crm-contact">${esc(l.contact||"контакт не указан")}</div><div class="crm-meta"><span class="crm-tag status-${esc(l.status).replace(/\s+/g,"-")}">${esc(l.status)}</span><span class="crm-tag">${esc(l.priority)}</span><span class="crm-tag">${esc(l.channel||"")}</span></div></div>
+  <div class="crm-date ${l.next_action_at<today()&&isLeadDue(l)?"overdue":""}"><b>${fmtDate(l.next_action_at)}</b><span>next</span></div>
+  <div class="crm-note">${esc(l.last_reply||l.notes||"")}</div></article>`}
+function renderLeadChips(){
+  const dirs=["all",...new Set(state.leads.map(l=>l.direction).filter(Boolean))];
+  const labels={"all":"все","producer jobs":"вакансии","producer sales":"продажи","iGaming production":"igaming","podcast venue":"подкаст","photo studio":"фотостудии"};
+  $("#lead-direction-chips").innerHTML=dirs.map(d=>`<button class="crm-chip ${state.leadDirection===d?"active":""}" data-dir="${esc(d)}">${esc(labels[d]||d)}</button>`).join("");
+  all("#lead-direction-chips [data-dir]").forEach(b=>b.onclick=()=>{state.leadDirection=b.dataset.dir;renderLeads()});
+}
+$("#lead-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-lead-view]");if(!b)return;state.leadView=b.dataset.leadView;all("[data-lead-view]").forEach(x=>x.classList.toggle("active",x===b));renderLeads()});
+$("#lead-search").addEventListener("input",e=>{state.leadSearch=e.target.value;renderLeads()});
+
+function populateProjectSelects(){
+  const options=state.projects.filter(p=>p.status!=="done").map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  $("#task-project-select").innerHTML='<option value="">без проекта</option>'+options;
+  $("#task-project-filter").innerHTML='<option value="all">все проекты</option>'+options;
+  $("#task-project-filter").value=state.taskProject;
+}
+
+const taskDialog=$("#task-dialog"),taskForm=$("#task-form");
+all("[data-open-task]").forEach(b=>b.onclick=()=>openTask());
+function openTask(id=null){
+  const t=id?state.tasks.find(x=>x.id===id):null;state.editingTask=t?.id||null;
+  $("#task-dialog-title").textContent=t?"задача":"новая задача";$("#delete-task").hidden=!t;
+  const defaults={title:"",description:"",project_id:"",priority:"medium",status:"todo",due_at:"",owner:"dora",waiting_on:"",category:"work"};
+  for(const [k,v] of Object.entries(defaults))if(taskForm.elements[k])taskForm.elements[k].value=t?.[k]??v;
+  taskDialog.showModal();
+}
+taskForm.addEventListener("submit",async e=>{
+  e.preventDefault();const fd=new FormData(taskForm),task={};for(const [k,v] of fd.entries())task[k]=String(v).trim()||null;
+  try{if(state.editingTask)await api("update_task",{id:state.editingTask,patch:task});else await api("create_task",{task});taskDialog.close();toast("задача сохранена");await load()}catch{toast("не сохранилось",true)}
+});
+$("#delete-task").onclick=async()=>{if(!state.editingTask||!confirm("удалить задачу?"))return;await api("delete_task",{id:state.editingTask});taskDialog.close();toast("удалено");await load()};
+
+const projectDialog=$("#project-dialog"),projectForm=$("#project-form");
+$("#new-project-button").onclick=()=>openProject();
+function openProject(id=null){
+  const p=id?state.projects.find(x=>x.id===id):null;state.editingProject=p?.id||null;$("#project-dialog-title").textContent=p?p.name:"новый проект";
+  const defaults={name:"",status:"active",priority:"medium",category:"work",deadline:"",goal:"",next_action:"",notes:""};
+  for(const [k,v] of Object.entries(defaults))if(projectForm.elements[k])projectForm.elements[k].value=p?.[k]??v;
+  projectDialog.showModal();
+}
+projectForm.addEventListener("submit",async e=>{
+  e.preventDefault();const fd=new FormData(projectForm),project={};for(const [k,v] of fd.entries())project[k]=String(v).trim()||null;
+  try{if(state.editingProject)await api("update_project",{id:state.editingProject,patch:project});else await api("create_project",{project});projectDialog.close();toast("проект сохранён");await load()}catch{toast("не сохранилось",true)}
+});
+
+const leadDialog=$("#lead-dialog"),leadForm=$("#lead-form");
+all("[data-open-lead]").forEach(b=>b.onclick=()=>openLead());
+function openLead(id=null){
+  const l=id?state.leads.find(x=>x.id===id):null;state.editingLead=l?.id||null;$("#lead-dialog-title").textContent=l?l.company:"новый лид";$("#delete-lead").hidden=!l;
+  const defaults={company:"",direction:"producer jobs",priority:"medium",contact:"",channel:"email",status:"new",sent_at:"",next_action_at:"",last_reply:"",notes:""};
+  for(const [k,v] of Object.entries(defaults))if(leadForm.elements[k])leadForm.elements[k].value=l?.[k]??v;
+  leadDialog.showModal();
+}
+$("#quick-status").addEventListener("click",e=>{const b=e.target.closest("[data-status]");if(b)leadForm.elements.status.value=b.dataset.status});
+leadForm.addEventListener("submit",async e=>{
+  e.preventDefault();const fd=new FormData(leadForm),lead={};for(const [k,v] of fd.entries())lead[k]=String(v).trim()||null;
+  try{if(state.editingLead)await api("update_lead",{id:state.editingLead,patch:lead});else await api("create_lead",{lead});leadDialog.close();toast("лид сохранён");await load()}catch{toast("не сохранилось",true)}
+});
+$("#delete-lead").onclick=async()=>{if(!state.editingLead||!confirm("удалить лид?"))return;await api("delete_lead",{id:state.editingLead});leadDialog.close();toast("удалено");await load()};
+
+all("[data-close-dialog]").forEach(b=>b.onclick=()=>$("#"+b.dataset.closeDialog).close());
+$("#global-fab").onclick=()=>state.section==="leads"?openLead():openTask();
+
+(async()=>{
+  try{
+    if(token()){showApp();await load()}else showLogin();
+    window.__CRM_BOOT_OK=true;
+  }catch(e){
+    window.__CRM_BOOT_ERROR=String(e&&e.message||e);
+    showLogin();
+  }
+})();
+
+</script>
+<script id="pwa-v7-enhancements">
+/* crm v4 progressive enhancement. no credentials or private data cached here. */
+(()=>{
+  "use strict";
+  const root=document.getElementById("app");
+  if(!root)return;
+  const loggedIn=()=>!root.hidden;
+  const q=s=>document.querySelector(s);
+  const topbar=q(".crm-topbar");
+  const aiTop=document.createElement("button");
+  aiTop.type="button";aiTop.className="crm-operator-btn";aiTop.textContent="✦ ии-оператор";aiTop.setAttribute("aria-label","открыть ии-помощницу");
+  const installTop=document.createElement("button");
+  installTop.type="button";installTop.className="crm-install-btn";installTop.textContent="↓ приложение";installTop.setAttribute("aria-label","установить приложение");
+  topbar.insertBefore(aiTop,q(".crm-sync"));
+  topbar.insertBefore(installTop,q(".crm-sync"));
+  const aiFab=document.createElement("button");
+  aiFab.id="crm-ai-floating";aiFab.className="crm-ai-floating";aiFab.type="button";aiFab.textContent="✦";aiFab.setAttribute("aria-label","открыть ии-помощницу");
+  root.append(aiFab);
+  const aiCard=document.createElement("section");
+  aiCard.className="crm-ai-today";
+  aiCard.innerHTML="<div><b>✦ твоя вторая голова</b><small>задай вопрос по задачам, проектам, письмам или лидам</small></div><button type='button' id='crm-ai-today-button'>разобрать день →</button>";
+  const hero=q(".crm-page-today .crm-hero");
+  if(hero)hero.after(aiCard);
+  const assistant=document.createElement("dialog");
+  assistant.id="crm-operator-dialog";assistant.className="crm-operator-modal";
+  assistant.innerHTML=`
+    <div class="crm-operator-shell">
+      <header class="crm-operator-head">
+        <div><p class="crm-operator-title">✦ ии-оператор</p><p class="crm-operator-sub">проекты × задачи × лиды × ответы</p></div>
+        <button type="button" class="crm-operator-x" id="crm-ai-close" aria-label="закрыть">×</button>
+      </header>
+      <section class="crm-ai-welcome">
+        <div><strong>не просто чат, а помощница с контекстом crm</strong><p>анализирует текущую базу, предлагает приоритеты, составляет планы и черновики. ничего не отправляет и не изменяет без тебя.</p></div>
+        <span id="crm-ai-status" class="crm-ai-status">проверка...</span>
+      </section>
+      <div class="crm-ai-quick">
+        <button type="button" data-ai-prompt="составь реалистичный план работы на сегодня: 5 приоритетов из моей crm, конкретные следующие шаги и что можно отложить">план дня</button>
+        <button type="button" data-ai-prompt="найди просроченные задачи и риски, сгруппируй по проектам, скажи с чего начать">просрочки</button>
+        <button type="button" data-ai-prompt="какие лиды требуют действия в первую очередь? предложи персональные следующие шаги и черновики сообщений для трёх важных контактов">лиды</button>
+        <button type="button" data-ai-prompt="разбери входящие ответы и предложи действия, кому ответить и что написать. письма не отправляй">почта</button>
+      </div>
+      <div class="crm-ai-log" id="crm-ai-log" role="log" aria-live="polite"></div>
+      <form id="crm-ai-form" class="crm-ai-compose">
+        <textarea id="crm-ai-input" rows="2" maxlength="3000" placeholder="спроси про любой проект, задачу, лид..." aria-label="вопрос ии"></textarea>
+        <button type="submit" id="crm-ai-send">отправить ↗</button>
+      </form>
+      <div class="crm-ai-footnote">использует данные текущей crm · черновики и рекомендации, без автоматических действий</div>
+    </div>`;
+  document.body.append(assistant);
+  const installDlg=document.createElement("dialog");
+  installDlg.className="crm-install-modal";installDlg.id="crm-install-dialog";
+  installDlg.innerHTML="<h2>crm как приложение</h2><p id='crm-install-instructions'>открой crm в safari, нажми «поделиться» → «на экран домой» → включи «открывать как веб-приложение» → «добавить». иконка появится на главном экране iphone.</p><button type='button' id='crm-install-close'>понятно</button>";
+  document.body.append(installDlg);
+  const network=document.createElement("p");
+  network.className="crm-pwa-network";network.id="crm-network";network.hidden=true;network.setAttribute("role","status");network.textContent="нет сети: данные crm недоступны до подключения";
+  document.body.append(network);
+  const log=q("#crm-ai-log"),input=q("#crm-ai-input"),send=q("#crm-ai-send"),indicator=q("#crm-ai-status");
+  const history=[];
+  let busy=false,checked=false,configured=false;
+  function bubble(text,role){
+    const el=document.createElement("div");
+    el.className="crm-ai-bubble "+role;
+    el.textContent=text;
+    log.append(el);
+    log.scrollTop=log.scrollHeight;
+    return el;
+  }
+  bubble("что разберём? можно попросить план на сегодня, найти зависшие задачи или подготовить ответ на письмо.","assistant");
+  async function status(){
+    if(checked)return;
+    try{
+      const r=await fetch("/api/crm-ai",{cache:"no-store"}),data=await r.json();
+      configured=Boolean(data.configured);checked=true;
+      indicator.textContent=configured?"ии подключена":"нужен ключ ии";
+      indicator.title=configured?"серверная модель доступна":"модель готова к подключению через CRM";
+    }catch{indicator.textContent="проверка недоступна"}
+  }
+  function openAssistant(){
+    if(!loggedIn())return;
+    if(!assistant.open)assistant.showModal();
+    status();setTimeout(()=>input.focus(),80);
+  }
+  aiTop.addEventListener("click",openAssistant);
+  aiFab.addEventListener("click",openAssistant);
+  q("#crm-ai-today-button")?.addEventListener("click",()=>{
+    openAssistant();
+    input.value="составь реалистичный план работы на сегодня: пять приоритетов из моей crm, конкретные шаги и блокеры";
+  });
+  q("#crm-ai-close").addEventListener("click",()=>assistant.close());
+  assistant.addEventListener("click",event=>{if(event.target===assistant)assistant.close()});
+  q(".crm-ai-quick").addEventListener("click",event=>{
+    const btn=event.target.closest("[data-ai-prompt]");
+    if(!btn||busy)return;
+    input.value=btn.dataset.aiPrompt;
+    q("#crm-ai-form").requestSubmit();
+  });
+  input.addEventListener("keydown",event=>{
+    if(event.key==="Enter"&&!event.shiftKey&&!event.isComposing){event.preventDefault();q("#crm-ai-form").requestSubmit()}
+  });
+  q("#crm-ai-form").addEventListener("submit",async event=>{
+    event.preventDefault();
+    const prompt=input.value.trim();
+    if(!prompt||busy)return;
+    const token=typeof window.__CRM_AUTH_TOKEN==='function'?window.__CRM_AUTH_TOKEN():null;
+    if(!token){bubble("для работы ии нужно войти в crm","error");return}
+    if(!configured){await status();if(!configured){bubble("интерфейс ии готов, но серверный ключ CRM пока не настроен. ключ не вводи в чат или в браузер: он должен храниться в переменных окружения vercel.","error");return}}
+    const previous=history.slice(-8);
+    bubble(prompt,"user");input.value="";
+    const loading=bubble("анализирую твою crm…","assistant loading");
+    busy=true;send.disabled=true;send.textContent="думаю…";
+    try{
+      const response=await fetch("/api/crm-ai",{
+        method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},
+        body:JSON.stringify({prompt,history:previous}),
+        cache:"no-store"
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok){
+        if(response.status===401){indicator.textContent="войти заново";throw new Error("сессия crm истекла: выйди и войди заново")}
+        if(data.error==="ai_not_configured"){configured=false;indicator.textContent="нужен ключ ии";throw new Error("для ответа ии пока не задан серверный CRM")}
+        throw new Error(data.error==="ai_provider_unavailable"?"проверь ключ, биллинг и модель в vercel":"ошибка соединения с ии. попробуй ещё раз");
+      }
+      loading.textContent=data.answer;
+      loading.className="crm-ai-bubble assistant";
+      history.push({role:"user",content:prompt},{role:"assistant",content:data.answer});
+    }catch(e){loading.textContent=e.message||"не получилось получить ответ";loading.className="crm-ai-bubble error"}
+    finally{busy=false;send.disabled=false;send.textContent="отправить ↗";input.focus();log.scrollTop=log.scrollHeight}
+  });
+  let deferredPrompt=null;
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+  function installHelp(){
+    if(window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone){q("#crm-install-instructions").textContent="crm уже установлена как приложение. открывай её с главного экрана."}
+    else if(!/iphone|ipad|ipod/i.test(navigator.userAgent)){q("#crm-install-instructions").textContent="для установки нажми значок установки в браузере или открой меню → «установить приложение». на iphone: safari → поделиться → на экран домой."}
+    installDlg.showModal();
+  }
+  installTop.addEventListener("click",async()=>{
+    if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;return}
+    installHelp();
+  });
+  q("#crm-install-close").addEventListener("click",()=>installDlg.close());
+  installDlg.addEventListener("click",event=>{if(event.target===installDlg)installDlg.close()});
+  function connectivity(){network.hidden=navigator.onLine; if(!navigator.onLine)indicator.textContent="нет сети"}
+  window.addEventListener("online",connectivity);window.addEventListener("offline",connectivity);connectivity();
+  if("serviceWorker" in navigator && location.protocol==="https:"){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("/crm-app/sw.js",{scope:"/crm-app/"}).catch(()=>{}));
+  }
+  const section=location.hash.replace("#","");
+  if(["today","tasks","inbox","projects","leads"].includes(section)){
+    const btn=document.querySelector('.crm-desktop-nav [data-section="'+section+'"]');
+    if(btn){const attempt=()=>{if(loggedIn())btn.click()};attempt();document.addEventListener("click",event=>{if(event.target?.id==="login-button")setTimeout(attempt,900)},{once:true})}
+  }
+  window.addEventListener("keydown",event=>{
+    if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==="k"){event.preventDefault();openAssistant()}
+  });
+})();
+
+</script>
+</body>
+</html>
