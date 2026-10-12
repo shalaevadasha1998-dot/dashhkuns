@@ -5,8 +5,7 @@ const TOKEN_KEY="dashhkuns_crm_token_v3";
 window.__CRM_SCRIPT_LOADED=true;
 const loginScriptStatus=document.getElementById("login-script-status");
 if(loginScriptStatus)loginScriptStatus.hidden=true;
-const loginReadyButton=document.getElementById("login-button");
-if(loginReadyButton){loginReadyButton.disabled=false;loginReadyButton.textContent="войти";}
+
 const CLOSED_LEADS=new Set(["bounce","declined"]);
 const DONE_TASKS=new Set(["done"]);
 
@@ -75,6 +74,8 @@ async function submitLogin(e){
 }
 $("#login-form").addEventListener("submit",submitLogin);
 $("#login-button").addEventListener("click",submitLogin);
+const loginReadyButton=document.getElementById("login-button");
+if(loginReadyButton){loginReadyButton.disabled=false;loginReadyButton.textContent="войти";}
 $("#logout-button").addEventListener("click",()=>{localStorage.removeItem(TOKEN_KEY);showLogin()});
 
 async function load(){
