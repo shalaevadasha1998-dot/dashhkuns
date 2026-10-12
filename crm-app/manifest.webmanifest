@@ -4,7 +4,7 @@
   "short_name": "dashhkuns crm",
   "description": "личная crm для проектов, задач, лидов и ии-оператора",
   "lang": "ru",
-  "start_url": "/crm-app/?pwa=v7",
+  "start_url": "/crm-app/index.html?source=pwa-v7",
   "scope": "/crm-app/",
   "display": "standalone",
   "orientation": "any",
@@ -28,12 +28,12 @@
     {
       "name": "задачи",
       "short_name": "задачи",
-      "url": "/crm-app/#tasks"
+      "url": "/crm-app/index.html#tasks"
     },
     {
       "name": "лиды",
       "short_name": "лиды",
-      "url": "/crm-app/#leads"
+      "url": "/crm-app/index.html#leads"
     }
   ]
 }
