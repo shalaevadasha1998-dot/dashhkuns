@@ -227,6 +227,7 @@ function renderTasks(){
   const q=normalize(state.taskSearch);
   let rows=state.tasks.filter(t=>{
     if(state.taskView==="open"&&t.status==="done")return false;
+    if(state.taskView==="home"&&(t.status==="done"||projectById(t.project_id)?.category!=="home"))return false;
     if(state.taskView==="today"&&!isTaskDue(t))return false;
     if(state.taskView==="waiting"&&t.status!=="waiting")return false;
     if(state.taskView==="backlog"&&t.status!=="backlog")return false;
