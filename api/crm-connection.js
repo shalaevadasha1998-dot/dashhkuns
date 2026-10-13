@@ -4,7 +4,7 @@
 export const maxDuration = 20;
 const BASE="https://hiczdxqlmrzozdvnlqfl.supabase.co/functions/v1/crm-api";
 const APIKEY="sb_publishable_nlajzfkH1tYEOAUZKcBvgg_5hbYJCM4";
-const ALLOWED=new Set(["login","snapshot","create_task","update_task","delete_task","create_project","update_project","create_lead","update_lead","delete_lead","update_message","queue_email","activities","add_activity","mark_alert_read","check_reminders"]);
+const ALLOWED=new Set(["login","snapshot","create_task","update_task","delete_task","create_project","update_project","cancel_project","bulk_update_tasks","changes","create_lead","update_lead","delete_lead","update_message","queue_email","activities","add_activity","mark_alert_read","check_reminders"]);
 function reply(res,status,data){
   res.setHeader("Content-Type","application/json; charset=utf-8");
   res.setHeader("Cache-Control","private, no-store, max-age=0");
