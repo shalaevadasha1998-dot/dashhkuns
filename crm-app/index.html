@@ -2714,6 +2714,7 @@ html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}
 .crm-task-card.status-cancelled{opacity:.83;background:#f0f0f0}
 .crm-task-card.status-cancelled .crm-task-title{text-decoration:line-through}
 .crm-project-card.status-cancelled{background:#f0f0f0;opacity:.88}
+#project-grid .crm-project-card[hidden]{display:none!important}
 .crm-lifecycle-history{padding:12px 15px;border:1px solid #bbb;border-radius:14px;background:#fafafa;font-size:12px;margin-top:14px;max-height:175px;overflow:auto}
 .crm-lifecycle-history strong{display:block;margin-bottom:7px}
 .crm-lifecycle-history p{margin:8px 0;line-height:1.4}
@@ -2966,7 +2967,7 @@ const fmtDate=(v)=>{if(!v)return "—";const d=new Date(String(v).length===10?v+
 const fmtDateLong=(v)=>{if(!v)return "—";const d=new Date(v);return new Intl.DateTimeFormat("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(d).replace(".","")};
 const projectById=(id)=>state.projects.find(p=>p.id===id);
 const projectName=(id)=>projectById(id)?.name||"без проекта";
-const isTaskOpen=(t)=>!DONE_TASKS.has(t.status);
+const isTaskOpen=(t)=>!DONE_TASKS.has(t.status)&&projectById(t.project_id)?.status!=="cancelled";
 const isTaskDue=(t)=>isTaskOpen(t)&&t.due_at&&t.due_at<=today();
 const isTaskOverdue=(t)=>isTaskOpen(t)&&t.due_at&&t.due_at<today();
 const isLeadDue=(l)=>l.next_action_at&&!CLOSED_LEADS.has(l.status)&&l.next_action_at<=today();
@@ -3150,8 +3151,8 @@ function renderTasks(){
   const projectFilter=$("#task-project-filter");projectFilter.value=state.taskProject;
   const q=normalize(state.taskSearch);
   let rows=state.tasks.filter(t=>{
-    if(state.taskView==="open"&&["done","cancelled"].includes(t.status))return false;
-    if(state.taskView==="home"&&(["done","cancelled"].includes(t.status)||projectById(t.project_id)?.category!=="home"))return false;
+    if(state.taskView==="open"&&!isTaskOpen(t))return false;
+    if(state.taskView==="home"&&(!isTaskOpen(t)||projectById(t.project_id)?.category!=="home"))return false;
     if(state.taskView==="today"&&!isTaskDue(t))return false;
     if(state.taskView==="waiting"&&t.status!=="waiting")return false;
     if(state.taskView==="backlog"&&t.status!=="backlog")return false;
