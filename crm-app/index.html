@@ -2701,7 +2701,24 @@ html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}
 .crm-login[hidden],.crm-app[hidden],.crm-page[hidden]{display:none!important}
 .crm-pwa-build{font-size:11px;color:#666;font-weight:600;letter-spacing:.02em;margin-top:8px}
 </style>
-<meta name="app-build" content="crm-v11-operator-20261012"><meta http-equiv="Cache-Control" content="no-store">
+<meta name="app-build" content="crm-v12-lifecycle-20261013"><meta http-equiv="Cache-Control" content="no-store">
+
+<style id="crm-v12-style">
+.crm-lifecycle-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:13px 0 18px}
+.crm-lifecycle-controls select,.crm-lifecycle-controls button,.crm-project-filters button{font:inherit;font-size:12px;font-weight:700;background:#fff;border:1px solid #151515;border-radius:12px;padding:9px 12px;color:#111}
+.crm-lifecycle-controls button,.crm-project-filters button{cursor:pointer}
+.crm-lifecycle-controls button:disabled{opacity:.45;cursor:not-allowed}
+.crm-lifecycle-controls strong{font-size:12px}
+.crm-project-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.crm-project-filters button.active{background:#ccff00}
+.crm-task-card.status-cancelled{opacity:.83;background:#f0f0f0}
+.crm-task-card.status-cancelled .crm-task-title{text-decoration:line-through}
+.crm-project-card.status-cancelled{background:#f0f0f0;opacity:.88}
+.crm-lifecycle-history{padding:12px 15px;border:1px solid #bbb;border-radius:14px;background:#fafafa;font-size:12px;margin-top:14px;max-height:175px;overflow:auto}
+.crm-lifecycle-history strong{display:block;margin-bottom:7px}
+.crm-lifecycle-history p{margin:8px 0;line-height:1.4}
+.crm-cancel-reason{grid-column:1/-1}
+</style>
 </head>
 <body class="crm-body">
   <main class="crm-login" id="login-screen">
@@ -2914,7 +2931,7 @@ const loginScriptStatus=document.getElementById("login-script-status");
 if(loginScriptStatus)loginScriptStatus.hidden=true;
 
 const CLOSED_LEADS=new Set(["bounce","declined"]);
-const DONE_TASKS=new Set(["done"]);
+const DONE_TASKS=new Set(["done","cancelled"]);
 
 const state={
   section:"today",
@@ -3133,12 +3150,13 @@ function renderTasks(){
   const projectFilter=$("#task-project-filter");projectFilter.value=state.taskProject;
   const q=normalize(state.taskSearch);
   let rows=state.tasks.filter(t=>{
-    if(state.taskView==="open"&&t.status==="done")return false;
-    if(state.taskView==="home"&&(t.status==="done"||projectById(t.project_id)?.category!=="home"))return false;
+    if(state.taskView==="open"&&["done","cancelled"].includes(t.status))return false;
+    if(state.taskView==="home"&&(["done","cancelled"].includes(t.status)||projectById(t.project_id)?.category!=="home"))return false;
     if(state.taskView==="today"&&!isTaskDue(t))return false;
     if(state.taskView==="waiting"&&t.status!=="waiting")return false;
     if(state.taskView==="backlog"&&t.status!=="backlog")return false;
     if(state.taskView==="done"&&t.status!=="done")return false;
+    if(state.taskView==="cancelled"&&t.status!=="cancelled")return false;
     if(state.taskProject!=="all"&&t.project_id!==state.taskProject)return false;
     if(q&&!normalize([t.title,t.description,t.waiting_on,projectName(t.project_id)].join(" ")).includes(q))return false;
     return true;
@@ -3985,6 +4003,216 @@ $("#global-fab").onclick=()=>state.section==="leads"?openLead():openTask();
  setTimeout(()=>scanReminders(false),8000);
  setInterval(()=>scanReminders(false),15*60*1000);
  window.addEventListener("focus",()=>scanReminders(false));
+})();
+</script>
+
+<script id="crm-v12-lifecycle">
+/* dashhkuns CRM v12: reversible cancellation, audited updates, batch statuses */
+(()=>{
+ "use strict";
+ const taskDialogEl=document.getElementById("task-dialog");
+ const projectDialogEl=document.getElementById("project-dialog");
+ const taskFormEl=document.getElementById("task-form");
+ const projectFormEl=document.getElementById("project-form");
+ const taskBoard=document.getElementById("task-board");
+ const projectGrid=document.getElementById("project-grid");
+ const taskTabs=document.getElementById("task-tabs");
+ if(!taskDialogEl||!projectDialogEl||!taskBoard||!projectGrid)return;
+ const ui={selected:new Set(),projectView:"active"};
+ const statusLabels={todo:"в планах",doing:"в работе",waiting:"ждём",backlog:"потом",paused:"на паузе",blocked:"заблокирована",review:"на проверке",done:"готово",cancelled:"отменена",active:"активен",later:"потом"};
+ function addOption(select,value,label){
+   if(![...select.options].some(o=>o.value===value))select.add(new Option(label,value));
+   else {const option=[...select.options].find(o=>o.value===value);option.textContent=label;}
+ }
+ for(const [key,value] of Object.entries(statusLabels)){
+   if(["active","later"].includes(key))continue;
+   addOption(taskFormEl.elements.status,key,value);
+ }
+ for(const [key,value] of Object.entries({active:"активен",later:"потом",paused:"на паузе",done:"завершён",cancelled:"отменён"})){
+   addOption(projectFormEl.elements.status,key,value);
+ }
+ const cancelTab=document.createElement("button");cancelTab.type="button";cancelTab.dataset.taskView="cancelled";cancelTab.textContent="отменённые";
+ taskTabs.append(cancelTab);
+ const pfilters=document.createElement("div");pfilters.className="crm-project-filters";
+ pfilters.innerHTML='<button type="button" data-lifecycle-project="active" class="active">текущие</button><button type="button" data-lifecycle-project="cancelled">отменённые</button><button type="button" data-lifecycle-project="all">все проекты</button>';
+ projectGrid.before(pfilters);
+ function filterProjects(){
+   let visible=0;
+   projectGrid.querySelectorAll("[data-project-id]").forEach(card=>{
+     const project=state.projects.find(p=>p.id===card.dataset.projectId);
+     const match=ui.projectView==="all"||(ui.projectView==="cancelled"?project?.status==="cancelled":project?.status!=="cancelled");
+     card.hidden=!match;if(match)visible++;
+   });
+   const existing=document.getElementById("crm-project-empty");if(existing)existing.remove();
+   if(!visible){const box=document.createElement("div");box.id="crm-project-empty";box.className="crm-empty";box.textContent="в этом разделе пока пусто";projectGrid.append(box);}
+ }
+ pfilters.addEventListener("click",e=>{
+   const b=e.target.closest("[data-lifecycle-project]");if(!b)return;
+   ui.projectView=b.dataset.lifecycleProject;
+   pfilters.querySelectorAll("button").forEach(btn=>btn.classList.toggle("active",btn===b));
+   filterProjects();
+ });
+ const originalRenderProjects=renderProjects;
+ renderProjects=function(){originalRenderProjects();filterProjects();};
+ const bulk=document.createElement("div");bulk.className="crm-lifecycle-controls";
+ bulk.innerHTML='<button type="button" id="crm-select-shown">выделить показанные</button><strong id="crm-bulk-counter">выбрано: 0</strong><select id="crm-bulk-status" aria-label="статус выделенных задач"><option value="cancelled">отменена</option><option value="todo">в планах</option><option value="doing">в работе</option><option value="paused">на паузе</option><option value="blocked">заблокирована</option><option value="waiting">ждём</option><option value="review">на проверке</option><option value="backlog">потом</option><option value="done">готово</option></select><button type="button" id="crm-bulk-apply" disabled>изменить статус</button><button type="button" id="crm-bulk-clear" disabled>снять выделение</button>';
+ taskBoard.before(bulk);
+ const counter=bulk.querySelector("#crm-bulk-counter");
+ const apply=bulk.querySelector("#crm-bulk-apply");
+ const clear=bulk.querySelector("#crm-bulk-clear");
+ function updateCount(){counter.textContent="выбрано: "+ui.selected.size;apply.disabled=clear.disabled=!ui.selected.size;}
+ const originalRenderTasks=renderTasks;
+ renderTasks=function(){
+   originalRenderTasks();
+   taskBoard.querySelectorAll(".crm-task-card").forEach(card=>{
+     const complete=card.querySelector("[data-task-check]");
+     if(!complete)return;
+     const id=complete.dataset.taskCheck;
+     const task=state.tasks.find(t=>t.id===id);
+     if(task?.status==="cancelled"){complete.disabled=true;complete.title="открой задачу, чтобы восстановить";}
+     const box=document.createElement("input");
+     box.type="checkbox";box.className="crm-check";box.dataset.taskSelect=id;
+     box.setAttribute("aria-label","выделить задачу: "+(task?.title||""));
+     box.checked=ui.selected.has(id);card.insertBefore(box,complete);
+   });
+   updateCount();
+ };
+ taskBoard.addEventListener("change",e=>{
+   const box=e.target.closest("[data-task-select]");if(!box)return;
+   if(box.checked)ui.selected.add(box.dataset.taskSelect);else ui.selected.delete(box.dataset.taskSelect);
+   updateCount();
+ });
+ bulk.querySelector("#crm-select-shown").onclick=()=>{
+   taskBoard.querySelectorAll("[data-task-select]").forEach(box=>ui.selected.add(box.dataset.taskSelect));
+   renderTasks();
+ };
+ clear.onclick=()=>{ui.selected.clear();renderTasks();};
+ apply.onclick=async()=>{
+   const ids=[...ui.selected];if(!ids.length)return;
+   const status=bulk.querySelector("#crm-bulk-status").value;
+   if(!confirm("изменить статус у "+ids.length+" задач на «"+(statusLabels[status]||status)+"»?"))return;
+   const reason=status==="cancelled"?(prompt("причина отмены (необязательно):","")||"отменено вручную"):"";
+   apply.disabled=true;
+   try{
+     const response=await api("bulk_update_tasks",{ids,status,reason});
+     toast("обновлено задач: "+(response.result?.updated??ids.length));
+     ui.selected.clear();await load();
+   }catch(e){toast("не удалось изменить задачи: "+String(e?.message||"ошибка"),true)}
+   finally{updateCount();}
+ };
+ function addReason(form,id){
+   const label=document.createElement("label");label.className="crm-field crm-cancel-reason";label.id=id;label.hidden=true;
+   label.innerHTML='<span>причина отмены (необязательно)</span><input type="text" name="cancel_reason" maxlength="500" placeholder="почему отменяем">';
+   form.querySelector(".crm-form-grid").append(label);
+   function sync(){label.hidden=form.elements.status.value!=="cancelled";}
+   form.elements.status.addEventListener("change",sync);
+   return {label,sync};
+ }
+ const taskReason=addReason(taskFormEl,"crm-task-reason");
+ const projectReason=addReason(projectFormEl,"crm-project-reason");
+ function historyPanel(dialog){
+   const panel=document.createElement("section");panel.className="crm-lifecycle-history";panel.hidden=true;
+   dialog.querySelector(".crm-form-grid").after(panel);
+   return panel;
+ }
+ const taskHistory=historyPanel(taskDialogEl),projectHistory=historyPanel(projectDialogEl);
+ async function history(type,id,node){
+   node.hidden=!id;if(!id)return;
+   node.textContent="загружаю историю…";
+   try{
+     const response=await api("changes",{entity_type:type,id});
+     node.innerHTML="<strong>история изменений</strong>";
+     if(!response.changes?.length){node.innerHTML+="<p>пока изменений нет</p>";return;}
+     for(const change of response.changes.slice(0,15)){
+       const a=change.before_data||{},b=change.after_data||{};
+       const line=document.createElement("p");
+       const date=new Date(change.changed_at).toLocaleString("ru-RU");
+       const from=a.status?statusLabels[a.status]||a.status:"";
+       const to=b.status?statusLabels[b.status]||b.status:"";
+       let detail=change.operation==="created"?"создано":change.operation==="deleted"?"удалено":"изменено";
+       if(from!==to)detail+=" · статус: "+from+" → "+to;
+       else if(a.due_at!==b.due_at||a.deadline!==b.deadline)detail+=" · срок";
+       const reason=b.metadata?.cancellation?.reason;
+       if(reason&&from!==to&&to.includes("отмен"))detail+=" · "+reason;
+       line.textContent=date+" · "+detail;node.append(line);
+     }
+   }catch(e){node.textContent="историю сейчас не удалось загрузить";}
+ }
+ const originalOpenTask=openTask;
+ openTask=function(id=null){
+   originalOpenTask(id);
+   const item=id?state.tasks.find(t=>t.id===id):null;
+   taskFormEl.elements.cancel_reason.value=item?.metadata?.cancellation?.reason||"";
+   taskReason.sync();
+   document.getElementById("delete-task").hidden=true;
+   taskCancel.hidden=!item||item.status==="cancelled"||item.status==="done";
+   history("task",id,taskHistory);
+ };
+ const taskCancel=document.createElement("button");taskCancel.type="button";taskCancel.className="btn ghost crm-danger";
+ taskCancel.textContent="отменить задачу";taskCancel.hidden=true;
+ taskDialogEl.querySelector(".crm-sheet-actions").prepend(taskCancel);
+ taskCancel.onclick=async()=>{
+   const id=state.editingTask;if(!id||!confirm("отменить эту задачу без удаления?"))return;
+   const reason=prompt("причина отмены (необязательно)","")||"отменено вручную";
+   try{await api("update_task",{id,patch:{status:"cancelled"},reason});taskDialogEl.close();toast("задача отменена");await load();}
+   catch(e){toast("отмена не сохранилась",true);}
+ };
+ const originalOpenProject=openProject;
+ openProject=function(id=null){
+   originalOpenProject(id);
+   const item=id?state.projects.find(p=>p.id===id):null;
+   projectFormEl.elements.cancel_reason.value=item?.metadata?.cancellation?.reason||"";
+   projectReason.sync();
+   projectCancel.hidden=!item||item.status==="cancelled"||item.status==="done";
+   history("project",id,projectHistory);
+ };
+ const projectCancel=document.createElement("button");projectCancel.type="button";projectCancel.className="btn ghost crm-danger";
+ projectCancel.textContent="отменить проект";projectCancel.hidden=true;
+ projectDialogEl.querySelector(".crm-sheet-actions").prepend(projectCancel);
+ async function cancelProject(id,reason){
+   await api("cancel_project",{id,reason,cancel_tasks:true});
+   projectDialogEl.close();toast("проект отменён; незавершённые задачи закрыты");ui.selected.clear();await load();
+ }
+ projectCancel.onclick=async()=>{
+   const id=state.editingProject;if(!id)return;
+   if(!confirm("отменить проект и все незавершённые задачи? выполненные останутся в истории."))return;
+   const reason=prompt("причина отмены (необязательно)","")||"проект отменён";
+   try{await cancelProject(id,reason)}catch(e){toast("отмена проекта не сохранилась",true)}
+ };
+ taskFormEl.addEventListener("submit",async event=>{
+   if(taskFormEl.elements.status.value!=="cancelled")return;
+   event.preventDefault();event.stopImmediatePropagation();
+   const fd=new FormData(taskFormEl),payload={};
+   for(const [k,v] of fd.entries())if(k!=="cancel_reason")payload[k]=String(v).trim()||null;
+   const reason=String(fd.get("cancel_reason")||"");
+   try{
+     if(state.editingTask)await api("update_task",{id:state.editingTask,patch:payload,reason});
+     else await api("create_task",{task:{...payload,metadata:{cancellation:{reason:reason||"создана как отменённая",at:new Date().toISOString()}}}});
+     taskDialogEl.close();toast("задача сохранена");await load();
+   }catch(e){toast("не удалось сохранить",true)}
+ },true);
+ projectFormEl.addEventListener("submit",async event=>{
+   if(projectFormEl.elements.status.value!=="cancelled")return;
+   event.preventDefault();event.stopImmediatePropagation();
+   const fd=new FormData(projectFormEl);
+   const reason=String(fd.get("cancel_reason")||"проект отменён");
+   const current=state.projects.find(p=>p.id===state.editingProject);
+   if(!current){toast("сначала создай проект, затем его можно отменить",true);return}
+   if(current.status!=="cancelled"){
+     if(!confirm("отменить проект и все незавершённые задачи?"))return;
+     try{await cancelProject(current.id,reason)}catch(e){toast("не удалось отменить проект",true)}
+   }else{
+     const patch={};
+     for(const [k,v] of fd.entries())if(k!=="cancel_reason"&&k!=="status")patch[k]=String(v).trim()||null;
+     try{await api("update_project",{id:current.id,patch});projectDialogEl.close();toast("проект сохранён");await load()}
+     catch(e){toast("не удалось сохранить изменения",true)}
+   }
+ },true);
+ // Highlight the cancelled filter correctly after the core handler runs.
+ taskTabs.addEventListener("click",e=>{
+   if(e.target.closest('[data-task-view="cancelled"]'))setTimeout(()=>renderTasks(),0);
+ });
+ renderTasks();renderProjects();
 })();
 </script>
 </body>
