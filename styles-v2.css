@@ -2539,3 +2539,18 @@ option{
   .booking-month-day,.booking-calendar-gap{height:39px}
   .booking-calendar-trigger{font-size:13px}
 }
+
+/* full-frame studio portraits on mobile: both hero images are 1024 × 1536 */
+@media (max-width:760px){
+  .hero-photo-card .tap-gallery{
+    width:100%;
+    aspect-ratio:2/3;
+    height:auto;
+    min-height:0;
+    max-height:none
+  }
+  .hero-photo-card .tap-gallery img{
+    object-fit:contain;
+    object-position:center center
+  }
+}
