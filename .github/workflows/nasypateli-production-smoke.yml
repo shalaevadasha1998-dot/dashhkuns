@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/nasypateli-production-smoke.yml'
       - 'api/nasypateli-live.js'
+      - 'api/package.json'
       - 'nasypateli-login.html'
       - 'vercel.json'
       - 'assets/nasypateli-entry.css'
@@ -12,6 +13,7 @@ on:
     branches: [main]
     paths:
       - 'api/nasypateli-live.js'
+      - 'api/package.json'
       - 'nasypateli-login.html'
       - 'vercel.json'
       - 'assets/nasypateli-entry.css'
@@ -23,43 +25,35 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: verify public login returns HTTP 200 and no protected stage
+      - name: require working login and password rejection together after deployment
         shell: bash
         run: |
           set -euo pipefail
           ok=0
-          for attempt in $(seq 1 25); do
-            code="$(curl --silent --show-error --location --max-time 15 --dump-header /tmp/nasypateli-headers --output /tmp/nasypateli-body --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live' || true)"
-            if [ "$code" = 200 ] &&
-               grep -q 'войди по паролю' /tmp/nasypateli-body &&
-               ! grep -q 'id="character"' /tmp/nasypateli-body &&
-               grep -qi 'x-robots-tag:.*noindex' /tmp/nasypateli-headers; then
-              echo "anonymous login page is HTTP 200 and stage remains protected"
+          for attempt in $(seq 1 20); do
+            entry="$(curl --silent --show-error --location --max-time 8 --dump-header /tmp/entry-headers --output /tmp/entry-body --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live' || true)"
+            post="$(curl --silent --show-error --max-time 8 --header 'Origin: https://dashhkuns.com' --header 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=invalid-ci-password' --dump-header /tmp/post-headers --output /tmp/post-body --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live/app' || true)"
+            if grep -q 'id="console"\|id="character"' /tmp/entry-body /tmp/post-body; then
+              echo 'private content was returned without authentication' >&2
+              exit 1
+            fi
+            if grep -qi '^set-cookie:.*nasypateli_live_session=[^;]' /tmp/post-headers; then
+              echo 'invalid credentials received an authenticated session' >&2
+              exit 1
+            fi
+            echo "attempt=$attempt entry=$entry invalid_password=$post"
+            if [ "$entry" = 200 ] && [ "$post" = 200 ] &&
+               grep -q 'войди по паролю' /tmp/entry-body &&
+               grep -q 'неверный пароль' /tmp/post-body &&
+               grep -qi 'x-robots-tag:.*noindex' /tmp/entry-headers &&
+               grep -qi 'cache-control:.*no-store' /tmp/post-headers; then
               ok=1
+              echo 'production entry and protected handler verified; anonymous content and invalid credentials remain rejected'
               break
             fi
-            echo "awaiting deploy: attempt=$attempt http=${code:-unavailable}"
-            sleep 8
+            sleep 7
           done
-          if [ "$ok" -ne 1 ]; then echo "protected route is not healthy" >&2; exit 1; fi
-      - name: verify wrong password shows form without revealing private stage
-        shell: bash
-        run: |
-          set -euo pipefail
-          code="$(curl --silent --show-error --max-time 15 --request POST --header 'Origin: https://dashhkuns.com' --header 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=invalid-ci-password' --output /tmp/nasypateli-wrong --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live/app')"
-          echo "wrong-password request: http=$code"
-          if grep -q 'неверный пароль' /tmp/nasypateli-wrong; then
-            echo "wrong-password marker: present"
-          else
-            echo "wrong-password marker: missing"
+          if [ "$ok" -ne 1 ]; then
+            echo 'production did not become healthy within the deployment window' >&2
+            exit 1
           fi
-          if grep -q 'вход по паролю' /tmp/nasypateli-wrong; then
-            echo "login marker: present"
-          else
-            echo "login marker: missing"
-          fi
-          echo "first response bytes: $(head -c 120 /tmp/nasypateli-wrong | tr '\\n' ' ' | tr -cd '[:print:]')"
-          test "$code" = 200
-          grep -q 'неверный пароль' /tmp/nasypateli-wrong
-          ! grep -q 'id="character"' /tmp/nasypateli-wrong
-          echo "wrong password remains rejected without a browser error page"
