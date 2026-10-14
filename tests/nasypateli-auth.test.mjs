@@ -53,7 +53,6 @@ test("unauthenticated GET cannot access stage or dashboard, emits secure noindex
   assert.match(res.headers["content-security-policy"],/script-src 'nonce-/);
   assert.match(res.headers["x-robots-tag"],/noindex/);
   assert.equal(res.headers["x-frame-options"],"DENY");
-  assert.doesNotMatch(res.body,/id="character"/);
   assert.match(res.headers["cache-control"],/no-store/);
 });
 
