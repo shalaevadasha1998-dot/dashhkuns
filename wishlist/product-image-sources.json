@@ -70,9 +70,9 @@
     "processing": "native"
   },
   "dna": {
-    "image": "https://www.genotek.ru/full-genome/Research_desktop.png",
-    "page": "https://www.genotek.ru/full-genome/",
-    "processing": "auto"
+    "image": "https://cmsasset.ancestrycdn.com/content/experience-fragments/acom/en-us/onsite/_2026/oct_fall_sale/dna-lohp/nonsubs/_jcr_content/root/responsivegrid/container_copy_copy__891895731/itemlist/item-0/container_copy_copy/image.coreimg.png/1786556409823/us-octgift-dna.png",
+    "page": "https://www.ancestry.com/dna/",
+    "processing": "complete_kit_reference"
   },
   "console": {
     "image": "https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$",
@@ -83,5 +83,10 @@
     "image": "https://air.agency/img/case/ostrov/logo.svg",
     "page": "https://air.agency/cases/ostrov",
     "processing": "public_designer_mark"
+  },
+  "acrylic": {
+    "image": "https://cdn.shopify.com/s/files/1/0787/6971/7523/files/80919.jpg?v=1762458322",
+    "page": "https://www.liquitex.com/products/basics-acrylic-set-48x22ml",
+    "processing": "complete_rectangular_package_face"
   }
 }
