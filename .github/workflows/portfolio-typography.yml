@@ -1,0 +1,55 @@
+name: portfolio typography preview
+on:
+  push:
+    branches: [design/alumni-literata-20261014]
+    paths:
+      - scripts/apply-portfolio-typography.py
+      - scripts/qa-portfolio-typography.mjs
+      - assets/portfolio-typography.css
+      - .github/workflows/portfolio-typography.yml
+permissions:
+  contents: write
+concurrency:
+  group: portfolio-typography-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  prepare-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: apply approved typography to portfolio pages
+        run: python3 scripts/apply-portfolio-typography.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: install isolated browser test dependency
+        run: |
+          mkdir -p /tmp/portfolio-qa
+          npm install --prefix /tmp/portfolio-qa playwright@1.56.1 --no-audit --no-fund
+          ln -s /tmp/portfolio-qa/node_modules node_modules
+          /tmp/portfolio-qa/node_modules/.bin/playwright install --with-deps chromium
+      - name: verify all public pages on mobile tablet and desktop
+        run: node scripts/qa-portfolio-typography.mjs
+      - name: save screenshots and machine-readable report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-typography-evidence
+          path: typography-evidence/
+          retention-days: 7
+      - name: commit reviewed-scope typography on the preview branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python3 - <<'PY'
+          import json,subprocess
+          rows=json.load(open('typography-evidence/scope.json'))
+          subprocess.run(['git','add','styles-v2.css','assets/portfolio-typography.css']+[r['file'] for r in rows],check=True)
+          PY
+          if ! git diff --cached --quiet; then
+            git commit -m 'design: apply approved Alumni Sans and Literata Italic across portfolio'
+            git push origin HEAD:design/alumni-literata-20261014
+          fi

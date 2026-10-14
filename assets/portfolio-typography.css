@@ -1,0 +1,43 @@
+/* Approved portfolio typography: Alumni Sans + Literata Italic.
+   Fonts served by Google Fonts under SIL OFL; no commercial font copies.
+   Loaded after the shared layout. Copy, palette and navigation are unchanged. */
+:root{
+  --sans:"Alumni Sans",Arial,sans-serif;
+  --serif:"Literata",Georgia,serif;
+}
+body{
+  font-family:var(--sans);
+  font-weight:500;
+  font-optical-sizing:auto;
+  font-synthesis:none;
+}
+button,input,select,textarea{font-family:var(--sans);font-optical-sizing:auto}
+h1,h2,h3{
+  font-family:var(--sans);
+  font-weight:750;
+  letter-spacing:-.014em;
+  line-height:.98;
+}
+.serif{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:.78em;
+  font-optical-sizing:auto;
+  font-synthesis:none;
+  letter-spacing:-.035em;
+  line-height:1.12;
+}
+.brand{font-family:var(--sans);font-weight:750;letter-spacing:-.012em}
+.nav a,.top-cta,.menu-btn,.btn,.mobile-menu a{font-family:var(--sans);letter-spacing:.005em}
+.nav a{font-size:17px;font-weight:600}
+.top-cta,.menu-btn{font-size:17px;font-weight:700}
+.btn{font-size:19px;font-weight:700}
+input,select,textarea{font-size:19px}
+.kicker,.case-kicker,.project-meta{font-weight:650;letter-spacing:.075em}
+.case-cover strong,.fact-value,.proof-number{letter-spacing:-.015em}
+@media(max-width:600px){
+  .nav a,.top-cta,.menu-btn{font-size:16px}
+  .btn{font-size:18px}
+  input,select,textarea{font-size:18px}
+}
