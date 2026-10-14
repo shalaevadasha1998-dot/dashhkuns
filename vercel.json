@@ -4,6 +4,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/faq.html",
+      "destination": "/faq",
+      "permanent": true
+    },
+    {
       "source": "/crm/",
       "destination": "/crm-app/index.html",
       "permanent": false
@@ -245,9 +250,22 @@
     {
       "source": "/creative-producer-moscow",
       "destination": "/creative-producer-moscow.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq.html"
     }
   ],
   "headers": [
+    {
+      "source": "/assets/portfolio-typography.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
     {
       "source": "/nasypateli-live",
       "headers": [

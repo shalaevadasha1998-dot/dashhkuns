@@ -3,8 +3,6 @@
    one deliberate gradient only: acid green -> neon pink
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&family=Sofia+Sans+Condensed:wght@400;500;600;700;800&display=swap');
-
 *,
 *::before,
 *::after{box-sizing:border-box}
@@ -22,8 +20,8 @@
   --gutter:clamp(22px,4.5vw,72px);
   --section:clamp(76px,7vw,116px);
   --gradient:linear-gradient(135deg,#24e86b 0%,#ff3fad 100%);
-  --sans:"Sofia Sans Condensed",Arial,sans-serif;
-  --serif:"Cormorant Garamond",Georgia,serif
+  --sans:"Alumni Sans",Arial,sans-serif;
+  --serif:"Literata",Georgia,serif
 }
 
 html{
@@ -42,7 +40,7 @@ body{
   background:var(--white);
   color:var(--black);
   font-family:var(--sans);
-  font-size:16px;
+  font-size:20px;
   line-height:1.45
 }
 
@@ -82,7 +80,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 .project-meta,
 .num,
 .no{
-  font-size:11px;
+  font-size:13px;
   line-height:1.2;
   font-weight:800;
   letter-spacing:.11em;
@@ -123,7 +121,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   align-items:center;
   min-width:0;
   white-space:nowrap;
-  font-size:23px;
+  font-size:28px;
   font-weight:800;
   letter-spacing:-.055em
 }
@@ -143,7 +141,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border-radius:999px;
   background:var(--acid);
   color:var(--black)!important;
-  font-size:8px!important;
+  font-size:12px!important;
   font-weight:800!important;
   letter-spacing:.08em!important;
   text-transform:uppercase;
@@ -165,7 +163,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 .nav a{
   position:relative;
   padding:7px 0;
-  font-size:12px;
+  font-size:15px;
   font-weight:700;
   opacity:.58
 }
@@ -192,7 +190,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border-radius:999px;
   background:var(--black);
   color:var(--white);
-  font-size:11px;
+  font-size:13px;
   font-weight:800;
   box-shadow:4px 4px 0 var(--pink)
 }
@@ -207,7 +205,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border:0;
   background:transparent;
   padding:8px 0;
-  font-size:12px;
+  font-size:15px;
   font-weight:800
 }
 .mobile-menu{display:none}
@@ -222,7 +220,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border-radius:999px;
   background:var(--white);
   color:var(--black);
-  font-size:13px;
+  font-size:16px;
   font-weight:800;
   letter-spacing:-.02em;
   cursor:pointer;
@@ -254,15 +252,15 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   padding:28px var(--gutter);
   background:var(--black);
   color:var(--white);
-  font-size:12px
+  font-size:15px
 }
-.site-footer a{font-size:16px;font-weight:700}
+.site-footer a{font-size:20px;font-weight:700}
 .site-footer span{opacity:.58}
 
 .mobile-swipe-note{
   display:none;
   margin:0 0 14px;
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.1em
 }
@@ -342,7 +340,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 .hero-commercial{
   margin-top:26px;
   max-width:650px;
-  font-size:15px;
+  font-size:18px;
   line-height:1.45
 }
 .hero-commercial span{
@@ -370,7 +368,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border:1px solid var(--black);
   border-radius:999px;
   background:var(--white);
-  font-size:11px
+  font-size:13px
 }
 .hero-categories span:nth-child(2n){background:var(--acid)}
 .hero .button-row{margin-top:30px}
@@ -416,11 +414,11 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border-radius:999px;
   background:var(--acid);
   color:var(--black);
-  font-size:10px;
+  font-size:12px;
   font-weight:800
 }
 .tap-count{
-  font-size:10px;
+  font-size:12px;
   font-weight:700;
   text-shadow:0 1px 8px rgba(0,0,0,.45)
 }
@@ -483,7 +481,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border-radius:999px;
   background:var(--white);
   color:var(--black);
-  font-size:10px;
+  font-size:12px;
   font-weight:800
 }
 .project-fragments span:nth-child(3n+2),
@@ -494,7 +492,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   margin-top:auto;
   padding-top:20px;
   border-top:1px solid var(--black);
-  font-size:12px;
+  font-size:15px;
   line-height:1.5
 }
 .project-role strong{font-weight:800}
@@ -509,7 +507,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   overflow:hidden
 }
 .project-cover>span{
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.1em
 }
@@ -535,7 +533,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 }
 .poster-index{
   color:var(--acid);
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.11em
 }
@@ -585,7 +583,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   gap:14px;
   padding-top:14px;
   border-top:1px solid rgba(255,255,255,.35);
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.08em
 }
@@ -635,7 +633,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 .trust-grid p{
   max-width:16ch;
   color:var(--muted-white);
-  font-size:12px
+  font-size:15px
 }
 
 /* capabilities, only deliberate gradient on the site */
@@ -665,7 +663,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   padding:20px;
   border-bottom:1px solid var(--black)
 }
-.service-card-media span{font-size:10px;font-weight:800}
+.service-card-media span{font-size:12px;font-weight:800}
 .service-card-media strong{
   font-size:clamp(32px,3.2vw,48px);
   line-height:.88;
@@ -673,7 +671,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 }
 .service-card-media em{
   max-width:18ch;
-  font-size:11px;
+  font-size:13px;
   font-style:normal
 }
 .media-01{background:var(--white)}
@@ -725,13 +723,13 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   color:var(--white)
 }
 .expertise-grid article>span{
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   opacity:.55
 }
 .expertise-grid h3{margin:auto 0 12px}
 .expertise-grid p{
-  font-size:12px;
+  font-size:15px;
   font-weight:800;
   opacity:.58
 }
@@ -762,7 +760,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   max-width:30ch;
   margin-top:24px;
   color:var(--muted-white);
-  font-size:18px
+  font-size:22px
 }
 .home-about .button-row{margin-top:28px}
 .home-about .btn.ghost{background:var(--white)}
@@ -822,7 +820,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border:1px solid var(--black);
   border-radius:var(--radius-sm);
   background:var(--acid);
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   line-height:1.25
 }
@@ -849,7 +847,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border:1px solid var(--black);
   border-radius:999px;
   background:var(--white);
-  font-size:11px;
+  font-size:13px;
   font-weight:700
 }
 .services-compact{
@@ -936,7 +934,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   margin-top:auto;
   padding-top:15px;
   border-top:1px solid var(--black);
-  font-size:10px;
+  font-size:12px;
   line-height:1.5
 }
 .project-compact-poster{
@@ -1009,12 +1007,12 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 .career-grid article:nth-child(3){background:var(--black);color:var(--white)}
 .career-grid article:nth-child(4){background:var(--acid)}
 .career-grid article>span{
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.1em
 }
 .career-grid h3{margin:auto 0 12px}
-.career-grid p{font-size:12px;font-weight:700}
+.career-grid p{font-size:15px;font-weight:700}
 .about-values,
 .compact-values{
   padding:var(--section) var(--gutter);
@@ -1064,13 +1062,13 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 }
 .contact-choice-pink{background:var(--pink)}
 .contact-choice-acid{background:var(--acid)}
-.contact-choice>span{font-size:10px;font-weight:800}
+.contact-choice>span{font-size:12px;font-weight:800}
 .contact-choice strong{
   font-size:clamp(27px,2.5vw,38px);
   line-height:.95;
   letter-spacing:-.05em
 }
-.contact-choice small{font-size:10px;font-weight:700}
+.contact-choice small{font-size:12px;font-weight:700}
 .contact-budget{
   display:grid;
   gap:6px;
@@ -1078,8 +1076,8 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border-top:1px solid var(--black)
 }
 .contact-budget span,
-.contact-budget small{font-size:10px}
-.contact-budget strong{font-size:18px}
+.contact-budget small{font-size:12px}
+.contact-budget strong{font-size:22px}
 .contact-action-panel{
   grid-column:2;
   overflow:hidden;
@@ -1098,7 +1096,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 }
 .project-form h2{max-width:10ch}
 .field{display:grid;gap:8px}
-.field label{font-size:10px;font-weight:800;letter-spacing:.08em}
+.field label{font-size:12px;font-weight:800;letter-spacing:.08em}
 .field input,
 .field textarea{
   width:100%;
@@ -1124,13 +1122,13 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   gap:18px;
   margin-top:8px
 }
-.form-note{max-width:26ch;font-size:10px;color:var(--muted)}
+.form-note{max-width:26ch;font-size:12px;color:var(--muted)}
 .form-error{
   padding:12px 14px;
   border:1px solid var(--black);
   border-radius:12px;
   background:var(--pink);
-  font-size:12px
+  font-size:15px
 }
 .hp-field{
   position:absolute!important;
@@ -1164,7 +1162,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   border:1px solid var(--black);
   border-radius:999px;
   background:var(--white);
-  font-size:11px;
+  font-size:13px;
   font-weight:700
 }
 .manifesto{
@@ -1178,8 +1176,8 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   padding:22px 0;
   border-bottom:1px solid var(--black)
 }
-.manifesto-row>span{font-size:10px;font-weight:800}
-.manifesto-row p{max-width:52ch;font-size:18px}
+.manifesto-row>span{font-size:12px;font-weight:800}
+.manifesto-row p{max-width:52ch;font-size:22px}
 .proof-band{
   display:grid;
   grid-template-columns:.7fr 1.3fr;
@@ -1194,7 +1192,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 .proof-copy p{
   max-width:52ch;
   color:var(--muted-white);
-  font-size:18px
+  font-size:22px
 }
 .proof-copy .button-row{margin-top:28px}
 
@@ -1221,7 +1219,7 @@ h3{font-size:clamp(30px,3.2vw,50px)}
   margin-top:auto;
   padding-top:20px;
   border-top:1px solid var(--black);
-  font-size:11px
+  font-size:13px
 }
 .case-cover{
   min-height:420px;
@@ -1304,14 +1302,14 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     gap:12px;
     padding:0 18px
   }
-  .brand{font-size:20px}
+  .brand{font-size:24px}
   .brand-state{
     min-height:20px;
     margin-left:7px;
     padding:0 6px;
-    font-size:7px!important
+    font-size:12px!important
   }
-  .menu-btn{font-size:11px}
+  .menu-btn{font-size:13px}
   .mobile-menu{top:64px}
 
   h1{font-size:clamp(54px,14vw,70px)}
@@ -1351,10 +1349,10 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     font-size:clamp(52px,13.8vw,64px);
     line-height:.9
   }
-  .hero-commercial{font-size:14px}
-  .hero-lead{font-size:17px}
+  .hero-commercial{font-size:17px}
+  .hero-lead{font-size:21px}
   .hero-categories{gap:7px}
-  .hero-categories span{padding:7px 10px;font-size:10px}
+  .hero-categories span{padding:7px 10px;font-size:12px}
   .hero-photo-card .tap-gallery{
     height:50svh;
     min-height:390px;
@@ -1422,7 +1420,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     font-size:28px;
     white-space:normal
   }
-  .poster-route{gap:12px;font-size:8px}
+  .poster-route{gap:12px;font-size:12px}
 
   .trust-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1433,7 +1431,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     padding:18px
   }
   .trust-grid strong{font-size:46px}
-  .trust-grid p{font-size:11px}
+  .trust-grid p{font-size:13px}
   .home-proof .section-title h2{max-width:100%;font-size:50px}
 
   .service-card{
@@ -1469,7 +1467,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   }
   .home-about .about-visual{height:330px}
   .home-about .about-copy h2{max-width:100%}
-  .home-about .about-copy p{font-size:16px}
+  .home-about .about-copy p{font-size:20px}
 
   .home-final-cta,
   .cta-band{padding:68px var(--gutter)}
@@ -1483,7 +1481,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     padding:58px var(--gutter) 52px
   }
   .page-hero h1{max-width:100%}
-  .page-hero>p{max-width:28ch;font-size:16px}
+  .page-hero>p{max-width:28ch;font-size:20px}
   .stamp{
     position:static;
     width:max-content;
@@ -1497,7 +1495,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     gap:22px;
     padding:54px var(--gutter)
   }
-  .commercial-prices span{font-size:10px}
+  .commercial-prices span{font-size:12px}
   .service-compact{
     flex:0 0 84%;
     width:84%;
@@ -1562,7 +1560,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     grid-template-columns:42px 1fr;
     gap:14px
   }
-  .manifesto-row p{font-size:16px}
+  .manifesto-row p{font-size:20px}
   .proof-band{
     grid-template-columns:1fr;
     gap:26px
@@ -1595,7 +1593,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 /* v2 completion: long-form and 404 */
 .people-card-kicker{
   margin:0;
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.11em
 }
@@ -1604,14 +1602,14 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   max-width:56ch;
   margin-top:18px;
   color:rgba(8,8,8,.7);
-  font-size:17px;
+  font-size:21px;
   line-height:1.6
 }
 .manifesto{margin-top:30px}
 .manifesto-row strong{
   display:block;
   max-width:46ch;
-  font-size:17px;
+  font-size:21px;
   line-height:1.35;
   letter-spacing:-.025em
 }
@@ -1647,11 +1645,11 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 
 @media(max-width:760px){
   .about-text>p:not(.kicker):not(.mega){
-    font-size:16px;
+    font-size:20px;
     line-height:1.55
   }
   .manifesto{margin-top:24px}
-  .manifesto-row strong{font-size:15px}
+  .manifesto-row strong{font-size:18px}
   .career:not(.career-compact) .career-grid{
     display:flex!important
   }
@@ -1725,7 +1723,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   }
   .compact-page-hero>p{
     max-width:30ch!important;
-    font-size:15px!important;
+    font-size:18px!important;
     line-height:1.42!important
   }
   .projects-compact .section-title,
@@ -1771,7 +1769,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   min-height:48px;
   padding-left:20px;
   padding-right:20px;
-  font-size:12px;
+  font-size:15px;
   background:#fff;
   box-shadow:none
 }
@@ -1783,7 +1781,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   min-height:27px;
   padding:5px 9px;
   background:#fff!important;
-  font-size:9px;
+  font-size:12px;
   font-weight:650;
   opacity:.82
 }
@@ -1820,7 +1818,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     width:92%;
     min-height:46px;
     justify-self:center;
-    font-size:12px
+    font-size:15px
   }
   .hero-photo-card .tap-gallery{
     height:48svh;
@@ -1834,13 +1832,13 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     margin-left:7px!important;
     padding:0 6px!important;
     line-height:18px!important;
-    font-size:7px!important
+    font-size:12px!important
   }
 
   .hero-categories span{
     min-height:25px;
     padding:4px 8px;
-    font-size:9px
+    font-size:12px
   }
 
   .project-row{
@@ -1886,7 +1884,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 @media(max-width:375px){
   .hero-first-line{font-size:28px}
   .hero-second-line{font-size:49px}
-  .hero-commercial{font-size:13px}
+  .hero-commercial{font-size:16px}
   .project-copy h3{font-size:31px}
 }
 
@@ -1919,7 +1917,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 
   .home-selected-work .project-meta{
     min-height:34px!important;
-    font-size:10px!important;
+    font-size:12px!important;
     line-height:1.35!important
   }
 
@@ -1940,7 +1938,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   .home-selected-work .project-fragments span{
     min-height:28px!important;
     padding:5px 9px!important;
-    font-size:10px!important;
+    font-size:12px!important;
     line-height:1!important
   }
 
@@ -1951,7 +1949,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     padding-top:16px!important;
     display:block!important;
     align-items:initial!important;
-    font-size:11px!important;
+    font-size:13px!important;
     line-height:1.45!important;
     overflow:visible!important
   }
@@ -2005,7 +2003,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   justify-content:center;
   padding:0 7px;
   border-radius:999px;
-  font-size:9px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.06em;
   line-height:1
@@ -2044,7 +2042,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     min-width:27px;
     height:24px;
     padding:0 5px;
-    font-size:8px
+    font-size:12px
   }
 }
 
@@ -2062,7 +2060,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   background:var(--white);
   color:var(--black);
   white-space:nowrap;
-  font-size:9px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.06em;
   line-height:1;
@@ -2107,7 +2105,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     min-height:30px;
     padding:2px 6px;
     gap:3px;
-    font-size:8px
+    font-size:12px
   }
   .lang-toggle span{
     min-width:21px;
@@ -2153,7 +2151,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 .authority-metric p{
   max-width:26ch;
   color:rgba(255,255,255,.7);
-  font-size:12px;
+  font-size:15px;
   line-height:1.5
 }
 
@@ -2185,14 +2183,14 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 }
 .business-case-grid article:last-child{border-right:0}
 .business-case-grid article>span{
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.1em
 }
 .business-case-grid article>p{
   margin-top:auto;
   max-width:34ch;
-  font-size:16px;
+  font-size:20px;
   line-height:1.5
 }
 .business-case-result{
@@ -2223,7 +2221,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 .position-copy>p:last-child{
   max-width:62ch;
   margin-top:26px;
-  font-size:17px;
+  font-size:21px;
   line-height:1.6
 }
 .active-projects{
@@ -2236,7 +2234,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
   background:var(--acid)
 }
 .active-projects span{
-  font-size:10px;
+  font-size:12px;
   font-weight:800;
   letter-spacing:.12em
 }
@@ -2247,7 +2245,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 }
 .active-projects p{
   max-width:14ch;
-  font-size:18px;
+  font-size:22px;
   font-weight:800
 }
 
@@ -2264,7 +2262,7 @@ body>.button-row{margin:30px var(--gutter) 20vh}
 .principle-band>p:last-child{
   max-width:60ch;
   margin-top:24px;
-  font-size:17px;
+  font-size:21px;
   line-height:1.6
 }
 
@@ -2314,18 +2312,18 @@ body>.button-row{margin:30px var(--gutter) 20vh}
     min-height:235px;
     padding:22px
   }
-  .business-case-grid article>p{font-size:15px}
+  .business-case-grid article>p{font-size:18px}
   .business-case-result strong{font-size:82px}
   .position-copy{padding:68px var(--gutter)}
   .position-copy h2{max-width:100%}
-  .position-copy>p:last-child{font-size:15px}
+  .position-copy>p:last-child{font-size:18px}
   .active-projects{
     min-height:230px;
     padding:24px var(--gutter)
   }
   .active-projects strong{font-size:120px}
   .principle-band h2{max-width:100%}
-  .principle-band>p:last-child{font-size:15px}
+  .principle-band>p:last-child{font-size:18px}
 }
 
 
@@ -2354,22 +2352,22 @@ option{
 .booking-panel{display:flex;flex-direction:column;gap:20px}
 .booking-calendar-intro{padding:30px 30px 0}
 .booking-calendar-intro h2{font-size:clamp(36px,3.7vw,57px);line-height:1.04;margin:16px 0}
-.booking-timezone{font-size:13px;line-height:1.5;color:rgba(0,0,0,.7);max-width:52ch}
+.booking-timezone{font-size:16px;line-height:1.5;color:rgba(0,0,0,.7);max-width:52ch}
 .booking-calendar{padding:0 30px}
-.booking-loading,.booking-empty,.booking-fetch-error{font-size:14px;line-height:1.55;padding:22px 0}
-.booking-section-label{font-size:11px;font-weight:800;letter-spacing:.07em;margin:16px 0 10px}
+.booking-loading,.booking-empty,.booking-fetch-error{font-size:17px;line-height:1.55;padding:22px 0}
+.booking-section-label{font-size:13px;font-weight:800;letter-spacing:.07em;margin:16px 0 10px}
 .booking-days{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;padding:4px 2px 12px}
 .booking-day,.booking-slot{appearance:none;cursor:pointer;border:1px solid var(--black);background:var(--white);color:var(--black);font:inherit;font-weight:800;text-transform:lowercase;transition:background .16s ease,border-color .16s ease}
-.booking-day{min-width:122px;min-height:50px;padding:10px 12px;border-radius:12px;scroll-snap-align:start;font-size:12px;white-space:nowrap}
+.booking-day{min-width:122px;min-height:50px;padding:10px 12px;border-radius:12px;scroll-snap-align:start;font-size:15px;white-space:nowrap}
 .booking-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.booking-slot{min-height:48px;border-radius:10px;font-size:15px}
+.booking-slot{min-height:48px;border-radius:10px;font-size:18px}
 .booking-day:hover,.booking-slot:hover{background:var(--acid)}
 .booking-day.active,.booking-slot.active{background:var(--acid);border-width:2px}
 .booking-day:focus-visible,.booking-slot:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
 .booking-form{padding-top:20px!important;border-top:1px solid rgba(0,0,0,.15)}
-.booking-picked{display:flex;flex-wrap:wrap;gap:8px;padding:13px 16px;background:var(--acid);border:1px solid var(--black);border-radius:10px;margin-bottom:20px;font-size:13px}
+.booking-picked{display:flex;flex-wrap:wrap;gap:8px;padding:13px 16px;background:var(--acid);border:1px solid var(--black);border-radius:10px;margin-bottom:20px;font-size:16px}
 .booking-picked strong{font-weight:800}
-.booking-fallback{padding:0 30px 28px;font-size:13px;line-height:1.6}
+.booking-fallback{padding:0 30px 28px;font-size:16px;line-height:1.6}
 .booking-fallback a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
 .booking-fallback a:hover{color:#b81766}
 .booking-fetch-error .booking-retry{margin-top:12px;min-height:44px}
@@ -2408,14 +2406,14 @@ option{
   padding:12px 16px;
   color:var(--black);
   font:inherit;
-  font-size:15px;
+  font-size:18px;
   font-weight:800;
   line-height:1.35;
   cursor:pointer;
   text-transform:lowercase
 }
 .booking-calendar-trigger-icon{font-size:25px;line-height:1;color:var(--black)}
-.booking-calendar-trigger-arrow{font-size:18px;margin-left:auto}
+.booking-calendar-trigger-arrow{font-size:22px;margin-left:auto}
 .booking-calendar-trigger:hover{background:var(--acid)}
 .booking-calendar-trigger:focus-visible,
 .booking-month-arrow:focus-visible,
@@ -2439,7 +2437,7 @@ option{
   margin-bottom:16px
 }
 .booking-month-name{
-  font-size:17px;
+  font-size:21px;
   font-weight:800;
   text-transform:lowercase;
   letter-spacing:-.02em;
@@ -2472,7 +2470,7 @@ option{
 .booking-weekdays span{
   text-align:center;
   color:rgba(0,0,0,.55);
-  font-size:11px;
+  font-size:13px;
   font-weight:800
 }
 .booking-month-day,.booking-calendar-gap{
@@ -2489,7 +2487,7 @@ option{
   background:transparent;
   color:var(--black);
   font:inherit;
-  font-size:14px;
+  font-size:17px;
   font-weight:750;
   cursor:pointer
 }
@@ -2522,7 +2520,7 @@ option{
   display:flex;
   align-items:center;
   gap:8px;
-  font-size:11px;
+  font-size:13px;
   line-height:1.5;
   margin:14px 0 0;
   color:rgba(0,0,0,.65)
@@ -2539,7 +2537,7 @@ option{
 @media(max-width:360px){
   .booking-month-popover{padding:10px}
   .booking-month-day,.booking-calendar-gap{height:39px}
-  .booking-calendar-trigger{font-size:13px}
+  .booking-calendar-trigger{font-size:16px}
 }
 
 /* full-frame studio portraits on mobile: both hero images are 1024 × 1536 */
@@ -2556,3 +2554,5 @@ option{
     object-position:center center
   }
 }
+
+/* alumni-small-text-adjustment: 2026-10-14 */

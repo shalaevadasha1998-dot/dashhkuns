@@ -1,0 +1,66 @@
+/* Approved portfolio typography: Alumni Sans + Literata Italic.
+   Fonts served by Google Fonts under SIL OFL; no commercial font copies.
+   Display type is reserved for headings. Small UI copy uses a neutral local sans.
+   Loaded after the shared layout. Copy, palette and navigation are unchanged. */
+:root{
+  --sans:"Alumni Sans",Arial,sans-serif;
+  --serif:"Literata",Georgia,serif;
+  --text:Arial,Helvetica,sans-serif;
+}
+body{
+  font-family:var(--text);
+  font-size:16px;
+  font-weight:400;
+  font-optical-sizing:auto;
+  font-synthesis:none;
+}
+button,input,select,textarea{font-family:var(--text);font-optical-sizing:auto}
+h1,h2,h3{
+  font-family:var(--sans);
+  font-weight:750;
+  letter-spacing:-.014em;
+  line-height:.98;
+  max-width:100%!important;
+  min-width:0;
+}
+/* Previous ch-based limits were tuned for a different font's zero glyph. */
+.hero h1{width:100%}
+.hero-first-line{letter-spacing:-.02em;text-wrap:balance}
+.hero-second-line{letter-spacing:-.014em}
+.serif{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:.78em;
+  font-optical-sizing:auto;
+  font-synthesis:none;
+  letter-spacing:-.035em;
+  line-height:1.12;
+}
+.brand{font-family:var(--sans);font-weight:750;letter-spacing:-.012em}
+.brand-state{font-family:var(--text)}
+.nav a,.top-cta,.menu-btn,.btn,.mobile-menu a{font-family:var(--text);letter-spacing:0}
+.nav a{font-size:13px;font-weight:600}
+.top-cta,.menu-btn{font-size:13px;font-weight:700}
+.btn{font-size:15px;font-weight:700}
+input,select,textarea{font-size:16px}
+.kicker,.case-kicker,.project-meta{font-size:11px;font-weight:700;letter-spacing:.06em}
+.hero-commercial{font-size:16px;line-height:1.5}
+.hero-lead{font-size:18px;line-height:1.4;font-weight:600;letter-spacing:-.015em}
+.hero-categories span{font-size:11px}
+.case-cover strong,.project-cover>strong,.case-punch strong,.trust-grid strong,
+.portfolio-main,.service-card-media>strong,.mega,.fact-value,.proof-number{
+  font-family:var(--sans);letter-spacing:-.015em;
+}
+.career-grid h3{font-size:clamp(28px,2.3vw,40px);line-height:1.04}
+@media(max-width:1100px) and (min-width:761px){
+  .page-hero h1{font-size:54px}
+}
+@media(max-width:600px){
+  .top-cta,.menu-btn{font-size:12px}
+  .btn{font-size:14px}
+  input,select,textarea{font-size:16px}
+  .hero-commercial{font-size:15px}
+  .hero-lead{font-size:16px}
+  .hero-categories span{font-size:10px}
+}
