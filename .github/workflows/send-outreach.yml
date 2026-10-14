@@ -20,7 +20,7 @@ jobs:
         id: batches
         shell: bash
         run: |
-          files="$(git diff --name-only "$GITHUB_EVENT_BEFORE" "$GITHUB_SHA" -- 'outreach/send/*.json' | tr '\n' ' ')"
+          files="$(git diff --name-only HEAD^ HEAD -- 'outreach/send/*.json' | tr '\n' ' ')"
           if [ -z "$files" ]; then
             echo "no changed batch files"
             exit 1
