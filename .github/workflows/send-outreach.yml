@@ -1,0 +1,37 @@
+name: send targeted outreach from create@dashhkuns.com
+
+on:
+  push:
+    paths:
+      - "outreach/send/*.json"
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: collect changed outreach batches
+        id: batches
+        shell: bash
+        run: |
+          files="$(git diff --name-only "$GITHUB_EVENT_BEFORE" "$GITHUB_SHA" -- 'outreach/send/*.json' | tr '\n' ' ')"
+          if [ -z "$files" ]; then
+            echo "no changed batch files"
+            exit 1
+          fi
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+
+      - name: send
+        env:
+          TIMEWEB_SMTP_PASSWORD: ${{ secrets.TIMEWEB_SMTP_PASSWORD }}
+          TIMEWEB_SMTP_USER: create@dashhkuns.com
+          TIMEWEB_SMTP_HOST: smtp.timeweb.ru
+          TIMEWEB_SMTP_PORT: "465"
+          OUTREACH_FROM_NAME: "дарья шалаева | dashhkuns"
+        run: python3 scripts/send_timeweb_outreach.py ${{ steps.batches.outputs.files }}
