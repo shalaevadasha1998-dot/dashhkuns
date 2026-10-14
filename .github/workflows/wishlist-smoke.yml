@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['wishlist/**', 'scripts/wishlist-browser-smoke.py', '.github/workflows/wishlist-smoke.yml']
+    paths: ['wishlist/**','scripts/wishlist*','.github/workflows/wishlist-smoke.yml']
 permissions:
   contents: read
 concurrency:
@@ -12,7 +12,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 14
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,16 +24,23 @@ jobs:
         with:
           node-version: '22'
       - name: javascript syntax
-        run: node --check wishlist/app.js
+        run: node --check wishlist/app.js && node --check wishlist/reservations.js
       - name: isolated browser tools
         run: |
-          python -m pip install --disable-pip-version-check playwright==1.57.0
+          python -m pip install --disable-pip-version-check playwright==1.57.0 pillow
           python -m playwright install --with-deps chromium
-      - name: public page and regressions
+      - name: verify deployed release, transparent png and booking form
+        run: python scripts/wishlist-live-release.py
+      - name: existing search and shortlist regressions
         run: python scripts/wishlist-browser-smoke.py
+      - name: actual reservation race, private capability and cancellation
+        run: python scripts/wishlist-reservation-smoke.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: wishlist-evidence
-          path: ${{ runner.temp }}/wishlist-evidence
-          retention-days: 3
+          path: |
+            ${{ runner.temp }}/wishlist-live
+            ${{ runner.temp }}/wishlist-evidence
+            ${{ runner.temp }}/wishlist-refresh
+          retention-days: 5
