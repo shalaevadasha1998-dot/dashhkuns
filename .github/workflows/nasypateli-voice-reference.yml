@@ -1,0 +1,48 @@
+name: nasypateli own voice preparation
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'api/nasypateli-live.js'
+      - 'lib/nasypateli-voice-reference.mjs'
+      - 'tests/nasypateli-voice-reference.test.mjs'
+      - 'scripts/nasypateli-voice-check.mjs'
+      - '.github/workflows/nasypateli-voice-reference.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/nasypateli-live.js'
+      - 'lib/nasypateli-voice-reference.mjs'
+      - 'tests/nasypateli-voice-reference.test.mjs'
+      - 'scripts/nasypateli-voice-check.mjs'
+      - '.github/workflows/nasypateli-voice-reference.yml'
+permissions:
+  contents: read
+jobs:
+  voice-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: authentication, reference lifecycle and isolation
+        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs tests/nasypateli-studio.test.mjs tests/nasypateli-voice-reference.test.mjs
+      - name: prepare browser verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/voice-tools" --no-audit --no-fund playwright
+          "$RUNNER_TEMP/voice-tools/node_modules/.bin/playwright" install --with-deps chromium webkit > "$RUNNER_TEMP/voice-install.log" 2>&1 || { tail -30 "$RUNNER_TEMP/voice-install.log"; exit 1; }
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/voice.key" -out "$RUNNER_TEMP/voice.crt" 2>/dev/null
+      - name: synthetic audio upload and fake-device browser capture
+        run: node scripts/nasypateli-voice-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nasypateli-own-voice-proof
+          path: ${{ runner.temp }}/nasypateli-voice-proof
+          retention-days: 3
