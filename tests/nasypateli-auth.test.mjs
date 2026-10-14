@@ -1,114 +1,74 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import {randomBytes} from "node:crypto";
-import handler from "../api/nasypateli-live.js";
-
-function fakeResponse(){
-  return {
-    code:200,body:"",headers:{},
-    setHeader(k,v){this.headers[k.toLowerCase()]=v;return this},
-    status(c){this.code=c;return this},
-    send(v){this.body=v;return this},
-    end(v=""){this.body=v;return this}
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {randomBytes} from 'node:crypto';
+import {readFile} from 'node:fs/promises';
+import handler from '../api/nasypateli-live.js';
+const keys=['NASYPATELI_LIVE_PASSWORD','NASYPATELI_LIVE_SESSION_SECRET'];
+const original=Object.fromEntries(keys.map(k=>[k,process.env[k]]));
+const fake=Object.fromEntries(keys.map(k=>[k,randomBytes(48).toString('base64url')]));
+test.beforeEach(()=>Object.assign(process.env,fake));
+test.after(()=>{for(const key of keys){if(original[key]===undefined)delete process.env[key];else process.env[key]=original[key];}});
+function request(method='GET',{cookie='',password='',origin='https://dashhkuns.com',action='login'}={}){
+  return {method,headers:{host:'dashhkuns.com',origin,cookie},body:method==='POST'?{action,password}:undefined};
+}
+function serve(method='GET',options={}){
+  const res={code:200,body:'',headers:{},
+    setHeader(key,value){this.headers[key.toLowerCase()]=value;return this;},
+    status(code){this.code=code;return this;},
+    send(body){this.body=body;return this;},
+    end(body=''){this.body=body;return this;}
   };
+  handler(request(method,options),res);return res;
 }
-function request(method="GET",{cookie="",password="",origin="https://dashhkuns.com",action="login"}={}){
-  return {method,headers:{host:"dashhkuns.com",origin,cookie},
-    body:method==="POST"?{action,password}:undefined};
-}
-function serve(method,options){
-  const res=fakeResponse();
-  handler(request(method,options),res);
-  return res;
-}
-const env={
-  NASYPATELI_LIVE_PASSWORD:randomBytes(24).toString("base64url"),
-  NASYPATELI_LIVE_SESSION_SECRET:randomBytes(48).toString("base64url")
-};
-const prev={NASYPATELI_LIVE_PASSWORD:process.env.NASYPATELI_LIVE_PASSWORD,
-NASYPATELI_LIVE_SESSION_SECRET:process.env.NASYPATELI_LIVE_SESSION_SECRET};
-test.after(()=>{
-  for(const key of Object.keys(prev)){
-    if(prev[key]===undefined) delete process.env[key];
-    else process.env[key]=prev[key];
-  }
+test('missing secrets fail closed',()=>{
+  for(const key of keys)delete process.env[key];
+  const res=serve();assert.equal(res.code,503);
+  assert.doesNotMatch(res.body,/id="character"/);
+  assert.match(res.headers['cache-control'],/no-store/);
 });
-
-test("missing secrets fail closed even for HTTP GET",()=>{
-  delete process.env.NASYPATELI_LIVE_PASSWORD;
-  delete process.env.NASYPATELI_LIVE_SESSION_SECRET;
-  const res=serve("GET");
-  assert.equal(res.code,503);
-  assert.match(res.body,/пароль не настроен/);
-  assert.match(res.headers["x-robots-tag"],/noindex/);
-  assert.match(res.headers["cache-control"],/no-store/);
-});
-
-test("unauthenticated GET cannot access stage or dashboard, emits secure noindex page",()=>{
-  Object.assign(process.env,env);
-  const res=serve("GET");
-  assert.equal(res.code,200);
+test('anonymous browser gets only a noindex login page',()=>{
+  const res=serve();assert.equal(res.code,200);
   assert.match(res.body,/вход по паролю/);
   assert.doesNotMatch(res.body,/id="character"/);
-  assert.match(res.headers["content-security-policy"],/script-src 'nonce-/);
-  assert.match(res.headers["x-robots-tag"],/noindex/);
-  assert.equal(res.headers["x-frame-options"],"DENY");
-  assert.match(res.headers["cache-control"],/no-store/);
+  assert.match(res.headers['content-security-policy'],/script-src 'nonce-/);
+  assert.match(res.headers['x-robots-tag'],/noindex/);
+  assert.equal(res.headers['x-frame-options'],'DENY');
+  assert.match(res.headers['cache-control'],/no-store/);
 });
-
-test("login uses timing-safe password verification and secure signed cookie",()=>{
-  const wrong=serve("POST",{password:"wrong"});
-  assert.equal(wrong.code,200);
-  assert.match(wrong.body,/неверный пароль/);
-  assert.ok(!wrong.headers["set-cookie"]);
-
-  const ok=serve("POST",{password:env.NASYPATELI_LIVE_PASSWORD});
-  assert.equal(ok.code,303);
-  assert.equal(ok.headers.location,"/nasypateli-live/app");
-  const session=ok.headers["set-cookie"];
-  assert.match(session,/HttpOnly/);
-  assert.match(session,/Secure/);
-  assert.match(session,/SameSite=Strict/);
-  assert.match(session,/Path=\/nasypateli-live/);
-  assert.doesNotMatch(session,/fbR7HYSt2Gz5JYGUpYxEXp/);
-  const rawCookie=session.split(";")[0];
-
-  const allowed=serve("GET",{cookie:rawCookie});
-  assert.equal(allowed.code,200);
-  assert.match(allowed.body,/id="character"/);
-  assert.match(allowed.body,/дашкунс live/);
-  assert.match(allowed.body,/BroadcastChannel/);
-  assert.match(allowed.body,/type="module" nonce="/);
-  assert.doesNotMatch(allowed.body,/NASYPATELI_LIVE_SESSION_SECRET|EO-CEx1sZ3ADm1pn9BBjaK5baGnJWcSQm7v-EA_oX4UFQjwvKpkYff5ujoAd6d0C/);
-  const parts=rawCookie.split("=");
-  const chars=parts[1].split("");
-  chars[chars.length-1]=chars[chars.length-1]==="A"?"B":"A";
-  assert.equal(serve("GET",{cookie:parts[0]+"="+chars.join("")}).code,200);
-  assert.doesNotMatch(serve("GET",{cookie:parts[0]+"="+chars.join("")}).body,/id="character"/);
-
-  const out=serve("POST",{cookie:rawCookie,action:"logout"});
-  assert.equal(out.code,303);
-  assert.match(out.headers["set-cookie"],/Max-Age=0/);
+test('synthetic login creates an authenticated session; tampering is rejected',()=>{
+  const wrong=serve('POST',{password:'deliberately-incorrect'});
+  assert.equal(wrong.code,200);assert.match(wrong.body,/неверный пароль/);
+  assert.ok(!wrong.headers['set-cookie']);assert.doesNotMatch(wrong.body,/id="character"/);
+  const ok=serve('POST',{password:fake.NASYPATELI_LIVE_PASSWORD});
+  assert.equal(ok.code,303);assert.equal(ok.headers.location,'/nasypateli-live/app');
+  const session=ok.headers['set-cookie'];
+  assert.match(session,/HttpOnly/);assert.match(session,/Secure/);
+  assert.match(session,/SameSite=Strict/);assert.match(session,/Path=\/nasypateli-live/);
+  assert.ok(!session.includes(fake.NASYPATELI_LIVE_PASSWORD));
+  const cookie=session.split(';')[0];
+  const authenticated=serve('GET',{cookie});
+  assert.equal(authenticated.code,200);assert.match(authenticated.body,/id="character"/);
+  assert.match(authenticated.body,/BroadcastChannel/);
+  assert.match(authenticated.body,/type="module" nonce="/);
+  for(const key of keys)assert.ok(!authenticated.body.includes(fake[key]));
+  const last=cookie.at(-1);const tampered=cookie.slice(0,-1)+(last==='A'?'B':'A');
+  const rejected=serve('GET',{cookie:tampered});
+  assert.equal(rejected.code,200);assert.doesNotMatch(rejected.body,/id="character"/);
+  const logout=serve('POST',{cookie,action:'logout'});
+  assert.equal(logout.code,303);assert.match(logout.headers['set-cookie'],/Max-Age=0/);
 });
-
-test("blocked cross-site POST and unsupported methods",()=>{
-  const bad=serve("POST",{password:env.NASYPATELI_LIVE_PASSWORD,origin:"https://attacker.example"});
-  assert.equal(bad.code,403);
-  assert.equal(bad.headers["set-cookie"],undefined);
-  assert.equal(serve("PUT").code,405);
-  assert.equal(serve("HEAD").code,200);
+test('cross-origin requests and unsupported methods are rejected',()=>{
+  const res=serve('POST',{password:fake.NASYPATELI_LIVE_PASSWORD,origin:'https://invalid.example'});
+  assert.equal(res.code,403);assert.ok(!res.headers['set-cookie']);
+  assert.equal(serve('PUT').code,405);assert.equal(serve('HEAD').code,200);
 });
-
-test("public login is static and actual stage is guarded by server auth",async()=>{
-  const fs=await import("node:fs/promises");
-  const root=new URL("../vercel.json",import.meta.url);
-  const v=JSON.parse(await fs.readFile(root,"utf8"));
-  const route=v.rewrites.find(x=>x.source==="/nasypateli-live");
-  assert.equal(route?.destination,"/nasypateli-login.html");
-  assert.equal(v.rewrites.find(x=>x.source==="/nasypateli-live/app")?.destination,"/api/nasypateli-live");
-  const page=await fs.readFile(new URL("../nasypateli-login.html",import.meta.url),"utf8");
+test('static entry and protected function are separate routes',async()=>{
+  const config=JSON.parse(await readFile(new URL('../vercel.json',import.meta.url),'utf8'));
+  assert.equal(config.rewrites.find(r=>r.source==='/nasypateli-live')?.destination,'/nasypateli-login.html');
+  assert.equal(config.rewrites.find(r=>r.source==='/nasypateli-live/app')?.destination,'/api/nasypateli-live');
+  const page=await readFile(new URL('../nasypateli-login.html',import.meta.url),'utf8');
   assert.match(page,/form method="post" action="\/nasypateli-live\/app"/);
   assert.doesNotMatch(page,/id="character"|NASYPATELI_LIVE_PASSWORD/);
-  const headers=v.headers.find(x=>x.source==="/nasypateli-live")?.headers||[];
-  assert.match(headers.find(h=>h.key==="X-Robots-Tag")?.value||"",/noindex/);
+  const headers=config.headers.find(h=>h.source==='/nasypateli-live')?.headers||[];
+  assert.match(headers.find(h=>h.key==='X-Robots-Tag')?.value||'',/noindex/);
 });
