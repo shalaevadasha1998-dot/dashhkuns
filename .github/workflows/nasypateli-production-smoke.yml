@@ -1,6 +1,10 @@
 name: nasypateli protected production route
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/nasypateli-production-smoke.yml'
+      - 'api/nasypateli-live.js'
   push:
     branches: [main]
     paths:
@@ -37,6 +41,18 @@ jobs:
         run: |
           set -euo pipefail
           code="$(curl --silent --show-error --max-time 15 --request POST --header 'Origin: https://dashhkuns.com' --header 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=invalid-ci-password' --output /tmp/nasypateli-wrong --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live')"
+          echo "wrong-password request: http=$code"
+          if grep -q 'неверный пароль' /tmp/nasypateli-wrong; then
+            echo "wrong-password marker: present"
+          else
+            echo "wrong-password marker: missing"
+          fi
+          if grep -q 'вход по паролю' /tmp/nasypateli-wrong; then
+            echo "login marker: present"
+          else
+            echo "login marker: missing"
+          fi
+          echo "first response bytes: $(head -c 120 /tmp/nasypateli-wrong | tr '\\n' ' ' | tr -cd '[:print:]')"
           test "$code" = 200
           grep -q 'неверный пароль' /tmp/nasypateli-wrong
           ! grep -q 'id="character"' /tmp/nasypateli-wrong
