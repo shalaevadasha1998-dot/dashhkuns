@@ -47,7 +47,7 @@ test("missing secrets fail closed even for HTTP GET",()=>{
 test("unauthenticated GET cannot access stage or dashboard, emits secure noindex page",()=>{
   Object.assign(process.env,env);
   const res=serve("GET");
-  assert.equal(res.code,401);
+  assert.equal(res.code,200);
   assert.match(res.body,/вход по паролю/);
   assert.doesNotMatch(res.body,/id="character"/);
   assert.match(res.headers["content-security-policy"],/script-src 'nonce-/);
@@ -58,7 +58,7 @@ test("unauthenticated GET cannot access stage or dashboard, emits secure noindex
 
 test("login uses timing-safe password verification and secure signed cookie",()=>{
   const wrong=serve("POST",{password:"wrong"});
-  assert.equal(wrong.code,401);
+  assert.equal(wrong.code,200);
   assert.match(wrong.body,/неверный пароль/);
   assert.ok(!wrong.headers["set-cookie"]);
 
@@ -83,7 +83,8 @@ test("login uses timing-safe password verification and secure signed cookie",()=
   const parts=rawCookie.split("=");
   const chars=parts[1].split("");
   chars[chars.length-1]=chars[chars.length-1]==="A"?"B":"A";
-  assert.equal(serve("GET",{cookie:parts[0]+"="+chars.join("")}).code,401);
+  assert.equal(serve("GET",{cookie:parts[0]+"="+chars.join("")}).code,200);
+  assert.doesNotMatch(serve("GET",{cookie:parts[0]+"="+chars.join("")}).body,/id="character"/);
 
   const out=serve("POST",{cookie:rawCookie,action:"logout"});
   assert.equal(out.code,303);
@@ -95,7 +96,7 @@ test("blocked cross-site POST and unsupported methods",()=>{
   assert.equal(bad.code,403);
   assert.equal(bad.headers["set-cookie"],undefined);
   assert.equal(serve("PUT").code,405);
-  assert.equal(serve("HEAD").code,401);
+  assert.equal(serve("HEAD").code,200);
 });
 
 test("vercel config maps private URL only to password-guarded function",async()=>{

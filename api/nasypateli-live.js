@@ -74,7 +74,10 @@ export default function handler(req,res){
   const s=settings();
   if(!s)return sendHtml(res,503,"<html lang='ru'><meta name='robots' content='noindex'><body>раздел временно недоступен: пароль не настроен</body></html>");
   if(req.method==="GET"||req.method==="HEAD"){
-    if(!validSession(req,s.secret))return sendHtml(res,401,loginHtml(nonce));
+    if(!validSession(req,s.secret)){
+      if(req.method==="HEAD"){res.status(200).end();return;}
+      return sendHtml(res,200,loginHtml(nonce));
+    }
     const html=PAGE_HTML.replaceAll("__NONCE__",nonce);
     if(req.method==="HEAD"){res.status(200).end();return;}
     return sendHtml(res,200,html);
@@ -91,7 +94,7 @@ export default function handler(req,res){
   const candidate=plain(fields.get("password"));
   if(candidate.length>200||!equal(candidate,s.password)){
     res.setHeader("Retry-After","2");
-    return sendHtml(res,401,loginHtml(nonce,true));
+    return sendHtml(res,200,loginHtml(nonce,true));
   }
   res.setHeader("Set-Cookie",cookie(makeSession(s.secret),TTL_SECONDS));
   res.setHeader("Location","/nasypateli-live");
