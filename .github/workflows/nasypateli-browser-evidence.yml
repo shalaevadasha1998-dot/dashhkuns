@@ -1,0 +1,59 @@
+name: nasypateli browser evidence
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'public deployment to inspect without any authentication bypass'
+        required: false
+        default: 'https://dashhkuns.com'
+  pull_request:
+    paths:
+      - '.github/workflows/nasypateli-browser-evidence.yml'
+      - 'scripts/nasypateli-browser-evidence.mjs'
+      - 'api/nasypateli-live.js'
+      - 'api/nasypateli-renderer.js'
+      - 'nasypateli-login.html'
+      - 'tests/nasypateli-referrer.test.mjs'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/nasypateli-browser-evidence.yml'
+      - 'scripts/nasypateli-browser-evidence.mjs'
+      - 'api/nasypateli-live.js'
+      - 'api/nasypateli-renderer.js'
+      - 'nasypateli-login.html'
+permissions:
+  contents: read
+jobs:
+  browser-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      # This incident's tested repair candidate is deployed from 4e511602b7e8790e4b87424524c0b9c603afd76b
+      # Main pushes always verify the actual production domain, never a previous preview
+      NASYPATELI_BROWSER_BASE: ${{ github.event_name == 'pull_request' && github.head_ref == 'fix/nasypateli-browser-evidence-20261014' && 'https://dashhkuns-42q1966q4-dora-5368.vercel.app' || inputs.base_url || 'https://dashhkuns.com' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: authentication and origin regression
+        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs
+      - name: prepare isolated browser tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/browser-tools" --no-audit --no-fund playwright
+          "$RUNNER_TEMP/browser-tools/node_modules/.bin/playwright" install --with-deps chromium webkit > "$RUNNER_TEMP/browser-install.log" 2>&1 || { tail -40 "$RUNNER_TEMP/browser-install.log"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/nasypateli-evidence"
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/local-test.key" -out "$RUNNER_TEMP/local-test.crt" 2>/dev/null
+      - name: live browser navigation and isolated authenticated UI
+        run: node scripts/nasypateli-browser-evidence.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nasypateli-browser-evidence
+          path: ${{ runner.temp }}/nasypateli-evidence
+          retention-days: 3
