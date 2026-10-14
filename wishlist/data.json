@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-14",
+  "updated": "2026-10-15",
   "items": [
     {
       "id": "macbook",
@@ -7,7 +7,7 @@
       "category": "техника",
       "priority": true,
       "description": "macbook pro на m5\nдиагональ, память и цвет сначала согласуем",
-      "image": "/wishlist/items/macbook.png",
+      "image": "/wishlist/items/macbook-full.png",
       "url": "https://www.apple.com/macbook-pro/"
     },
     {
@@ -16,7 +16,7 @@
       "category": "техника",
       "priority": true,
       "description": "карманная камера для съёмок\nпредпочтительно creator combo",
-      "image": "/wishlist/items/pocket.png",
+      "image": "/wishlist/items/pocket-full.png",
       "url": "https://www.dji.com/osmo-pocket-3"
     },
     {
@@ -25,7 +25,7 @@
       "category": "техника",
       "priority": true,
       "description": "два передатчика, приёмник и зарядный кейс",
-      "image": "/wishlist/items/mic.png",
+      "image": "/wishlist/items/mic-full.png",
       "url": "https://www.dji.com/mic-3"
     },
     {
@@ -34,7 +34,7 @@
       "category": "техника",
       "priority": true,
       "description": "мобильный свет, который легко поставить\nособенно интересна надувная лампа",
-      "image": "/wishlist/items/light.png"
+      "image": "/wishlist/items/light-full.png"
     },
     {
       "id": "airpods",
@@ -42,7 +42,7 @@
       "category": "техника",
       "priority": true,
       "description": "наушники с usb-c\nцвет и версию сначала согласуем",
-      "image": "/wishlist/items/airpods.png",
+      "image": "/wishlist/items/airpods-full.png",
       "url": "https://www.apple.com/airpods-max/"
     },
     {
@@ -51,7 +51,7 @@
       "category": "техника",
       "priority": true,
       "description": "playstation 5 и два розовых dualsense\nименно оба розовых",
-      "image": "/wishlist/items/playstation.png"
+      "image": "/wishlist/items/playstation-full.png"
     },
     {
       "id": "airwrap",
@@ -59,7 +59,7 @@
       "category": "красота",
       "priority": true,
       "description": "стайлер с подключением к приложению\nрассматриваю co-anda2x; комплектацию и цвет согласуем",
-      "image": "/wishlist/items/airwrap.png",
+      "image": "/wishlist/items/airwrap-full.png",
       "url": "https://www.dyson.com/hair-care/hair-stylers/airwrap-co-anda2x"
     },
     {
@@ -68,7 +68,7 @@
       "category": "красота",
       "priority": true,
       "description": "dyson airstrait\nличная техника, не покупка для квартиры",
-      "image": "/wishlist/items/airstrait.png"
+      "image": "/wishlist/items/airstrait-full.png"
     },
     {
       "id": "australia",
@@ -76,7 +76,7 @@
       "category": "впечатления",
       "priority": true,
       "description": "хочу улететь в австралию на день рождения\nмаршрут и даты согласуем до любых бронирований",
-      "image": "/wishlist/items/australia.png",
+      "image": "/wishlist/items/australia-full.png",
       "url": "https://www.australia.com/en"
     },
     {
@@ -85,7 +85,7 @@
       "category": "впечатления",
       "priority": true,
       "description": "хочу уехать на неделю в тёплое место на новый год\nнаправление и даты пока выбираю",
-      "image": "/wishlist/items/newyear.png"
+      "image": "/wishlist/items/newyear-full.png"
     },
     {
       "id": "dreamisland",
@@ -93,7 +93,7 @@
       "category": "впечатления",
       "priority": true,
       "description": "снова попасть в остров мечты с ускоренным входом на аттракционы\nдату согласуем",
-      "image": "/wishlist/items/dreamisland.png",
+      "image": "/wishlist/items/dreamisland-full.png",
       "url": "https://dreamisland.ru/"
     },
     {
@@ -102,15 +102,15 @@
       "category": "впечатления",
       "priority": true,
       "description": "полноценная программа обучения\nсначала выбираю направление и программу, потом подарок",
-      "image": "/wishlist/items/psychology.png"
+      "image": "/wishlist/items/psychology-full.png"
     },
     {
       "id": "fabricpaint",
       "title": "краски для одежды / много",
       "category": "творчество",
       "priority": true,
-      "description": "большой профессиональный набор: флуоресцентные, перламутровые и металлические оттенки\nориентир — jacquard textile color, lumiere и neopaque",
-      "image": "/wishlist/items/fabricpaint.png",
+      "description": "большая профессиональная палитра для ткани\nобязательно флуоресцентные, перламутровые и металлические оттенки\nфото — пример линейки, хочу не только маленький набор",
+      "image": "/wishlist/items/fabricpaint-full.png",
       "url": "https://www.jacquardproducts.com/sets-main"
     },
     {
@@ -119,7 +119,7 @@
       "category": "творчество",
       "priority": true,
       "description": "много акриловых красок для холстов и смешанных техник, включая необычные эффекты",
-      "image": "/wishlist/items/acrylic.png"
+      "image": "/wishlist/items/acrylic-full.png"
     },
     {
       "id": "brushes",
@@ -127,7 +127,7 @@
       "category": "творчество",
       "priority": true,
       "description": "большой набор разных форм и размеров для акрила\nне детский комплект",
-      "image": "/wishlist/items/brushes.png"
+      "image": "/wishlist/items/brushes-full.png"
     },
     {
       "id": "markers",
@@ -135,7 +135,7 @@
       "category": "творчество",
       "priority": true,
       "description": "профессиональный большой набор цветов и разных толщин",
-      "image": "/wishlist/items/markers.png"
+      "image": "/wishlist/items/markers-full.png"
     },
     {
       "id": "finemarkers",
@@ -143,43 +143,43 @@
       "category": "творчество",
       "priority": true,
       "description": "для тонких линий, надписей и мелких деталей",
-      "image": "/wishlist/items/finemarkers.png"
+      "image": "/wishlist/items/finemarkers-full.png"
     },
     {
       "id": "bigcanvas",
       "title": "два огромных холста",
       "category": "творчество",
       "priority": true,
-      "description": "два больших холста, чтобы написать свои картины\nточный размер сначала согласуем",
-      "image": "/wishlist/items/bigcanvas.png"
+      "description": "два больших холста — хочу сама написать картины в спальню\nразмеры сначала согласуем",
+      "image": "/wishlist/items/bigcanvas-full.png"
     },
     {
       "id": "canvas",
       "title": "холсты любых размеров",
       "category": "творчество",
       "description": "натянутые холсты и холсты на картоне для новых работ",
-      "image": "/wishlist/items/canvas.png"
+      "image": "/wishlist/items/canvas-full.png"
     },
     {
       "id": "beads",
       "title": "бисер, бусины и подвески",
       "category": "творчество",
       "description": "большой набор: бисер, стеклярус, бусины, жемчуг, подвески, иглы и нити",
-      "image": "/wishlist/items/beads.png"
+      "image": "/wishlist/items/beads-full.png"
     },
     {
       "id": "necklace",
       "title": "материалы для ожерелья",
       "category": "творчество",
-      "description": "бисер и фурнитура, чтобы собрать одно красивое ожерелье своими руками",
-      "image": "/wishlist/items/necklace.png"
+      "description": "бисер, стеклярус, жемчуг, подвески и фурнитура — хочу собрать ожерелье сама\nнить, иглы, застёжки и соединительные кольца тоже пригодятся",
+      "image": "/wishlist/items/necklace-full.png"
     },
     {
       "id": "gluegun",
       "title": "хороший клеевой пистолет",
       "category": "творчество",
-      "description": "удобный клеевой пистолет для декора, коллажей и diy\nмодель выбираю",
-      "image": "/wishlist/items/gluegun.png"
+      "description": "хороший клеевой пистолет для декора, коллажей и мелких diy-штук\nудобная подача клея и сменные стержни — модель сначала согласуем",
+      "image": "/wishlist/items/gluegun-full.png"
     },
     {
       "id": "sewing",
@@ -187,7 +187,7 @@
       "category": "одежда / diy",
       "priority": true,
       "description": "для кастомизации одежды, плотных тканей и обычного шитья\nмодель согласуем",
-      "image": "/wishlist/items/sewing.png"
+      "image": "/wishlist/items/sewing-full.png"
     },
     {
       "id": "tshirts",
@@ -195,115 +195,116 @@
       "category": "одежда / diy",
       "priority": true,
       "description": "разные крои и плотности: оверсайз, baby tee, мужская база\nразмеры и посадку согласуем",
-      "image": "/wishlist/items/tshirts.png"
+      "image": "/wishlist/items/tshirts-full.png"
     },
     {
       "id": "hardware",
       "title": "фурнитура для одежды",
       "category": "одежда / diy",
-      "description": "люверсы, заклёпки, кнопки, карабины, цепи, кольца, пряжки и молнии\nинструмент для установки тоже пригодится",
-      "image": "/wishlist/items/hardware.png"
+      "description": "люверсы, кнопки, заклёпки, цепи, карабины, кольца, пряжки, шипы и молнии\nмного разных необычных деталей для кастома одежды и головных уборов",
+      "image": "/wishlist/items/hardware-full.png"
     },
     {
       "id": "piercing",
       "title": "пирсинг пупка",
       "category": "красота",
       "priority": true,
-      "description": "сертификат на прокол и украшение у хорошего пирсера\nстудию выбираю сама",
-      "image": "/wishlist/items/piercing.png"
+      "description": "пирсинг пупка — сертификат на прокол и украшение\nстудию выбираю сама, подходящее украшение подбирает пирсер",
+      "image": "/wishlist/items/piercing-full.png"
     },
     {
       "id": "tattoo",
       "title": "новая татуировка",
       "category": "красота",
       "priority": true,
-      "description": "оплата сеанса или сертификат\nмастера и эскиз выбираю сама",
-      "image": "/wishlist/items/tattoo.png"
+      "description": "оплата сеанса или сертификат на татуировку\nмастера и эскиз выбираю сама\nтату-машинка на фото только символ сеанса — оборудование дарить не нужно",
+      "image": "/wishlist/items/tattoo-full.png"
     },
     {
       "id": "theact",
-      "title": "набор ухода the act",
+      "title": "набор скрабов и ухода the act",
       "category": "красота",
-      "description": "хочу набор the act\nточный состав ещё уточняю — сначала напиши мне",
-      "image": "/wishlist/items/theact.png"
+      "description": "хочу большой набор ухода the act\nскрабы и другие средства — точный состав сначала согласуем",
+      "image": "/wishlist/items/theact-full.png"
     },
     {
       "id": "carafe",
       "title": "красивый графин",
       "category": "для себя и дома",
       "description": "необычный графин, который хочется оставить на виду",
-      "image": "/wishlist/items/carafe.png"
+      "image": "/wishlist/items/carafe-full.png"
     },
     {
       "id": "waffles",
       "title": "вафельница",
       "category": "для себя и дома",
       "description": "красивая и компактная вафельница для толстых вафель",
-      "image": "/wishlist/items/waffles.png"
+      "image": "/wishlist/items/waffles-full.png"
     },
     {
       "id": "sousvide",
       "title": "су-вид",
       "category": "для себя и дома",
       "description": "погружной термостат для готовки\nконтейнер и крышка — если нужны для выбранной модели",
-      "image": "/wishlist/items/sousvide.png"
+      "image": "/wishlist/items/sousvide-full.png"
     },
     {
       "id": "coffee",
       "title": "капсульная кофемашина",
       "category": "для себя и дома",
       "description": "компактная и красивая\nсистему капсул сначала согласуем",
-      "image": "/wishlist/items/coffee.png"
+      "image": "/wishlist/items/coffee-full.png"
     },
     {
       "id": "kuromi",
       "title": "ещё одна необычная kuromi",
       "category": "для себя и дома",
       "description": "не стандартная фигурка, которая у меня уже есть, а необычная серия или лимитка",
-      "image": "/wishlist/items/kuromi.png"
+      "image": "/wishlist/items/kuromi-full.png"
     },
     {
       "id": "speaker",
-      "title": "morning blues / колонка",
+      "title": "morningblues sonicglass a1",
       "category": "для себя и дома",
-      "description": "колонка с экраном и текстами песен\nточное название и модель сначала уточним",
-      "image": "/wishlist/items/speaker.png"
+      "description": "прозрачная колонка с экраном и текстами песен\nориентир — sonicglass a1, комплектацию согласуем",
+      "image": "/wishlist/items/speaker-full.png",
+      "url": "https://www.morningblues.com/products/morningblues-lyric-transparent-speaker-sonicglass-a1"
     },
     {
       "id": "drums",
       "title": "воздушные барабанные палочки",
       "category": "техника",
       "description": "электронные палочки, с которыми можно барабанить по воздуху\nмодель выбираю",
-      "image": "/wishlist/items/drums.png"
+      "image": "/wishlist/items/drums-full.png"
     },
     {
       "id": "plants",
       "title": "розовые комнатные растения",
       "category": "для себя и дома",
       "description": "растения с розовой листвой или цветами, за которыми не слишком сложно ухаживать",
-      "image": "/wishlist/items/plants.png"
+      "image": "/wishlist/items/plants-full.png"
     },
     {
       "id": "magazines",
       "title": "старые журналы для коллажей",
       "category": "без бюджета",
-      "description": "журналы, каталоги, газеты, открытки и интересные бумажки\nможно просто отдать то, что не нужно",
-      "image": "/wishlist/items/magazines.png"
+      "description": "старые журналы, газеты, каталоги, открытки и интересные бумажки для коллажей\nособенно нравится печатное из 90-х и нулевых\nможно просто отдать то, что вам уже не нужно",
+      "image": "/wishlist/items/magazines-full.png"
     },
     {
       "id": "checkup",
       "title": "чекап и анализы",
       "category": "здоровье",
       "priority": true,
-      "description": "подарочный бюджет около 20 000 ₽ на обследование\nклинику и состав выбираю отдельно",
-      "image": "/wishlist/items/checkup.png"
+      "description": "бюджет около 20 000 ₽ на чекап и анализы\nклинику и состав обследования выбираю отдельно\nстетоскоп на фото — символ обследования, не отдельная хотелка",
+      "image": "/wishlist/items/checkup-full.png"
     },
     {
       "id": "dna",
       "title": "днк-тест",
       "category": "здоровье",
-      "description": "тест на происхождение и генетические особенности\nлабораторию и условия обработки данных выбираю сама",
-      "image": "/wishlist/items/dna.png"
+      "description": "хочу днк-тест на происхождение и генетические особенности\nлабораторию, программу и условия обработки данных выбираю отдельно\nнабор на фото только визуальный пример",
+      "image": "/wishlist/items/dna-full.png"
     }
   ]
 }

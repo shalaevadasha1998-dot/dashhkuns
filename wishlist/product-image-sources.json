@@ -1,0 +1,92 @@
+{
+  "macbook": {
+    "image": "https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/macbook-pro-14-inch-m5.png",
+    "page": "https://support.apple.com/en-us/125405",
+    "processing": "native"
+  },
+  "airwrap": {
+    "image": "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/images/products/primary/492485-01.png?fmt=png-alpha&wid=1400",
+    "page": "https://www.dyson.com/hair-care/hair-stylers/airwrap-co-anda2x",
+    "processing": "native"
+  },
+  "airstrait": {
+    "image": "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/images/products/primary-locale/en_US/453951-01.png?fmt=png-alpha&wid=1400",
+    "page": "https://www.dyson.com/hair-care/hair-straighteners/airstrait/ceramic-pink-rose-gold",
+    "processing": "native"
+  },
+  "speaker": {
+    "image": "https://www.morningblues.com/cdn/shop/files/A1_BG.png?v=1785206536&width=1600",
+    "page": "https://www.morningblues.com/products/morningblues-lyric-transparent-speaker-sonicglass-a1",
+    "processing": "native"
+  },
+  "sousvide": {
+    "image": "https://cdn.shopify.com/s/files/1/0619/7487/2253/products/Anova_PrecisionCooker3hero.webp?v=1757350346",
+    "page": "https://anovaculinary.com/products/anova-precision-cooker-3",
+    "processing": "white"
+  },
+  "coffee": {
+    "image": "https://dam.delonghi.com/902x902/assets/113707",
+    "page": "https://www.delonghi.com/en-us/p/essenza-mini-espresso-machine/EN85B.html",
+    "processing": "coffee"
+  },
+  "fabricpaint": {
+    "image": "https://images.squarespace-cdn.com/content/v1/5ac4eb022971149bb6d709d3/1544137761805-NO7PGN6O4YYHZJGXY9KY/JAC5000_Lumiere-6-color-set-RGB.jpg",
+    "page": "https://www.jacquardproducts.com/lumiere",
+    "processing": "white"
+  },
+  "tattoo": {
+    "image": "https://shop.us.cheyennetattoo.com/cdn/shop/files/HAWK_Pen_2_2.jpg?v=1761639609&width=1445",
+    "page": "https://cheyennetattoo.com/en/tattoo-machines/hawk-pen",
+    "processing": "holes"
+  },
+  "theact": {
+    "image": "https://theact.ru/upload/webp/100/upload/resize-cache/iblock/38a/wbc0mj9yjkqywqglv58epqgxc98pgvh4/1000-1500-1/3-skraba-nabor-1.webp",
+    "page": "https://theact.ru/catalog/nabory/nabor_skrabov_dlya_tela_kokos_shokolad_greypfrut/",
+    "processing": "white"
+  },
+  "drums": {
+    "image": "https://aeroband.fr/wp-content/uploads/2024/02/PocketDrum-2-Plus.webp",
+    "page": "https://aeroband.fr/",
+    "processing": "holes"
+  },
+  "plants": {
+    "image": "https://cdn.shopify.com/s/files/1/0979/5115/4506/files/syngonium-podophyllum-pink-perfection-aka-pink-dream-04.webp?v=1776363046",
+    "page": "https://foliage-factory.com/products/syngonium-pink-perfection-aka-pink-dream",
+    "processing": "plant"
+  },
+  "piercing": {
+    "image": "https://cdn.shopify.com/s/files/1/0002/2872/0700/files/bj0375-P_1.jpg?v=1722319573",
+    "page": "https://glittersjewellery.com/products/titanium-double-cz-belly-button-navel-ring-pink",
+    "processing": "silver"
+  },
+  "checkup": {
+    "image": "https://assets.solventum.com/is/image/mmmspinco/5861-Aux-1",
+    "page": "https://www.littmann.com/en-us/home/f/b00037556/",
+    "processing": "holes"
+  },
+  "magazines": {
+    "image": "https://pngimg.com/uploads/magazine/magazine_PNG100074.png",
+    "page": "https://pngimg.com/images/objects/magazine",
+    "processing": "native"
+  },
+  "dna": {
+    "image": "https://cmsasset.ancestrycdn.com/content/experience-fragments/acom/en-us/onsite/_2026/oct_fall_sale/dna-lohp/nonsubs/_jcr_content/root/responsivegrid/container_copy_copy__891895731/itemlist/item-0/container_copy_copy/image.coreimg.png/1786556409823/us-octgift-dna.png",
+    "page": "https://www.ancestry.com/dna/",
+    "processing": "complete_kit_reference"
+  },
+  "console": {
+    "image": "https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$",
+    "page": "https://www.playstation.com/en-us/ps5/",
+    "processing": "native"
+  },
+  "dreamisland": {
+    "image": "https://air.agency/img/case/ostrov/logo.svg",
+    "page": "https://air.agency/cases/ostrov",
+    "processing": "public_designer_mark"
+  },
+  "acrylic": {
+    "image": "https://cdn.shopify.com/s/files/1/0787/6971/7523/files/80919.jpg?v=1762458322",
+    "page": "https://www.liquitex.com/products/basics-acrylic-set-48x22ml",
+    "processing": "complete_rectangular_package_face"
+  }
+}
