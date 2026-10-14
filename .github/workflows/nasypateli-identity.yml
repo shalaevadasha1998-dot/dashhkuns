@@ -1,0 +1,48 @@
+name: nasypateli identity and access
+on:
+  pull_request:
+    paths:
+      - 'lib/nasypateli-identity.mjs'
+      - 'api/nasypateli-live.js'
+      - 'assets/nasypateli-mark.webp'
+      - 'assets/nasypateli-entry.css'
+      - 'nasypateli-login.html'
+      - 'scripts/nasypateli-identity-check.mjs'
+      - '.github/workflows/nasypateli-identity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'lib/nasypateli-identity.mjs'
+      - 'assets/nasypateli-mark.webp'
+      - 'scripts/nasypateli-identity-check.mjs'
+      - '.github/workflows/nasypateli-identity.yml'
+permissions:
+  contents: read
+jobs:
+  identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: existing authentication and origin regression
+        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs
+      - name: prepare isolated browser tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/ui-tools" --no-audit --no-fund playwright
+          "$RUNNER_TEMP/ui-tools/node_modules/.bin/playwright" install --with-deps chromium webkit > "$RUNNER_TEMP/identity-install.log" 2>&1 || { tail -30 "$RUNNER_TEMP/identity-install.log"; exit 1; }
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/identity.key" -out "$RUNNER_TEMP/identity.crt" 2>/dev/null
+      - name: visual hierarchy and projector synchronization
+        run: node scripts/nasypateli-identity-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nasypateli-identity-proof
+          path: ${{ runner.temp }}/nasypateli-identity-proof
+          retention-days: 3
