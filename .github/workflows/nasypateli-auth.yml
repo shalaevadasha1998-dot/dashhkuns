@@ -1,0 +1,28 @@
+name: Protected podcast web smoke
+on:
+  pull_request:
+    paths:
+      - 'api/nasypateli-live.js'
+      - 'vercel.json'
+      - 'tests/nasypateli-auth.test.mjs'
+      - '.github/workflows/nasypateli-auth.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/nasypateli-live.js'
+      - 'vercel.json'
+      - 'tests/nasypateli-auth.test.mjs'
+      - '.github/workflows/nasypateli-auth.yml'
+permissions:
+  contents: read
+jobs:
+  auth-and-page:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: test protected dashboard and config
+        run: node --test tests/nasypateli-auth.test.mjs
