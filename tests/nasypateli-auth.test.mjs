@@ -64,7 +64,7 @@ test("login uses timing-safe password verification and secure signed cookie",()=
 
   const ok=serve("POST",{password:env.NASYPATELI_LIVE_PASSWORD});
   assert.equal(ok.code,303);
-  assert.equal(ok.headers.location,"/nasypateli-live");
+  assert.equal(ok.headers.location,"/nasypateli-live/app");
   const session=ok.headers["set-cookie"];
   assert.match(session,/HttpOnly/);
   assert.match(session,/Secure/);
@@ -99,11 +99,16 @@ test("blocked cross-site POST and unsupported methods",()=>{
   assert.equal(serve("HEAD").code,200);
 });
 
-test("vercel config maps private URL only to password-guarded function",async()=>{
+test("public login is static and actual stage is guarded by server auth",async()=>{
   const fs=await import("node:fs/promises");
   const root=new URL("../vercel.json",import.meta.url);
   const v=JSON.parse(await fs.readFile(root,"utf8"));
   const route=v.rewrites.find(x=>x.source==="/nasypateli-live");
-  assert.equal(route?.destination,"/api/nasypateli-live");
-  assert.ok(!v.redirects?.some(x=>x.source==="/nasypateli-live"&&x.destination!=="/api/nasypateli-live"));
+  assert.equal(route?.destination,"/nasypateli-login.html");
+  assert.equal(v.rewrites.find(x=>x.source==="/nasypateli-live/app")?.destination,"/api/nasypateli-live");
+  const page=await fs.readFile(new URL("../nasypateli-login.html",import.meta.url),"utf8");
+  assert.match(page,/form method="post" action="\/nasypateli-live\/app"/);
+  assert.doesNotMatch(page,/id="character"|NASYPATELI_LIVE_PASSWORD/);
+  const headers=v.headers.find(x=>x.source==="/nasypateli-live")?.headers||[];
+  assert.match(headers.find(h=>h.key==="X-Robots-Tag")?.value||"",/noindex/);
 });
