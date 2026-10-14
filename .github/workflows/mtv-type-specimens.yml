@@ -1,4 +1,4 @@
-name: narrow type and italic specimens only
+name: thin black ornate type preview only
 on:
   push:
     branches: [design/mtv-type-specimens]
@@ -12,100 +12,113 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: prepare isolated rendering environment
         run: |
           python3 -m venv /tmp/font-preview-env
           /tmp/font-preview-env/bin/pip -q install playwright fonttools requests
           /tmp/font-preview-env/bin/playwright install --with-deps chromium
-      - name: render narrow lettering and real italic glyphs without site changes
+      - name: render thin black lettering and ornate calligraphy without site changes
         run: |
           /tmp/font-preview-env/bin/python - <<'PY'
           from pathlib import Path
           from concurrent.futures import ThreadPoolExecutor
           from urllib.parse import quote
-          from io import BytesIO
-          import requests, json, zipfile
+          import requests, json
           from fontTools.ttLib import TTFont
           from playwright.sync_api import sync_playwright
-          root=Path('/tmp/narrow-italic-specimens'); (root/'fonts').mkdir(parents=True,exist_ok=True)
-          output=Path('narrow-italic-output');output.mkdir(exist_ok=True)
+          root=Path('/tmp/thin-ornate-type'); (root/'fonts').mkdir(parents=True,exist_ok=True)
+          output=Path('thin-ornate-output'); output.mkdir(exist_ok=True)
           fonts={
-            'oswald':('oswald','Oswald[wght].ttf'),
-            'oldstandard':('oldstandardtt','OldStandard-Italic.ttf'),
-            'playfair':('playfairdisplay','PlayfairDisplay-Italic[wght].ttf'),
-            'bona':('bonanova','BonaNova-Italic.ttf')
+            'thin':('firasansextracondensed','FiraSansExtraCondensed-ExtraLight.ttf'),
+            'light':('firasansextracondensed','FiraSansExtraCondensed-Light.ttf'),
+            'regular':('firasansextracondensed','FiraSansExtraCondensed-Regular.ttf'),
+            'bold':('firasansextracondensed','FiraSansExtraCondensed-Bold.ttf'),
+            'ornate':('greatvibes','GreatVibes-Regular.ttf')
           }
           letters='абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-          def inspect_font(key,path,source,license_name):
-            f=TTFont(path);cmap=f.getBestCmap()
+          def fetch(item):
+            key,(folder,name)=item
+            base='https://raw.githubusercontent.com/google/fonts/main/ofl/'+folder+'/'
+            for remote,local in [(name,key+'.ttf'),('OFL.txt',key+'-OFL.txt')]:
+              r=requests.get(base+quote(remote),timeout=45); r.raise_for_status()
+              (root/'fonts'/local).write_bytes(r.content)
+            font=TTFont(root/'fonts'/(key+'.ttf')); cmap=font.getBestCmap()
             missing=[c for c in letters+letters.upper() if ord(c) not in cmap]
             assert not missing,(key,missing)
-            assert any(cmap[ord(c)]!=cmap[ord(c.upper())] for c in 'абвгде'),key
-            return {'russianAlphabetComplete':True,'separateLowercaseGlyphs':True,'source':source,'license':license_name,'names':[n.toUnicode() for n in f['name'].names if n.nameID in [1,2] and n.platformID==3][:4]}
-          def fetch(item):
-            key,(folder,name)=item;base='https://raw.githubusercontent.com/google/fonts/main/ofl/'+folder+'/'
-            for remote,local in [(name,key+'.ttf'),('OFL.txt',key+'-OFL.txt')]:
-              r=requests.get(base+quote(remote),timeout=45);r.raise_for_status();(root/'fonts'/local).write_bytes(r.content)
-            return key,inspect_font(key,root/'fonts'/(key+'.ttf'),base+quote(name),'SIL OFL 1.1')
-          with ThreadPoolExecutor(max_workers=4) as pool:validation=dict(pool.map(fetch,fonts.items()))
-          akrobat_url='https://media.uprock.school/fonts/Akrobat/Akrobat.zip'
-          r=requests.get(akrobat_url,timeout=45);r.raise_for_status()
-          with zipfile.ZipFile(BytesIO(r.content)) as z:
-            candidates=[n for n in z.namelist() if 'extrabold' in n.lower().replace('-','').replace('_','') and n.lower().endswith(('.otf','.ttf')) and '__MACOSX' not in n]
-            assert candidates,z.namelist()
-            path=root/'fonts'/'akrobat.otf';path.write_bytes(z.read(candidates[0]))
-          validation['akrobat']=inspect_font('akrobat',path,akrobat_url,'Fontfabric free-font EULA; publisher confirms free commercial use')
+            tags=sorted(set(r.FeatureTag for r in font['GSUB'].table.FeatureList.FeatureRecord)) if 'GSUB' in font else []
+            return key,{'russianAlphabetComplete':True,'source':base+quote(name),'license':'SIL OFL 1.1','features':tags}
+          with ThreadPoolExecutor(max_workers=5) as pool:
+            validation=dict(pool.map(fetch,fonts.items()))
           css='''
-          @font-face{font-family:oswald;src:url(fonts/oswald.ttf);font-weight:200 700}
-          @font-face{font-family:oldstandard;src:url(fonts/oldstandard.ttf);font-weight:400;font-style:italic}
-          @font-face{font-family:playfair;src:url(fonts/playfair.ttf);font-weight:400 900;font-style:italic}
-          @font-face{font-family:bona;src:url(fonts/bona.ttf);font-weight:400;font-style:italic}
-          @font-face{font-family:akrobat;src:url(fonts/akrobat.otf);font-weight:800}
-          *{box-sizing:border-box}body{margin:0;background:#fbfaf7;color:#151414;font-family:Arial,sans-serif;font-synthesis:none}
-          .board{width:1280px;padding:42px 64px 24px}
-          header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px;border-bottom:1px solid #ccc7c4;font-size:18px;color:#65605b}
-          .brand{font-weight:700;letter-spacing:-.03em;color:#151414;font-size:24px}
-          article{padding:34px 0 36px;border-bottom:1px solid #ccc7c4}
-          .label{display:flex;align-items:baseline;gap:24px;margin-bottom:34px;font-size:22px}
-          .num{font-size:20px;color:#77716a}.names{font-weight:400;letter-spacing:-.03em}
-          .lead{font-size:99px;line-height:1.08;letter-spacing:-.018em;white-space:nowrap;width:max-content}
-          .line{display:flex;align-items:baseline;gap:26px;margin-top:5px;white-space:nowrap;width:max-content}
-          .launch{font-size:128px;line-height:1.3;letter-spacing:-.03em;color:#d80a68;font-style:italic;font-weight:400}
-          .projects{font-size:117px;line-height:1.05;letter-spacing:-.018em}
-          .details{display:grid;grid-template-columns:340px 1fr;align-items:baseline;margin-top:24px;padding-top:18px;border-top:1px solid #e2ded9}
-          .sample-main{font-size:58px;letter-spacing:-.01em;line-height:1.15}
-          .sample-italic{font-style:italic;font-size:46px;font-weight:400;letter-spacing:-.025em;line-height:1.35}
-          .a .lead,.a .projects,.a .sample-main{font-family:oswald;font-weight:600}
-          .a .launch,.a .sample-italic{font-family:oldstandard}
-          .b .lead,.b .projects,.b .sample-main{font-family:akrobat;font-weight:800}
-          .b .launch,.b .sample-italic{font-family:playfair;font-weight:500}
-          .c .lead,.c .projects,.c .sample-main{font-family:oswald;font-weight:500}
-          .c .launch,.c .sample-italic{font-family:bona}
-          footer{display:flex;justify-content:space-between;padding-top:22px;font-size:16px;color:#706a65}
+          @font-face{font-family:base;src:url(fonts/thin.ttf);font-weight:200;font-style:normal}
+          @font-face{font-family:base;src:url(fonts/light.ttf);font-weight:300;font-style:normal}
+          @font-face{font-family:base;src:url(fonts/regular.ttf);font-weight:400;font-style:normal}
+          @font-face{font-family:base;src:url(fonts/bold.ttf);font-weight:700;font-style:normal}
+          @font-face{font-family:ornate;src:url(fonts/ornate.ttf);font-weight:400;font-style:normal}
+          *{box-sizing:border-box}html,body{margin:0;background:#fff;color:#0a0a0a;font-family:base,sans-serif;font-weight:300;font-synthesis:none}
+          body{font-size:24px}a{color:inherit;text-decoration:none}p,h1,h2{margin:0}strong{font-weight:700}
+          .sheet{max-width:1280px;margin:auto;padding:34px 64px 24px}
+          header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px;border-bottom:1px solid #171717;gap:20px}
+          .brand{font-size:36px;font-weight:300;letter-spacing:.01em}
+          nav{display:flex;gap:32px;align-items:center;font-size:21px;font-weight:300}
+          .stamp{font-size:18px;letter-spacing:.07em;font-weight:300}
+          .hero{position:relative;padding:46px 8px 26px}
+          .eyebrow{font-size:18px;font-weight:300;letter-spacing:.13em;margin-bottom:30px}
+          h1{font-weight:200;letter-spacing:-.01em}
+          .first{display:block;font-size:90px;line-height:1.12;white-space:nowrap}
+          .second{display:flex;align-items:baseline;gap:40px;white-space:nowrap;margin-top:2px;padding-right:14px}
+          .ornate{font-family:ornate;font-style:normal;font-weight:400;letter-spacing:0;line-height:1.25;font-kerning:normal;font-feature-settings:'liga' 1,'calt' 1}
+          .launch{font-size:218px}
+          .projects{font-size:144px;line-height:1.1;font-weight:200;letter-spacing:-.025em}
+          .description{max-width:675px;margin-top:10px;font-size:28px;line-height:1.48;font-weight:300}
+          .hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:36px;margin-top:32px}
+          .cta{display:inline-flex;border-bottom:1px solid #0a0a0a;padding:0 0 6px;font-size:25px;font-weight:700;white-space:nowrap}
+          .note{font-size:20px;font-weight:300;max-width:350px;line-height:1.45;text-align:right}
+          .detail{display:grid;grid-template-columns:1fr 1fr;column-gap:46px;row-gap:28px;border-top:1px solid #171717;margin-top:25px;padding-top:30px}
+          .detail-title{font-size:17px;letter-spacing:.10em;font-weight:300;margin-bottom:17px}
+          .base-example{font-size:61px;line-height:1.18;font-weight:200;letter-spacing:-.015em}
+          .base-example strong{font-weight:700}
+          .body-example{font-size:23px;line-height:1.5;font-weight:300;max-width:510px;margin-top:17px}
+          .flourish{font-size:104px;white-space:nowrap;padding:0 12px 0 6px}
+          .flourish-sub{font-size:25px;line-height:1.45;font-weight:300;margin-top:2px}
+          footer{display:flex;justify-content:space-between;gap:20px;border-top:1px solid #171717;margin-top:35px;padding-top:19px;font-size:18px;line-height:1.4;font-weight:300}
+          @media(max-width:600px){
+            .sheet{padding:23px 24px 20px}.brand{font-size:30px}nav{display:none}header{padding-bottom:17px}.stamp{font-size:15px;letter-spacing:.01em}
+            .hero{padding:33px 0 18px}.eyebrow{font-size:16px;letter-spacing:.08em;margin-bottom:22px}
+            .first{font-size:43px;white-space:normal;max-width:300px;line-height:1.17}
+            .second{display:block;margin-top:14px;padding:0;white-space:normal}.launch{display:block;font-size:123px;line-height:1.06}.projects{display:block;font-size:91px;margin-top:6px;line-height:1.1}
+            .description{font-size:23px;line-height:1.45;margin-top:22px}.hero-bottom{align-items:start;flex-direction:column;gap:25px;margin-top:27px}.cta{font-size:24px}.note{font-size:18px;text-align:left}
+            .detail{grid-template-columns:1fr;margin-top:22px;padding-top:25px;gap:28px}.detail-title{font-size:16px;margin-bottom:12px}.base-example{font-size:43px}.body-example{font-size:21px;margin-top:15px}.flourish{font-size:81px}.flourish-sub{font-size:21px}
+            footer{flex-direction:column;gap:7px;font-size:16px;margin-top:29px;padding-top:17px}
+          }
           '''
-          cards=[('a','01','oswald semibold + old standard tt italic'),('b','02','akrobat extrabold + playfair display italic'),('c','03','oswald medium + bona nova italic')]
-          parts=[]
-          for cls,n,name in cards:
-            parts.append(f'<article class="{cls}" id="v{n}"><div class="label"><span class="num">{n}</span><span class="names">{name}</span></div><div class="hero"><div class="lead fit">придумываю, собираю и</div><div class="line fit"><span class="launch">запускаю</span><span class="projects">проекты</span></div></div><div class="details"><span class="sample-main">дашкунс</span><span class="sample-italic">идея становится реальностью</span></div></article>')
-          html='<!doctype html><html lang="ru"><meta charset="utf-8"><style>'+css+'</style><main class="board"><header><span class="brand">dashhkuns</span><span>узкий прямой + выразительный курсив</span></header>'+''.join(parts)+'<footer><span>настоящие начертания · кириллица · строчные буквы</span><span>тест, не обновление сайта</span></footer></main></html>'
+          html='''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>'''+css+'''</style></head><body><main class="sheet"><header><span class="brand">dashhkuns</span><nav><span>что делаю</span><span>проекты</span><span>обо мне</span><span>контакт</span></nav><span class="stamp">тест типографики</span></header><section class="hero"><p class="eyebrow">креативный продюсер · идея / команда / запуск</p><h1><span class="first">придумываю, собираю и</span><span class="second"><span class="ornate launch">запускаю</span><span class="projects">проекты</span></span></h1><p class="description">связываю концепцию, людей и производство<br>и довожу проект <strong>до запуска</strong></p><div class="hero-bottom"><span class="cta">обсудить проект ↗</span><p class="note">тонкая основа · чёрный текст<br>жирное — только смысловой акцент</p></div></section><section class="detail"><div><h2 class="detail-title">01 / основа и смысловой акцент</h2><p class="base-example">много идей<br><strong>один результат</strong></p><p class="body-example">обычный текст остаётся лёгким и спокойным<br>жирным выделяем <strong>только важное</strong></p></div><div><h2 class="detail-title">02 / вычурный каллиграфический акцент</h2><p class="ornate flourish">дерзко</p><p class="flourish-sub">не наклон обычных букв,<br>а отдельный рисунок с росчерками</p></div></section><footer><span>fira sans extra condensed · great vibes</span><span>настоящие шрифты / кириллица / чёрный на белом</span></footer></main></body></html>'''
           (root/'index.html').write_text(html,encoding='utf-8')
+          reports=[]
           with sync_playwright() as p:
-            browser=p.chromium.launch();page=browser.new_page(viewport={'width':1280,'height':900},device_scale_factor=1.5)
-            errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-            page.goto((root/'index.html').as_uri(),wait_until='load')
-            page.evaluate('''async()=>{await Promise.all([document.fonts.load('600 90px oswald','придумываю'),document.fonts.load('800 90px akrobat','придумываю'),document.fonts.load('italic 400 90px oldstandard','запускаю'),document.fonts.load('italic 500 90px playfair','запускаю'),document.fonts.load('italic 400 90px bona','запускаю')]);await document.fonts.ready;for(const el of document.querySelectorAll('.lead')){let n=parseFloat(getComputedStyle(el).fontSize);while(el.getBoundingClientRect().width>el.parentElement.clientWidth-4){n-=1;el.style.fontSize=n+'px';}}for(const el of document.querySelectorAll('.line')){while(el.getBoundingClientRect().width>el.parentElement.clientWidth-4){for(const child of el.children){child.style.fontSize=(parseFloat(getComputedStyle(child).fontSize)-1)+'px';}}}}''')
-            faces=page.evaluate('()=>Array.from(document.fonts).map(f=>({family:f.family,status:f.status}))')
-            assert all(f['status']=='loaded' for f in faces),faces
-            assert not errors,errors
-            page.screenshot(path=str(output/'dashhkuns-narrow-italic-options.png'),full_page=True)
-            for cls,n,name in cards:page.locator('#v'+n).screenshot(path=str(output/('dashhkuns-pair-'+n+'.png')))
+            browser=p.chromium.launch()
+            for width,label in [(1280,'desktop'),(390,'mobile')]:
+              page=browser.new_page(viewport={'width':width,'height':1000},device_scale_factor=1.5)
+              errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+              page.goto((root/'index.html').as_uri(),wait_until='load')
+              page.evaluate('''async()=>{await Promise.all([document.fonts.load('200 90px base','придумываю'),document.fonts.load('300 24px base','обычный текст'),document.fonts.load('400 24px base','буквы'),document.fonts.load('700 24px base','до запуска'),document.fonts.load('400 180px ornate','запускаю')]);await document.fonts.ready;const fit=(el,parent)=>{let i=0;while(el.getBoundingClientRect().width>parent.clientWidth-8&&i++<80){el.style.fontSize=(parseFloat(getComputedStyle(el).fontSize)-1)+'px'}};if(innerWidth>600){const first=document.querySelector('.first');first.style.width='max-content';fit(first,first.parentElement);const second=document.querySelector('.second');second.style.width='max-content';let i=0;while(second.getBoundingClientRect().width>second.parentElement.clientWidth-8&&i++<80){for(const c of second.children)c.style.fontSize=(parseFloat(getComputedStyle(c).fontSize)-1)+'px'}}else{for(const el of document.querySelectorAll('.launch,.flourish')){el.style.width='max-content';fit(el,el.parentElement)}}}''')
+              faces=page.evaluate('()=>Array.from(document.fonts).map(f=>({family:f.family,weight:f.weight,status:f.status}))')
+              assert all(f['status']=='loaded' for f in faces),faces
+              assert not errors,errors
+              overflow=page.evaluate('()=>document.documentElement.scrollWidth>innerWidth')
+              assert not overflow, width
+              page.screenshot(path=str(output/('dashhkuns-thin-ornate-'+label+'.png')),full_page=True)
+              reports.append({'width':width,'faces':faces,'overflow':overflow,'jsErrors':errors})
+              page.close()
             browser.close()
-          (output/'validation.json').write_text(json.dumps({'fonts':validation,'faces':faces,'websiteChanged':False,'errors':errors},ensure_ascii=False,indent=2))
-          print('Rendered three pairs with real lowercase Cyrillic outlines. Only PNG images and validation are exported; no font files.')
+          (output/'validation.json').write_text(json.dumps({'fonts':validation,'browser':reports,'websiteChanged':False,'fontFilesExported':False},ensure_ascii=False,indent=2),encoding='utf-8')
+          print('Black on white: thin base, ornate real Cyrillic script, bold only at semantic accents. Preview only.')
           PY
       - name: return only raster previews and validation
         uses: actions/upload-artifact@v4
         with:
-          name: dashhkuns-narrow-italic-review
-          path: narrow-italic-output/
+          name: dashhkuns-thin-ornate-review
+          path: thin-ornate-output/
           retention-days: 7
