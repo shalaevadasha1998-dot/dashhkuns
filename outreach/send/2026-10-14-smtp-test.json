@@ -1,0 +1,8 @@
+[
+  {
+    "company": "dashhkuns test",
+    "to": "shalaevadasha1998@gmail.com",
+    "subject": "тест исходящей почты create@dashhkuns.com",
+    "body": "технический тест автоматической отправки с create@dashhkuns.com\n\nесли это письмо пришло именно от create@dashhkuns.com, smtp и автоматическая рассылка работают\n\nдашкунс"
+  }
+]
