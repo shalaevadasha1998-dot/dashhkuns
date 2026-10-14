@@ -1,0 +1,64 @@
+name: wishlist full product review
+on:
+  push:
+    branches: [fix/wishlist-full-items-20261015]
+    paths: ['scripts/wishlist-full-products.py','scripts/wishlist-more-ideas.py','.github/workflows/wishlist-full-build.yml']
+permissions:
+  contents: write
+concurrency:
+  group: wishlist-full-product-build
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/wishlist-full-items-20261015
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: image and browser tools
+        run: python -m pip install --disable-pip-version-check pillow numpy scipy requests beautifulsoup4 cairosvg playwright==1.57.0
+      - name: complete photographed objects and native transparency
+        run: python scripts/wishlist-full-products.py
+      - name: separate optional ideas from existing wishes
+        run: python scripts/wishlist-more-ideas.py
+      - name: syntax checks
+        run: node --check wishlist/app.js && node --check wishlist/ideas.js && node --check wishlist/reservations.js
+      - name: browser
+        run: python -m playwright install --with-deps chromium
+      - name: preserved real reservation and browser flows
+        run: python scripts/wishlist-reservation-smoke.py
+      - name: save candidate files only to feature branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add wishlist/items/*-full.png wishlist/data.json wishlist/product-image-sources.json wishlist/ideas.css wishlist/ideas.js wishlist/ideas.json wishlist/index.html wishlist/app.js wishlist/image-credits.html wishlist/README.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'build(wishlist): complete objects and 16 clearly unconfirmed ideas'
+            git push origin HEAD:fix/wishlist-full-items-20261015
+          fi
+      - name: review bundle
+        if: always()
+        run: |
+          python - <<'PY'
+          import pathlib,os,zipfile
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'wishlist-full-review';out.mkdir(exist_ok=True)
+          with zipfile.ZipFile(out/'review-site.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in pathlib.Path('wishlist').rglob('*'):
+                  if p.is_file():z.write(p,str(p))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wishlist-full-review
+          path: |
+            ${{ runner.temp }}/wishlist-full-review
+            ${{ runner.temp }}/wishlist-refresh
+          retention-days: 4
