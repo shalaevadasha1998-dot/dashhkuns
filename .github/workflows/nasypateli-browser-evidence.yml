@@ -6,6 +6,9 @@ on:
       - '.github/workflows/nasypateli-browser-evidence.yml'
       - 'scripts/nasypateli-browser-evidence.mjs'
       - 'api/nasypateli-live.js'
+      - 'api/nasypateli-renderer.js'
+      - 'nasypateli-login.html'
+      - 'tests/nasypateli-referrer.test.mjs'
 permissions:
   contents: read
 jobs:
@@ -19,12 +22,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: authentication and origin regression
+        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs
       - name: prepare isolated browser tools
         shell: bash
         run: |
           set -euo pipefail
           npm install --prefix "$RUNNER_TEMP/browser-tools" --no-audit --no-fund playwright
-          "$RUNNER_TEMP/browser-tools/node_modules/.bin/playwright" install --with-deps chromium webkit
+          "$RUNNER_TEMP/browser-tools/node_modules/.bin/playwright" install --with-deps chromium webkit > "$RUNNER_TEMP/browser-install.log" 2>&1 || { tail -40 "$RUNNER_TEMP/browser-install.log"; exit 1; }
           mkdir -p "$RUNNER_TEMP/nasypateli-evidence"
           openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/local-test.key" -out "$RUNNER_TEMP/local-test.crt" 2>/dev/null
       - name: live browser navigation and isolated authenticated UI
