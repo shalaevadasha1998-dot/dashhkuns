@@ -1,0 +1,56 @@
+/* crm layout refinement · 2026-10-14 */
+.crm-body{overflow-x:hidden}
+.crm-app,.crm-page,.crm-panel,.crm-task-board,.crm-project-grid,.crm-leads{min-width:0}
+.crm-page{max-width:1680px;margin-inline:auto}
+.crm-topbar{gap:clamp(8px,1.5vw,24px)}
+.crm-desktop-nav{min-width:0;flex-wrap:wrap}
+.crm-desktop-nav button{white-space:nowrap}
+.crm-panel,.crm-task-card,.crm-message-card,.crm-project-card,.crm-lead{overflow-wrap:anywhere}
+.crm-task-main,.crm-task-title,.crm-task-desc{min-width:0;overflow-wrap:anywhere}
+.crm-task-row,.crm-task-card{min-width:0}
+.crm-controls,.crm-controls-tasks{grid-template-columns:minmax(0,1fr) minmax(180px,360px)}
+.crm-controls-tasks .crm-select{grid-column:1/-1;max-width:360px}
+.crm-tabs{max-width:100%;overflow-x:auto;scrollbar-width:thin}
+.crm-tabs button{flex:0 0 auto;white-space:nowrap}
+.crm-search{min-width:0}
+.crm-search input{min-width:0}
+.crm-project-grid,.crm-leads{grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
+@media(max-width:1000px){
+.crm-dashboard-grid{grid-template-columns:1fr 1fr}
+.crm-panel-wide{grid-column:1/-1;grid-row:auto}
+.crm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.crm-controls,.crm-controls-tasks{grid-template-columns:minmax(0,1fr)}
+.crm-controls-tasks .crm-select{grid-column:auto;max-width:none}
+}
+@media(max-width:680px){
+.crm-app{padding-bottom:calc(94px + env(safe-area-inset-bottom,0px))}
+.crm-topbar{height:auto;min-height:62px;padding:10px 16px;grid-template-columns:minmax(0,1fr) auto auto}
+.crm-topbar .crm-brand{min-width:0}
+.crm-desktop-nav{display:none}
+.crm-sync{max-width:110px;font-size:9px}
+.crm-hero,.crm-section-hero{padding:30px 16px 22px;gap:12px;align-items:center}
+.crm-hero h1,.crm-section-hero h1{font-size:clamp(38px,11vw,64px);line-height:.95}
+.crm-stats{padding:12px 16px;gap:8px}
+.crm-stat{min-height:100px;padding:13px}
+.crm-stat strong{font-size:clamp(36px,10vw,52px)}
+.crm-dashboard-grid{padding:16px;grid-template-columns:minmax(0,1fr);gap:12px}
+.crm-panel-wide{grid-column:auto}
+.crm-panel{padding:16px;border-radius:16px}
+.crm-panel-head h2{font-size:36px}
+.crm-controls{padding:14px 16px;gap:12px}
+.crm-tabs{border-radius:12px}
+.crm-tabs button{min-height:42px;padding:0 12px}
+.crm-task-board,.crm-message-list,.crm-project-grid,.crm-leads{padding:16px;gap:12px}
+.crm-task-card{padding:14px;gap:9px;grid-template-columns:auto minmax(0,1fr) auto}
+.crm-task-title{font-size:15px}
+.crm-message-card{grid-template-columns:minmax(0,1fr);padding:16px}
+.crm-message-side{text-align:left}
+.crm-project-card,.crm-lead{min-height:unset;padding:18px}
+.crm-project-card h3{margin:18px 0 12px;font-size:34px}
+.crm-login{grid-template-columns:minmax(0,1fr)}
+.crm-login-art{display:none}
+.crm-login-card{min-height:100svh;padding:96px 22px 40px;border:0}
+.crm-login-card .crm-brand{left:22px}
+.crm-login-card h1{font-size:clamp(46px,13vw,76px)}
+}
+@media(prefers-reduced-motion:reduce){.crm-body *{scroll-behavior:auto!important;transition-duration:0.01ms!important}}
