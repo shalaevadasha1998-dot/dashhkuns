@@ -2,7 +2,7 @@ name: wishlist full product review
 on:
   push:
     branches: [fix/wishlist-full-items-20261015]
-    paths: ['scripts/wishlist-full-products.py','scripts/wishlist-more-ideas.py','.github/workflows/wishlist-full-build.yml']
+    paths: ['scripts/wishlist-full-products.py','scripts/wishlist-more-ideas.py','scripts/wishlist-final-polish.py','.github/workflows/wishlist-full-build.yml']
 permissions:
   contents: write
 concurrency:
@@ -28,6 +28,8 @@ jobs:
         run: python scripts/wishlist-full-products.py
       - name: separate optional ideas from existing wishes
         run: python scripts/wishlist-more-ideas.py
+      - name: final visual corrections and readable copy
+        run: python scripts/wishlist-final-polish.py
       - name: syntax checks
         run: node --check wishlist/app.js && node --check wishlist/ideas.js && node --check wishlist/reservations.js
       - name: browser
