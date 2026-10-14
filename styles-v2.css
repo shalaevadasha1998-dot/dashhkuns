@@ -3,7 +3,7 @@
    one deliberate gradient only: acid green -> neon pink
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700;800&family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&family=Sofia+Sans+Condensed:wght@400;500;600;700;800&display=swap');
 
 *,
 *::before,
@@ -22,8 +22,8 @@
   --gutter:clamp(22px,4.5vw,72px);
   --section:clamp(76px,7vw,116px);
   --gradient:linear-gradient(135deg,#24e86b 0%,#ff3fad 100%);
-  --sans:Geologica,Arial,sans-serif;
-  --serif:Prata,Georgia,serif
+  --sans:"Sofia Sans Condensed",Arial,sans-serif;
+  --serif:"Cormorant Garamond",Georgia,serif
 }
 
 html{
@@ -72,9 +72,9 @@ h3{font-size:clamp(30px,3.2vw,50px)}
 
 .serif{
   font-family:var(--serif);
-  font-style:normal;
-  font-weight:400;
-  letter-spacing:-.045em
+  font-style:italic;
+  font-weight:500;
+  letter-spacing:-.035em
 }
 .accent-pop{color:var(--pink)}
 .kicker,
