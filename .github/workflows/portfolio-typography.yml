@@ -1,19 +1,24 @@
-name: portfolio typography preview
+name: portfolio typography checks
 on:
   push:
-    branches: [design/alumni-literata-20261014]
+    branches: [design/alumni-literata-20261014, main]
     paths:
       - scripts/apply-portfolio-typography.py
       - scripts/qa-portfolio-typography.mjs
+      - scripts/ensure-portfolio-routes.py
+      - scripts/verify-public-typography.py
       - assets/portfolio-typography.css
       - .github/workflows/portfolio-typography.yml
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: portfolio-typography-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   prepare-and-test:
+    if: github.ref_name == 'design/alumni-literata-20261014'
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -21,7 +26,9 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
       - name: apply approved typography to portfolio pages
-        run: python3 scripts/apply-portfolio-typography.py
+        run: |
+          python3 scripts/apply-portfolio-typography.py
+          python3 scripts/ensure-portfolio-routes.py
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -40,16 +47,31 @@ jobs:
           name: portfolio-typography-evidence
           path: typography-evidence/
           retention-days: 7
-      - name: commit reviewed-scope typography on the preview branch only
+      - name: commit tested typography on the preview branch only
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           python3 - <<'PY'
           import json,subprocess
           rows=json.load(open('typography-evidence/scope.json'))
-          subprocess.run(['git','add','styles-v2.css','assets/portfolio-typography.css']+[r['file'] for r in rows],check=True)
+          subprocess.run(['git','add','styles-v2.css','assets/portfolio-typography.css','vercel.json']+[r['file'] for r in rows],check=True)
           PY
           if ! git diff --cached --quiet; then
-            git commit -m 'design: apply approved Alumni Sans and Literata Italic across portfolio'
+            git commit -m 'design: finalize tested portfolio typography and FAQ route'
             git push origin HEAD:design/alumni-literata-20261014
           fi
+  production-smoke:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: verify all public portfolio URLs and deployed font stylesheets
+        run: python3 scripts/verify-public-typography.py
+      - name: save public delivery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-typography-report
+          path: public-typography-report.json
+          retention-days: 7
