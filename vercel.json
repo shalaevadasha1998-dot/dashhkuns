@@ -157,6 +157,14 @@
   ],
   "rewrites": [
     {
+      "source": "/nasypateli-live",
+      "destination": "/api/nasypateli-live"
+    },
+    {
+      "source": "/nasypateli-live/",
+      "destination": "/api/nasypateli-live"
+    },
+    {
       "source": "/crm-app/",
       "destination": "/crm-app/index.html"
     },
