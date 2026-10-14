@@ -51,15 +51,22 @@ for(const[name,engine]of[['chromium',chromium],['webkit',webkit]]){
   await page.locator('#episodeArchive summary').first().click();await page.locator('#episodeArchive input[type=checkbox]').nth(1).check();await page.locator('#searchQuotes').click();
   assert.ok((await page.locator('#quoteResults').textContent()).includes('свобода требует ответственности'));assert.ok((await page.locator('#quoteResults').textContent()).includes('00:01:24'));result.reviewedSources=true;
   await page.getByText('сохранение и резервная копия',{exact:true}).click();await page.locator('#saveLocal').check();
-  assert.ok(await page.evaluate(()=>Boolean(localStorage.getItem('nasypateli.studio.v3'))));
+  await page.waitForFunction(()=>Boolean(localStorage.getItem('nasypateli.studio.v3')));
   const download=page.waitForEvent('download');await page.locator('#exportArchive').click();const file=await download;const path=join(out,name+'-synthetic-archive.json');await file.saveAs(path);const exported=JSON.parse(await readFile(path,'utf8'));assert.equal(exported.project,'nasypateli');assert.equal(exported.episodes[0].items.length,3);assert.ok(!JSON.stringify(exported).includes('черновик не должен попасть'));result.backup=true;
+  await page.locator('#startClock').click();await page.waitForTimeout(1150);await page.locator('#startClock').click();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('nasypateli.studio.v3')).elapsedSeconds>=1);
+  const savedClock=await page.locator('#episodeClock').textContent();
   await page.screenshot({path:join(out,name+'-archive.png'),fullPage:true});
-  await page.reload();await page.locator('#console').waitFor();assert.equal(await page.locator('#cue').inputValue(),'черновик не должен попасть в кадр');await stage.waitForFunction(()=>document.getElementById('caption')?.textContent==='');result.recoveryWithoutPublication=true;
+  await page.reload();await page.locator('#console').waitFor();assert.equal(await page.locator('#cue').inputValue(),'черновик не должен попасть в кадр');assert.equal(await page.locator('#episodeClock').textContent(),savedClock);result.pausedClockRestored=true;
+  await stage.waitForFunction(()=>document.getElementById('caption')?.textContent==='');result.recoveryWithoutPublication=true;
   await page.locator('#showCue').click();await stage.waitForFunction(()=>document.getElementById('caption')?.textContent==='черновик не должен попасть в кадр');await page.locator('#panicStop').click();await stage.waitForFunction(()=>document.getElementById('caption')?.textContent==='');result.emergencyStop=true;
   const other=await ctx.newPage();await other.goto(base+'/nasypateli-live/app');await other.locator('#cue').fill('другой зал');await other.locator('#showCue').click();await stage.waitForTimeout(250);assert.equal(await stage.locator('#caption').textContent(),'');result.roomIsolation=true;await other.close();
+  await page.locator('#cue').fill('свой черновик после изменения архива в другой вкладке');
+  await page.waitForFunction(()=>document.getElementById('storageStatus')?.textContent.includes('другой вкладкой'));
+  assert.equal(await page.locator('#saveLocal').isChecked(),false);result.concurrentArchiveProtected=true;
   await page.screenshot({path:join(out,name+'-operator.png')});await stage.screenshot({path:join(out,name+'-projector.png')});
   await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:join(out,name+'-mobile.png'),fullPage:true});result.mobile=true;
-  await page.locator('#logoutStudio button').click();await page.locator('#password').waitFor();assert.equal(await page.locator('#console').count(),0);result.logout=true;
+  await page.locator('#logoutStudio button').click();await page.locator('#password').waitFor();await stage.locator('#password').waitFor();assert.equal(await page.locator('#console').count(),0);result.logout=true;
   assert.deepEqual(errors,[]);result.ok=true;
  }catch(e){result.ok=false;result.error=e.message.slice(0,500);result.errors=errors;failures++;await page.screenshot({path:join(out,name+'-failure.png'),fullPage:true}).catch(()=>{});}
  results.push(result);console.log(JSON.stringify(result));await ctx.close();await browser.close();
