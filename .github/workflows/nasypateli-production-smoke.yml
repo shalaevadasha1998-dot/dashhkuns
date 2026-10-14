@@ -1,0 +1,43 @@
+name: nasypateli protected production route
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'api/nasypateli-live.js'
+      - '.github/workflows/nasypateli-production-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  live-http-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: verify public login returns HTTP 200 and no protected stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in $(seq 1 25); do
+            code="$(curl --silent --show-error --location --max-time 15 --dump-header /tmp/nasypateli-headers --output /tmp/nasypateli-body --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live' || true)"
+            if [ "$code" = 200 ] &&
+               grep -q 'вход по паролю' /tmp/nasypateli-body &&
+               ! grep -q 'id="character"' /tmp/nasypateli-body &&
+               grep -qi 'x-robots-tag:.*noindex' /tmp/nasypateli-headers; then
+              echo "anonymous login page is HTTP 200 and stage remains protected"
+              ok=1
+              break
+            fi
+            echo "awaiting deploy: attempt=$attempt http=${code:-unavailable}"
+            sleep 8
+          done
+          if [ "$ok" -ne 1 ]; then echo "protected route is not healthy" >&2; exit 1; fi
+      - name: verify wrong password shows form without revealing private stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          code="$(curl --silent --show-error --max-time 15 --request POST --header 'Origin: https://dashhkuns.com' --header 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=invalid-ci-password' --output /tmp/nasypateli-wrong --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live')"
+          test "$code" = 200
+          grep -q 'неверный пароль' /tmp/nasypateli-wrong
+          ! grep -q 'id="character"' /tmp/nasypateli-wrong
+          echo "wrong password remains rejected without a browser error page"
