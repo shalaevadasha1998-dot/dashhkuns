@@ -1,0 +1,59 @@
+name: nasypateli studio rehearsal
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'api/nasypateli-live.js'
+      - 'lib/nasypateli-studio.mjs'
+      - 'tests/nasypateli-studio.test.mjs'
+      - 'scripts/nasypateli-studio-check.mjs'
+      - '.github/workflows/nasypateli-studio.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/nasypateli-live.js'
+      - 'lib/nasypateli-studio.mjs'
+      - 'tests/nasypateli-studio.test.mjs'
+      - 'scripts/nasypateli-studio-check.mjs'
+      - '.github/workflows/nasypateli-studio.yml'
+permissions:
+  contents: read
+jobs:
+  rehearsal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: authentication, origin and archive tests
+        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs tests/nasypateli-studio.test.mjs
+      - name: prepare browsers
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/ui-tools" --no-audit --no-fund playwright
+          "$RUNNER_TEMP/ui-tools/node_modules/.bin/playwright" install --with-deps chromium webkit > "$RUNNER_TEMP/studio-browser-install.log" 2>&1 || { tail -30 "$RUNNER_TEMP/studio-browser-install.log"; exit 1; }
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/identity.key" -out "$RUNNER_TEMP/identity.crt" 2>/dev/null
+      - name: visual and functional rehearsal
+        run: node scripts/nasypateli-studio-check.mjs
+      - name: attach only relevant public source for reproducibility
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/nasypateli-studio-proof/source/lib" "$RUNNER_TEMP/nasypateli-studio-proof/source/api" "$RUNNER_TEMP/nasypateli-studio-proof/source/assets" "$RUNNER_TEMP/nasypateli-studio-proof/source/tests" "$RUNNER_TEMP/nasypateli-studio-proof/source/scripts"
+          cp lib/nasypateli-studio.mjs lib/nasypateli-identity.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/lib/"
+          cp api/nasypateli-live.js api/nasypateli-renderer.js "$RUNNER_TEMP/nasypateli-studio-proof/source/api/"
+          cp assets/nasypateli-mark.webp assets/nasypateli-entry.css "$RUNNER_TEMP/nasypateli-studio-proof/source/assets/"
+          cp nasypateli-login.html vercel.json "$RUNNER_TEMP/nasypateli-studio-proof/source/"
+          cp tests/nasypateli-{studio,auth,referrer}.test.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/tests/"
+          cp scripts/nasypateli-studio-check.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/scripts/"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nasypateli-studio-proof
+          path: ${{ runner.temp }}/nasypateli-studio-proof
+          retention-days: 3
