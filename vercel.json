@@ -139,6 +139,11 @@
       "permanent": false
     },
     {
+      "source": "/go/behance",
+      "destination": "/?utm_source=behance&utm_medium=profile&utm_campaign=creative_producer",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [
         {
