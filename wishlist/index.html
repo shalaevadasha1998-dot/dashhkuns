@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff3fad"><meta name="robots" content="noindex,follow">
+<meta name="description" content="вишлист доры: встречи, впечатления, творчество и вещи, которым я буду рада">
+<link rel="canonical" href="https://dashhkuns.com/wishlist">
+<meta property="og:type" content="website"><meta property="og:title" content="дора хочет — dashhkuns">
+<meta property="og:description" content="не только вещи. зовите меня, пишите мне — и выбирайте подарок по любви">
+<meta property="og:url" content="https://dashhkuns.com/wishlist"><meta property="og:image" content="https://dashhkuns.com/assets/shoot-2026-9694.jpg">
+<title>дора хочет — вишлист dashhkuns</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Sofia+Sans+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wishlist/style.css?v=20261014-1">
+<script src="/wishlist/app.js?v=20261014-1" defer></script>
+</head>
+<body>
+<a class="skip" href="#gifts">перейти к подаркам</a>
+<header class="topbar"><a class="brand" href="/" aria-label="dashhkuns, на главную">dash<span>h</span>kuns</a><nav aria-label="навигация вишлиста"><a href="#people">самое важное</a><a href="#gifts">подарки</a><a href="#how">как дарить</a></nav><button class="button compact dark" id="share-page" type="button">поделиться ↗</button></header>
+<main>
+<section class="hero" aria-labelledby="page-title">
+ <div class="hero-copy"><p class="eyebrow"><span class="live-dot"></span> личная территория / вишлист</p><h1 id="page-title">дора<br><span class="serif">хочет.</span></h1><p class="hero-lead">встречаться. создавать.<br>уезжать. <span>и иногда — новую штуку.</span></p><p class="hero-note">здесь всё, чему я буду рада<br>дорогой подарок совсем не обязателен</p><a class="button primary" href="#gifts">смотреть хотелки <span aria-hidden="true">↓</span></a></div>
+ <figure class="portrait"><img src="/assets/shoot-2026-9694.jpg" alt="дора — фотография с основного сайта" width="800" height="1000" fetchpriority="high"><figcaption><span>не бриф.<br><b>просто я.</b></span><span class="portrait-star" aria-hidden="true">✳</span></figcaption><span class="portrait-tag">желания без повода</span></figure>
+</section>
+<section class="people" id="people" aria-labelledby="people-title">
+ <div class="section-heading"><p class="eyebrow">01 / самое важное</p><h2 id="people-title">лучшие подарки —<br><span class="serif">не обязательно вещи</span></h2></div>
+ <div class="people-grid"><article class="people-card pink"><span class="card-number">01 / без бюджета</span><h3>зовите<br>меня <span class="serif">с собой</span></h3><p>на тусовки, концерты, премьеры, выставки и открытия. и просто проводить время с друзьями. мне правда интересно</p><p class="people-caption">не решайте за меня, что я занята</p></article><article class="people-card green"><span class="card-number">02 / без повода</span><h3>пишите,<br>как вы <span class="serif">там</span></h3><p>рассказывайте, как у вас дела. что случилось, что придумали, чему радуетесь. можно просто написать — мне не нужен особый повод</p><p class="people-caption">истории из вашей жизни тоже подарок</p></article></div>
+</section>
+<section class="catalog" id="gifts" aria-labelledby="gifts-title">
+ <div class="catalog-heading"><div><p class="eyebrow">02 / материальное и не очень</p><h2 id="gifts-title">вот это <span class="serif">хочу</span></h2></div><p class="catalog-note">не обязательно всё и сразу<br>маленьким подаркам тоже рада</p></div>
+ <div class="toolbar"><label class="search"><span class="sr-only">поиск по вишлисту</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="найти ту самую штуку" autocomplete="off"></label><label class="priority-toggle"><input id="priority" type="checkbox"><span>только «очень хочу»</span></label><button id="saved-toggle" class="filter-button" type="button" aria-pressed="false">мой выбор <span id="saved-count">0</span></button></div>
+ <div class="categories" id="categories" role="group" aria-label="категории подарков"></div>
+ <div class="results-line"><p id="results" role="status" aria-live="polite">загружаю желания…</p><button class="text-button" id="reset" type="button" hidden>сбросить фильтры ↺</button></div>
+ <div class="gift-grid" id="gift-grid" aria-busy="true"></div>
+ <div class="empty" id="empty" hidden><span class="serif">ничего не нашлось</span><p>попробуй другое слово или сбрось фильтры</p><button class="button" id="empty-reset" type="button">показать всё</button></div>
+ <div class="empty" id="load-error" hidden><span class="serif">список не загрузился</span><p>обнови страницу или открой исходный вишлист</p><a class="button" href="https://app.notion.com/p/484bb0ef79364f9f9d3bc95b4b8f146a" target="_blank" rel="noopener noreferrer">вишлист в notion ↗</a></div>
+ <noscript><p>для поиска и карточек нужен javascript. <a href="https://app.notion.com/p/484bb0ef79364f9f9d3bc95b4b8f146a">исходный список в notion</a></p></noscript>
+ <p class="reference-note">фотографии — визуальные ориентиры. комплектацию, цвет, размер и точную модель согласуем перед покупкой</p>
+</section>
+<section class="how" id="how" aria-labelledby="how-title"><div><p class="eyebrow">03 / без сложностей</p><h2 id="how-title">не угадывай.<br><span class="serif">просто напиши.</span></h2></div><div class="how-copy"><p>выбери подарок, открой карточку и скопируй сообщение. отправь его мне в нашем обычном чате — так мы уточним детали и не купим одно и то же</p><p>«мой выбор» сохраняется только в твоём браузере и не бронирует подарок для других</p><p>можно скинуться на большую мечту. можно принести старые журналы. можно позвать меня гулять</p><button class="button primary" id="share-bottom" type="button">отправить вишлист друзьям ↗</button></div></section>
+</main>
+<footer><a class="brand" href="/">dash<span>h</span>kuns</a><p>вишлист доры / <span id="updated">октябрь 2026</span></p><a href="#page-title">наверх ↑</a></footer>
+<dialog id="gift-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="закрыть карточку">×</button><div class="dialog-picture"><img id="dialog-image" alt="" width="800" height="600"><span class="image-fallback" aria-hidden="true">хочу.</span></div><div class="dialog-copy"><p class="eyebrow" id="dialog-category"></p><h2 id="dialog-title"></h2><p id="dialog-description"></p><p class="detail-note">фото — ориентир, а не подтверждение модели или наличия. перед покупкой напиши мне</p><a class="button" id="dialog-source" target="_blank" rel="noopener noreferrer" hidden>страница модели ↗</a><button class="button primary" id="copy-message" type="button">скопировать сообщение доре</button><button class="text-button" id="copy-gift-link" type="button">скопировать ссылку на подарок ↗</button><label id="manual-copy" hidden>скопируй текст вручную<textarea readonly rows="4"></textarea></label><p class="detail-note">кнопка только копирует текст — сообщение никуда не отправляется</p></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body></html>
