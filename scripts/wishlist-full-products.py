@@ -1,12 +1,10 @@
 """Build reviewed whole-object cutouts only; no generative segmentation or portrait edits."""
 from pathlib import Path
-from urllib.parse import urljoin
 from concurrent.futures import ThreadPoolExecutor
-import hashlib,io,json,os,html
+import hashlib,io,json,os
 import requests,numpy as np
 from scipy import ndimage as ndi
 from PIL import Image,ImageOps,ImageFilter,ImageDraw
-from bs4 import BeautifulSoup
 ROOT=Path('.').resolve();ITEMS=ROOT/'wishlist/items';OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'wishlist-full-review';OUT.mkdir(parents=True,exist_ok=True)
 SOURCES={
 'macbook':('https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/macbook-pro-14-inch-m5.png','https://support.apple.com/en-us/125405','native'),
@@ -62,31 +60,16 @@ def prep(key,im,mode):
  return studio(im,17,mode=='holes')
 
 def park_logo():
- page='https://dreamisland.ru/';soup=BeautifulSoup(get(page).content.decode('utf-8'),'html.parser');options=[]
- for im in soup.find_all('img'):
-  src=im.get('src','');desc=src+' '+str(im.get('class',''))+' '+im.get('alt','')
-  if 'logo' in desc.lower() and src:options.append(urljoin(page,src))
- for link in soup.find_all('link'):
-  if 'icon' in ' '.join(link.get('rel',[])) and link.get('href'):options.append(urljoin(page,link['href']))
- for url in dict.fromkeys(options):
-  try:
-   raw=get(url).content
-   if b'<svg' in raw[:1000]:
-    import cairosvg
-    return Image.open(io.BytesIO(cairosvg.svg2png(bytestring=raw,output_width=1000))).convert('RGBA'),url
-   im=Image.open(io.BytesIO(raw)).convert('RGBA')
-   if min(im.size)>60:return im,url
-  except Exception:pass
- raise ValueError('no full park mark found')
+ # The park page rejected automated access, so use the separate designer's public case asset
+ import cairosvg
+ url='https://air.agency/img/case/ostrov/logo.svg';raw=get(url).content
+ return Image.open(io.BytesIO(cairosvg.svg2png(bytestring=raw,output_width=1000))).convert('RGBA'),url
 manifest=json.loads((ROOT/'wishlist/data.json').read_text());rows=[];old_ids=[x['id'] for x in manifest['items']]
 with ThreadPoolExecutor(max_workers=5) as pool:pending={key:pool.submit(load_url,row[0]) for key,row in SOURCES.items()}
 assets={key:prep(key,f.result(),SOURCES[key][2]) for key,f in pending.items()}
-# Use the whole front-view headphones, not the cropped side-view sample
 assets['airpods']=original('airpods').crop((70,80,560,620))
-# A complete retail pack replaces the deliberately enlarged/cropped foreground marker
 assets['finemarkers']=polygon(original('finemarkers'),[(260,30),(770,30),(770,658),(730,658),(349,567),(335,310),(303,182),(286,135),(260,120)])
 assets['beads']=original('beads').crop((199,105,601,420));assets['necklace']=assets['beads'].copy()
-# Assemble a reference for the requested console and exactly two pink controllers
 console=assets.pop('console').crop((543,10,804,603));console=console.crop(console.getbbox());console.thumbnail((360,720),Image.Resampling.LANCZOS)
 pad=studio(original('playstation'),neutral=True);pad=pad.crop(pad.getbbox());pad.thumbnail((460,290),Image.Resampling.LANCZOS)
 combo=Image.new('RGBA',(1050,800));combo.alpha_composite(console,(120,50));combo.alpha_composite(pad,(535,130));combo.alpha_composite(pad,(535,450));assets['playstation']=combo
@@ -97,7 +80,6 @@ for item in manifest['items']:
  assert bbox[0]>=30 and bbox[1]>=30 and bbox[2]<=1170 and bbox[3]<=870,key
  item['image']='/wishlist/items/'+path.name;item.pop('fit',None)
  rows.append({'id':key,'new_source':key in SOURCES or key=='playstation' or key=='dreamisland','mode':SOURCES.get(key,('','','preserved_whole_selection'))[2],'full_frame_margin':True,'transparent_fraction':round(float((alpha==0).mean()),4),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
-# These refinements keep original wishes distinct from new unconfirmed ideas
 changes={
  'speaker':{'title':'morningblues sonicglass a1','description':'прозрачная колонка с экраном и текстами песен\nориентир — sonicglass a1, комплектацию согласуем','url':'https://www.morningblues.com/products/morningblues-lyric-transparent-speaker-sonicglass-a1'},
  'theact':{'title':'набор скрабов и ухода the act','description':'хочу большой набор ухода the act\nскрабы и другие средства — точный состав сначала согласуем'},
@@ -116,8 +98,7 @@ for item in manifest['items']:
  item.update(changes.get(item['id'],{}));assert '.' not in item['title'] and '.' not in item['description']
 assert old_ids==[x['id'] for x in manifest['items']];assert len(old_ids)==39
 manifest['updated']='2026-10-15';(ROOT/'wishlist/data.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
-# Explicit provenance; all materials illustrate wishes and do not assert stock or exact configurations
-provenance={key:{'image':row[0],'page':row[1],'processing':row[2]} for key,row in SOURCES.items()};provenance['dreamisland']={'image':park_source,'page':'https://dreamisland.ru/','processing':'official_mark'}
+provenance={key:{'image':row[0],'page':row[1],'processing':row[2]} for key,row in SOURCES.items()};provenance['dreamisland']={'image':park_source,'page':'https://air.agency/cases/ostrov','processing':'public_designer_mark'}
 (ROOT/'wishlist/product-image-sources.json').write_text(json.dumps(provenance,ensure_ascii=False,indent=2)+'\n')
 for batch in range(4):
  part=manifest['items'][batch*12:(batch+1)*12];sheet=Image.new('RGB',(1600,960),'#ddd');draw=ImageDraw.Draw(sheet)
