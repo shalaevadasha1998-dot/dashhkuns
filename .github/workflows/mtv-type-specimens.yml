@@ -1,4 +1,4 @@
-name: mtv font specimens only
+name: narrow type and italic specimens only
 on:
   push:
     branches: [design/mtv-type-specimens]
@@ -17,100 +17,95 @@ jobs:
           python3 -m venv /tmp/font-preview-env
           /tmp/font-preview-env/bin/pip -q install playwright fonttools requests
           /tmp/font-preview-env/bin/playwright install --with-deps chromium
-      - name: render real font outlines without changing website files
+      - name: render narrow lettering and real italic glyphs without site changes
         run: |
           /tmp/font-preview-env/bin/python - <<'PY'
           from pathlib import Path
           from concurrent.futures import ThreadPoolExecutor
           from urllib.parse import quote
-          import requests, json
+          from io import BytesIO
+          import requests, json, zipfile
           from fontTools.ttLib import TTFont
           from playwright.sync_api import sync_playwright
-          root=Path('/tmp/mtv-font-specimens')
-          (root/'fonts').mkdir(parents=True,exist_ok=True)
-          output=Path('mtv-type-specimens-output'); output.mkdir(exist_ok=True)
+          root=Path('/tmp/narrow-italic-specimens'); (root/'fonts').mkdir(parents=True,exist_ok=True)
+          output=Path('narrow-italic-output');output.mkdir(exist_ok=True)
           fonts={
-            'science':('sciencegothic','ScienceGothic[CTRS,slnt,wdth,wght].ttf'),
-            'dela':('delagothicone','DelaGothicOne-Regular.ttf'),
-            'rubik':('rubik','Rubik[wght].ttf'),
-            'rubik-italic':('rubik','Rubik-Italic[wght].ttf'),
-            'dirt':('rubikdirt','RubikDirt-Regular.ttf'),
-            'glitch':('rubikglitch','RubikGlitch-Regular.ttf')
+            'oswald':('oswald','Oswald[wght].ttf'),
+            'oldstandard':('oldstandardtt','OldStandard-Italic.ttf'),
+            'playfair':('playfairdisplay','PlayfairDisplay-Italic[wght].ttf'),
+            'bona':('bonanova','BonaNova-Italic.ttf')
           }
           letters='абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-          def fetch(item):
-            key,(folder,name)=item
-            base='https://raw.githubusercontent.com/google/fonts/main/ofl/'+folder+'/'
-            for remote,local in [(name,key+'.ttf'),('OFL.txt',key+'-OFL.txt')]:
-              r=requests.get(base+quote(remote),timeout=40); r.raise_for_status()
-              (root/'fonts'/local).write_bytes(r.content)
-            f=TTFont(root/'fonts'/(key+'.ttf'))
-            missing=[c for c in letters+letters.upper() if ord(c) not in f.getBestCmap()]
+          def inspect_font(key,path,source,license_name):
+            f=TTFont(path);cmap=f.getBestCmap()
+            missing=[c for c in letters+letters.upper() if ord(c) not in cmap]
             assert not missing,(key,missing)
-            return key,{'russianAlphabetComplete':True,'source':base+quote(name),'license':'SIL OFL 1.1'}
-          with ThreadPoolExecutor(max_workers=6) as pool:
-            validation=dict(pool.map(fetch,fonts.items()))
+            assert any(cmap[ord(c)]!=cmap[ord(c.upper())] for c in 'абвгде'),key
+            return {'russianAlphabetComplete':True,'separateLowercaseGlyphs':True,'source':source,'license':license_name,'names':[n.toUnicode() for n in f['name'].names if n.nameID in [1,2] and n.platformID==3][:4]}
+          def fetch(item):
+            key,(folder,name)=item;base='https://raw.githubusercontent.com/google/fonts/main/ofl/'+folder+'/'
+            for remote,local in [(name,key+'.ttf'),('OFL.txt',key+'-OFL.txt')]:
+              r=requests.get(base+quote(remote),timeout=45);r.raise_for_status();(root/'fonts'/local).write_bytes(r.content)
+            return key,inspect_font(key,root/'fonts'/(key+'.ttf'),base+quote(name),'SIL OFL 1.1')
+          with ThreadPoolExecutor(max_workers=4) as pool:validation=dict(pool.map(fetch,fonts.items()))
+          akrobat_url='https://media.uprock.school/fonts/Akrobat/Akrobat.zip'
+          r=requests.get(akrobat_url,timeout=45);r.raise_for_status()
+          with zipfile.ZipFile(BytesIO(r.content)) as z:
+            candidates=[n for n in z.namelist() if 'extrabold' in n.lower().replace('-','').replace('_','') and n.lower().endswith(('.otf','.ttf')) and '__MACOSX' not in n]
+            assert candidates,z.namelist()
+            path=root/'fonts'/'akrobat.otf';path.write_bytes(z.read(candidates[0]))
+          validation['akrobat']=inspect_font('akrobat',path,akrobat_url,'Fontfabric free-font EULA; publisher confirms free commercial use')
           css='''
-          @font-face{font-family:science;src:url(fonts/science.ttf);font-weight:100 900;font-stretch:50% 200%;font-style:oblique 0deg 10deg}
-          @font-face{font-family:dela;src:url(fonts/dela.ttf);font-weight:400}
-          @font-face{font-family:rubik;src:url(fonts/rubik.ttf);font-weight:300 900}
-          @font-face{font-family:rubik;src:url(fonts/rubik-italic.ttf);font-weight:300 900;font-style:italic}
-          @font-face{font-family:dirt;src:url(fonts/dirt.ttf);font-weight:400}
-          @font-face{font-family:glitch;src:url(fonts/glitch.ttf);font-weight:400}
-          *{box-sizing:border-box}html,body{margin:0;background:#080808;color:#fff;font-family:rubik,sans-serif;font-synthesis:none}
-          .board{width:1280px;padding:38px 52px 24px}
-          header{display:flex;align-items:center;justify-content:space-between;padding-bottom:24px;border-bottom:1px solid #626262}
-          .brand{font-size:22px;font-weight:800;letter-spacing:-1px}.brand em{color:#ff3fad;font-style:normal}
-          .caption{font-size:14px;line-height:1.5;color:#bdbdbd}
-          article{padding:34px 0 30px;border-bottom:1px solid #626262}
-          .label{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;font-size:17px;letter-spacing:.035em}
-          .number{display:inline-flex;align-items:center;justify-content:center;margin-right:14px;background:#24e86b;color:#080808;font-weight:700;padding:8px 14px;border-radius:0}
-          .name{font-weight:600}.tag{font-size:15px;color:#bdbdbd}
-          .hero{padding:0 8px 4px;overflow:visible}
-          .fit{display:block;white-space:nowrap;width:max-content;max-width:none}
-          .lead{font-size:66px;font-weight:900;line-height:1.15;letter-spacing:-.035em}
-          .launch{font-size:156px;line-height:1.12;color:#ff3fad;margin:6px 0 -6px;font-weight:900}
-          .projects{font-size:102px;line-height:1.12;letter-spacing:-.025em}
-          .science .lead,.science .projects{font-family:science;font-variation-settings:'wght' 880,'wdth' 67,'slnt' 0,'CTRS' 0}
-          .science .launch{font-family:science;font-variation-settings:'wght' 880,'wdth' 100,'slnt' -10,'CTRS' 0;letter-spacing:-.04em}
-          .dela .lead,.dela .projects{font-family:dela;font-weight:400;letter-spacing:-.035em}
-          .dela .launch{font-family:rubik;font-style:italic;font-weight:900;letter-spacing:-.07em}
-          .punk .lead,.punk .projects{font-family:rubik;font-style:italic;font-weight:900;letter-spacing:-.045em}
-          .punk .launch{font-family:dirt;font-weight:400;letter-spacing:-.035em}
-          .bottom{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:17px;border-top:1px dashed #454545;font-size:16px;line-height:1.5;color:#dedede;gap:22px}
-          .button{font-family:rubik;font-size:16px;font-weight:600;background:#fff;color:#080808;padding:13px 20px;white-space:nowrap}
-          .micro{font-size:14px;color:#929292;margin-top:13px}
-          footer{padding-top:20px;color:#bdbdbd;font-size:14px;display:flex;justify-content:space-between}
+          @font-face{font-family:oswald;src:url(fonts/oswald.ttf);font-weight:200 700}
+          @font-face{font-family:oldstandard;src:url(fonts/oldstandard.ttf);font-weight:400;font-style:italic}
+          @font-face{font-family:playfair;src:url(fonts/playfair.ttf);font-weight:400 900;font-style:italic}
+          @font-face{font-family:bona;src:url(fonts/bona.ttf);font-weight:400;font-style:italic}
+          @font-face{font-family:akrobat;src:url(fonts/akrobat.otf);font-weight:800}
+          *{box-sizing:border-box}body{margin:0;background:#fbfaf7;color:#151414;font-family:Arial,sans-serif;font-synthesis:none}
+          .board{width:1280px;padding:42px 64px 24px}
+          header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px;border-bottom:1px solid #ccc7c4;font-size:18px;color:#65605b}
+          .brand{font-weight:700;letter-spacing:-.03em;color:#151414;font-size:24px}
+          article{padding:34px 0 36px;border-bottom:1px solid #ccc7c4}
+          .label{display:flex;align-items:baseline;gap:24px;margin-bottom:34px;font-size:22px}
+          .num{font-size:20px;color:#77716a}.names{font-weight:400;letter-spacing:-.03em}
+          .lead{font-size:99px;line-height:1.08;letter-spacing:-.018em;white-space:nowrap;width:max-content}
+          .line{display:flex;align-items:baseline;gap:26px;margin-top:5px;white-space:nowrap;width:max-content}
+          .launch{font-size:128px;line-height:1.3;letter-spacing:-.03em;color:#d80a68;font-style:italic;font-weight:400}
+          .projects{font-size:117px;line-height:1.05;letter-spacing:-.018em}
+          .details{display:grid;grid-template-columns:340px 1fr;align-items:baseline;margin-top:24px;padding-top:18px;border-top:1px solid #e2ded9}
+          .sample-main{font-size:58px;letter-spacing:-.01em;line-height:1.15}
+          .sample-italic{font-style:italic;font-size:46px;font-weight:400;letter-spacing:-.025em;line-height:1.35}
+          .a .lead,.a .projects,.a .sample-main{font-family:oswald;font-weight:600}
+          .a .launch,.a .sample-italic{font-family:oldstandard}
+          .b .lead,.b .projects,.b .sample-main{font-family:akrobat;font-weight:800}
+          .b .launch,.b .sample-italic{font-family:playfair;font-weight:500}
+          .c .lead,.c .projects,.c .sample-main{font-family:oswald;font-weight:500}
+          .c .launch,.c .sample-italic{font-family:bona}
+          footer{display:flex;justify-content:space-between;padding-top:22px;font-size:16px;color:#706a65}
           '''
-          cards=[
-            ('science','01','science gothic','узкий / наклонный / цифровой','одна гарнитура: прямой заголовок + настоящий наклон по оси шрифта'),
-            ('dela','02','dela gothic one + rubik black italic','плотный / поп / громкий','широкие тяжёлые буквы + плотный наклон вместо книжного курсива'),
-            ('punk','03','rubik black italic + rubik dirt','скейт / рок / ксерокс','чистая наклонная основа + фактурное акцентное слово')
-          ]
+          cards=[('a','01','oswald semibold + old standard tt italic'),('b','02','akrobat extrabold + playfair display italic'),('c','03','oswald medium + bona nova italic')]
           parts=[]
-          for cls,n,name,tag,note in cards:
-            parts.append(f'''<article class="{cls}" id="v{n}"><div class="label"><div><span class="number">{n}</span><span class="name">{name}</span></div><span class="tag">{tag}</span></div><div class="hero"><span class="lead fit">придумываю, собираю и</span><span class="launch fit">запускаю</span><span class="projects fit">проекты</span></div><div class="bottom"><span>шоу, медиа и новые идеи<br>от концепции до запуска</span><span class="button">обсудить проект ↗</span></div><div class="micro">{note}</div></article>''')
-          page_html='<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>'+css+'</style></head><body><main class="board"><header><div class="brand">dash<em>h</em>kuns</div><div class="caption">типографика / музыкальные нулевые<br>реальные начертания · тест, не публикация сайта</div></header>'+''.join(parts)+'<footer><span>во всех вариантах есть русские буквы и бесплатная ofl-лицензия</span><span>сравниваем характер, не меняем сайт</span></footer></main></body></html>'
-          (root/'index.html').write_text(page_html,encoding='utf-8')
+          for cls,n,name in cards:
+            parts.append(f'<article class="{cls}" id="v{n}"><div class="label"><span class="num">{n}</span><span class="names">{name}</span></div><div class="hero"><div class="lead fit">придумываю, собираю и</div><div class="line fit"><span class="launch">запускаю</span><span class="projects">проекты</span></div></div><div class="details"><span class="sample-main">дашкунс</span><span class="sample-italic">идея становится реальностью</span></div></article>')
+          html='<!doctype html><html lang="ru"><meta charset="utf-8"><style>'+css+'</style><main class="board"><header><span class="brand">dashhkuns</span><span>узкий прямой + выразительный курсив</span></header>'+''.join(parts)+'<footer><span>настоящие начертания · кириллица · строчные буквы</span><span>тест, не обновление сайта</span></footer></main></html>'
+          (root/'index.html').write_text(html,encoding='utf-8')
           with sync_playwright() as p:
-            browser=p.chromium.launch()
-            page=browser.new_page(viewport={'width':1280,'height':900},device_scale_factor=1)
+            browser=p.chromium.launch();page=browser.new_page(viewport={'width':1280,'height':900},device_scale_factor=1.5)
             errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
             page.goto((root/'index.html').as_uri(),wait_until='load')
-            page.evaluate('''async()=>{await document.fonts.load('900 60px rubik');await document.fonts.load('italic 900 60px rubik');await document.fonts.load('400 60px dela');await document.fonts.load('400 60px dirt');await document.fonts.load('880 60px science');await document.fonts.ready;for(const e of document.querySelectorAll('.fit')){let n=parseFloat(getComputedStyle(e).fontSize);while(e.getBoundingClientRect().width>e.parentElement.clientWidth-20&&n>20){n-=1;e.style.fontSize=n+'px';}}}''')
-            faces=page.evaluate('''()=>Array.from(document.fonts).map(f=>({family:f.family,status:f.status}))''')
-            assert all(f['status']=='loaded' for f in faces if f['family']!='glitch'),faces
+            page.evaluate('''async()=>{await Promise.all([document.fonts.load('600 90px oswald','придумываю'),document.fonts.load('800 90px akrobat','придумываю'),document.fonts.load('italic 400 90px oldstandard','запускаю'),document.fonts.load('italic 500 90px playfair','запускаю'),document.fonts.load('italic 400 90px bona','запускаю')]);await document.fonts.ready;for(const el of document.querySelectorAll('.lead')){let n=parseFloat(getComputedStyle(el).fontSize);while(el.getBoundingClientRect().width>el.parentElement.clientWidth-4){n-=1;el.style.fontSize=n+'px';}}for(const el of document.querySelectorAll('.line')){while(el.getBoundingClientRect().width>el.parentElement.clientWidth-4){for(const child of el.children){child.style.fontSize=(parseFloat(getComputedStyle(child).fontSize)-1)+'px';}}}}''')
+            faces=page.evaluate('()=>Array.from(document.fonts).map(f=>({family:f.family,status:f.status}))')
+            assert all(f['status']=='loaded' for f in faces),faces
             assert not errors,errors
-            page.screenshot(path=str(output/'dashhkuns-mtv-fonts.png'),full_page=True)
-            for _,n,*_ in cards:
-              page.locator('#v'+n).screenshot(path=str(output/('dashhkuns-mtv-'+n+'.png')))
+            page.screenshot(path=str(output/'dashhkuns-narrow-italic-options.png'),full_page=True)
+            for cls,n,name in cards:page.locator('#v'+n).screenshot(path=str(output/('dashhkuns-pair-'+n+'.png')))
             browser.close()
-          (output/'validation.json').write_text(json.dumps({'fonts':validation,'browserFonts':faces,'jsErrors':errors,'websiteChanged':False},ensure_ascii=False,indent=2),encoding='utf-8')
-          print('Three real-font specimen cards rendered. No font binaries included in artifacts.')
+          (output/'validation.json').write_text(json.dumps({'fonts':validation,'faces':faces,'websiteChanged':False,'errors':errors},ensure_ascii=False,indent=2))
+          print('Rendered three pairs with real lowercase Cyrillic outlines. Only PNG images and validation are exported; no font files.')
           PY
-      - name: return only images and validation
+      - name: return only raster previews and validation
         uses: actions/upload-artifact@v4
         with:
-          name: dashhkuns-mtv-font-specimens
-          path: mtv-type-specimens-output/
+          name: dashhkuns-narrow-italic-review
+          path: narrow-italic-output/
           retention-days: 7
