@@ -158,10 +158,14 @@
   "rewrites": [
     {
       "source": "/nasypateli-live",
-      "destination": "/api/nasypateli-live"
+      "destination": "/nasypateli-login.html"
     },
     {
       "source": "/nasypateli-live/",
+      "destination": "/nasypateli-login.html"
+    },
+    {
+      "source": "/nasypateli-live/app",
       "destination": "/api/nasypateli-live"
     },
     {
@@ -244,6 +248,31 @@
     }
   ],
   "headers": [
+    {
+      "source": "/nasypateli-live",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+        }
+      ]
+    },
     {
       "source": "/crm-app/sw.js",
       "headers": [

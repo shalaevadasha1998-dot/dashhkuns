@@ -54,7 +54,7 @@ function loginHtml(nonce,wrong=false){
   const error=wrong?'<p class="error" role="alert">неверный пароль</p>':"";
   return '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>дашкунс live · вход</title><style nonce="'+nonce+'">'+
     ':root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% 40%,#244a2c,#0a130d 75%);color:#edf9e8;display:grid;place-items:center;padding:24px}.card{width:min(100%,410px);border:1px solid #47704b;background:#101b13;border-radius:24px;padding:36px 30px;box-shadow:0 20px 80px #0007}.label{font-size:11px;letter-spacing:.22em;color:#b5f0ac}.title{font-size:40px;margin:14px 0 3px;letter-spacing:-.05em}.sub{color:#93b39b;font-size:14px;margin-bottom:31px}label{display:block;margin:12px 0 9px;color:#c3d5c2;font-size:14px}input{width:100%;border:1px solid #58765a;border-radius:12px;background:#0a130c;color:white;padding:15px;font-size:17px}button{width:100%;margin-top:15px;border:0;border-radius:12px;background:#b2f39e;color:#0b200e;padding:16px;font-size:16px;font-weight:800;cursor:pointer}.error{color:#ffaeac}.footer{color:#77947c;font-size:12px;margin:29px 0 0;text-align:center}'+
-  '</style></head><body><main class="card"><div class="label">насыпатели / закрытая режиссёрская</div><h1 class="title">дашкунс live</h1><p class="sub">только для команды · вход по паролю</p><form method="post" action="/nasypateli-live"><input type="hidden" name="action" value="login"><label for="password">пароль</label><input id="password" type="password" name="password" autocomplete="current-password" required minlength="1" autofocus>'+error+'<button type="submit">войти</button></form><p class="footer">видео и личные данные недоступны без входа</p></main></body></html>';
+  '</style></head><body><main class="card"><div class="label">насыпатели / закрытая режиссёрская</div><h1 class="title">дашкунс live</h1><p class="sub">только для команды · вход по паролю</p><form method="post" action="/nasypateli-live/app"><input type="hidden" name="action" value="login"><label for="password">пароль</label><input id="password" type="password" name="password" autocomplete="current-password" required minlength="1" autofocus>'+error+'<button type="submit">войти</button></form><p class="footer">видео и личные данные недоступны без входа</p></main></body></html>';
 }
 function sameSite(req){
   const origin=plain(req.headers.origin);
@@ -97,6 +97,6 @@ export default function handler(req,res){
     return sendHtml(res,200,loginHtml(nonce,true));
   }
   res.setHeader("Set-Cookie",cookie(makeSession(s.secret),TTL_SECONDS));
-  res.setHeader("Location","/nasypateli-live");
+  res.setHeader("Location","/nasypateli-live/app");
   res.status(303).end();
 }

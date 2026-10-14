@@ -5,10 +5,16 @@ on:
     paths:
       - '.github/workflows/nasypateli-production-smoke.yml'
       - 'api/nasypateli-live.js'
+      - 'nasypateli-login.html'
+      - 'vercel.json'
+      - 'assets/nasypateli-entry.css'
   push:
     branches: [main]
     paths:
       - 'api/nasypateli-live.js'
+      - 'nasypateli-login.html'
+      - 'vercel.json'
+      - 'assets/nasypateli-entry.css'
       - '.github/workflows/nasypateli-production-smoke.yml'
 permissions:
   contents: read
@@ -25,7 +31,7 @@ jobs:
           for attempt in $(seq 1 25); do
             code="$(curl --silent --show-error --location --max-time 15 --dump-header /tmp/nasypateli-headers --output /tmp/nasypateli-body --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live' || true)"
             if [ "$code" = 200 ] &&
-               grep -q 'вход по паролю' /tmp/nasypateli-body &&
+               grep -q 'войди по паролю' /tmp/nasypateli-body &&
                ! grep -q 'id="character"' /tmp/nasypateli-body &&
                grep -qi 'x-robots-tag:.*noindex' /tmp/nasypateli-headers; then
               echo "anonymous login page is HTTP 200 and stage remains protected"
@@ -40,7 +46,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          code="$(curl --silent --show-error --max-time 15 --request POST --header 'Origin: https://dashhkuns.com' --header 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=invalid-ci-password' --output /tmp/nasypateli-wrong --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live')"
+          code="$(curl --silent --show-error --max-time 15 --request POST --header 'Origin: https://dashhkuns.com' --header 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=invalid-ci-password' --output /tmp/nasypateli-wrong --write-out '%{http_code}' 'https://dashhkuns.com/nasypateli-live/app')"
           echo "wrong-password request: http=$code"
           if grep -q 'неверный пароль' /tmp/nasypateli-wrong; then
             echo "wrong-password marker: present"
