@@ -1,0 +1,35 @@
+name: nasypateli deployed candidate runtime
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+      - 'lib/nasypateli-*.mjs'
+      - '.github/workflows/nasypateli-preview-runtime.yml'
+permissions:
+  contents: read
+jobs:
+  preview:
+    if: github.head_ref == 'feat/nasypateli-studio-workflow-v3'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: require real deployed login and rejection without any deployed credentials
+        env:
+          BASE: https://dashhkuns-git-feat-nasypateli-studio-workflow-v3-dora-5368.vercel.app
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in $(seq 1 12); do
+            status="$(curl -sS --max-time 20 -D /tmp/headers -o /tmp/body --write-out '%{http_code}' -H "Origin: $BASE" -H 'Content-Type: application/x-www-form-urlencoded' --data 'action=login&password=deliberately-invalid-runtime-check' "$BASE/nasypateli-live/app" || true)"
+            echo "candidate attempt=$attempt http=$status"
+            grep -iE '^(x-vercel-error|content-type):' /tmp/headers || true
+            if [ "$status" = 200 ] && grep -q 'неверный пароль' /tmp/body && ! grep -q 'id="console"' /tmp/body; then ok=1; break; fi
+            sleep 10
+          done
+          test "$ok" = 1
+          for path in '/' '/nasypateli-live' '/api/crm-connection' '/api/crm-ai' '/api/crm-icon?size=192'; do
+            code="$(curl -sS --max-time 20 -o /tmp/entry --write-out '%{http_code}' "$BASE$path")"
+            echo "candidate path=$path http=$code"
+            test "$code" = 200
+          done

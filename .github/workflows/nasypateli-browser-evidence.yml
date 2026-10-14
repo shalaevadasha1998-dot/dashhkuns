@@ -12,6 +12,7 @@ on:
       - 'scripts/nasypateli-browser-evidence.mjs'
       - 'api/nasypateli-live.js'
       - 'api/nasypateli-renderer.js'
+      - 'api/package.json'
       - 'nasypateli-login.html'
       - 'tests/nasypateli-referrer.test.mjs'
   push:
@@ -21,6 +22,7 @@ on:
       - 'scripts/nasypateli-browser-evidence.mjs'
       - 'api/nasypateli-live.js'
       - 'api/nasypateli-renderer.js'
+      - 'api/package.json'
       - 'nasypateli-login.html'
 permissions:
   contents: read
@@ -29,9 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
-      # This incident's tested repair candidate is deployed from 4e511602b7e8790e4b87424524c0b9c603afd76b
-      # Main pushes always verify the actual production domain, never a previous preview
-      NASYPATELI_BROWSER_BASE: ${{ github.event_name == 'pull_request' && github.head_ref == 'fix/nasypateli-browser-evidence-20261014' && 'https://dashhkuns-42q1966q4-dora-5368.vercel.app' || inputs.base_url || 'https://dashhkuns.com' }}
+      # Exact candidate URL comes from the Vercel deployment comment on PR 30.
+      # A push to main always checks the real production domain.
+      NASYPATELI_BROWSER_BASE: ${{ github.event_name == 'pull_request' && github.head_ref == 'feat/nasypateli-studio-workflow-v3' && 'https://dashhkuns-git-feat-nasypateli-studio-workflow-v3-dora-5368.vercel.app' || inputs.base_url || 'https://dashhkuns.com' }}
     steps:
       - uses: actions/checkout@v4
         with:

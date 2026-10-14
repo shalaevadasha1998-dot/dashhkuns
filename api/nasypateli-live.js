@@ -1,10 +1,10 @@
 import privateHandler from './nasypateli-renderer.js';
 import {applyIdentity} from '../lib/nasypateli-identity.mjs';
+import {applyStudio} from '../lib/nasypateli-studio.mjs';
 
 export const maxDuration=10;
 
-// Access checks and session cookies remain in the existing authenticated renderer.
-// Only its permitted HTML response is restyled. Keep same-origin form navigation.
+// The renderer authenticates first. Presentation transforms cannot grant access.
 export default function handler(req,res){
   const originalSetHeader=res.setHeader;
   const originalSend=res.send;
@@ -12,7 +12,7 @@ export default function handler(req,res){
     const safeValue=String(name).toLowerCase()==='referrer-policy'?'same-origin':value;
     return originalSetHeader.call(this,name,safeValue);
   };
-  res.send=function(body){return originalSend.call(this,applyIdentity(body));};
+  res.send=function(body){return originalSend.call(this,applyStudio(applyIdentity(body)));};
   try{return privateHandler(req,res);}
   finally{res.setHeader=originalSetHeader;res.send=originalSend;}
 }
