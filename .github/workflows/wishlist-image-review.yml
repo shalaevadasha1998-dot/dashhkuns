@@ -1,0 +1,29 @@
+name: wishlist image source review
+on:
+  push:
+    branches: [fix/wishlist-full-items-20261015]
+    paths: ['scripts/wishlist-candidate-review.py','.github/workflows/wishlist-image-review.yml']
+permissions:
+  contents: read
+concurrency:
+  group: wishlist-image-review
+  cancel-in-progress: true
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check pillow numpy requests beautifulsoup4
+      - run: python scripts/wishlist-candidate-review.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wishlist-candidates
+          path: ${{ runner.temp }}/wishlist-candidates
+          retention-days: 4
