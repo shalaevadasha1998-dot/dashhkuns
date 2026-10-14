@@ -7,26 +7,32 @@ scope={}
 source=Path('scripts/wishlist-full-products.py').read_text()
 exec(compile(source.split('manifest=json.loads(')[0],'<image helpers>','exec'),scope)
 root=Path('.');items=root/'wishlist/items';out=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'wishlist-full-review';out.mkdir(parents=True,exist_ok=True)
-get=scope['get'];load=scope['load_url'];studio=scope['studio'];frame=scope['normalized']
-# Use a complete photographed pack, not the previously segmented box with holes
+get=scope['get'];load=scope['load_url'];studio=scope['studio'];frame=scope['normalized'];polygon=scope['polygon']
 page='https://www.liquitex.com/products/basics-acrylic-set-48x22ml'
 product=get(page+'.js').json();urls=product.get('images',[])
 url=next(u for u in urls if '/80919' in u)
 if url.startswith('//'):url='https:'+url
-acrylic=frame(studio(load(url),10));acrylic.save(items/'acrylic-full.png',optimize=True)
-# The Genotek lifestyle image is not a viable cutout; use a complete kit illustration
-# This is an image reference only, not a chosen laboratory or purchase recommendation
+# The selected photo is a front-on rectangular box: mask its whole face, retaining white printing
+pack=load(url);rgb=np.array(pack)[:,:,:3];ys,xs=np.where(rgb.min(axis=2)<180)
+assert len(xs)>1000
+pad=max(1,round(pack.width/1000));x0=max(0,int(xs.min())-pad);x1=min(pack.width-1,int(xs.max())+pad);y0=max(0,int(ys.min())-pad);y1=min(pack.height-1,int(ys.max())+pad)
+acrylic=frame(polygon(pack,[(x0,y0),(x1,y0),(x1,y1),(x0,y1)]));acrylic.save(items/'acrylic-full.png',optimize=True)
+# Replace an unusable lifestyle photograph with a complete kit reference, not a lab recommendation
 kit_url='https://cmsasset.ancestrycdn.com/content/experience-fragments/acom/en-us/onsite/_2026/oct_fall_sale/dna-lohp/nonsubs/_jcr_content/root/responsivegrid/container_copy_copy__891895731/itemlist/item-0/container_copy_copy/image.coreimg.png/1786556409823/us-octgift-dna.png'
 kit=load(kit_url)
 if float((np.array(kit)[:,:,3]==0).mean())<.05:kit=studio(kit,10)
-kit=frame(kit);kit.save(items/'dna-full.png',optimize=True)
-# Preserve line breaks and use a gender-neutral message for every visitor
+frame(kit).save(items/'dna-full.png',optimize=True)
+# Keep the complete book stack and glasses; discard the fragmented background plant and cup
+books=Image.open(items/'psychology.png').convert('RGBA')
+assert books.size==(900,700)
+books=polygon(books,[(0,0),(460,0),(465,282),(483,288),(483,348),(500,350),(502,405),(510,408),(510,460),(0,650)])
+frame(books).save(items/'psychology-full.png',optimize=True)
 css=root/'wishlist/ideas.css';text=css.read_text()
 rule='\n.gift-description,#dialog-description{white-space:pre-line}\n'
 if rule.strip() not in text:css.write_text(text+rule)
 js=root/'wishlist/ideas.js';js.write_text(js.read_text().replace('дора, увидела идею «','дора, в твоём вишлисте есть идея «'))
 data_path=root/'wishlist/product-image-sources.json';sources=json.loads(data_path.read_text())
-sources['acrylic']={'image':url,'page':page,'processing':'whole_package_border_mask'}
+sources['acrylic']={'image':url,'page':page,'processing':'complete_rectangular_package_face'}
 sources['dna']={'image':kit_url,'page':'https://www.ancestry.com/dna/','processing':'complete_kit_reference'}
 data_path.write_text(json.dumps(sources,ensure_ascii=False,indent=2)+'\n')
 credits=root/'wishlist/image-credits.html';text=credits.read_text()
@@ -45,4 +51,4 @@ for batch in range(4):
   im.thumbnail((390,280),Image.Resampling.LANCZOS);sheet.paste(im,(x+(400-im.width)//2,y),im);d.text((x+12,y+294),item['id'],fill='black')
  sheet.save(out/f'full-items-{batch+1}.jpg',quality=93)
 (out/'full-items-report.json').write_text(json.dumps({'ok':True,'count':len(checks),'items':checks},indent=2))
-print('39 complete-frame assets, two final reference replacements, readable text and neutral messages')
+print('39 complete-frame assets, final reference replacements, readable text and neutral messages')
