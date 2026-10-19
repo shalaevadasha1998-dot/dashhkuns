@@ -5,6 +5,9 @@ on:
     paths:
       - 'api/nasypateli-live.js'
       - 'lib/nasypateli-studio.mjs'
+      - 'lib/nasypateli-auto-live.mjs'
+      - 'api/nasypateli-ai.js'
+      - 'tests/nasypateli-auto-live.test.mjs'
       - 'tests/nasypateli-studio.test.mjs'
       - 'scripts/nasypateli-studio-check.mjs'
       - '.github/workflows/nasypateli-studio.yml'
@@ -13,6 +16,9 @@ on:
     paths:
       - 'api/nasypateli-live.js'
       - 'lib/nasypateli-studio.mjs'
+      - 'lib/nasypateli-auto-live.mjs'
+      - 'api/nasypateli-ai.js'
+      - 'tests/nasypateli-auto-live.test.mjs'
       - 'tests/nasypateli-studio.test.mjs'
       - 'scripts/nasypateli-studio-check.mjs'
       - '.github/workflows/nasypateli-studio.yml'
@@ -30,7 +36,7 @@ jobs:
         with:
           node-version: '22'
       - name: authentication, origin and archive tests
-        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs tests/nasypateli-studio.test.mjs
+        run: node --test tests/nasypateli-auth.test.mjs tests/nasypateli-referrer.test.mjs tests/nasypateli-studio.test.mjs tests/nasypateli-auto-live.test.mjs
       - name: prepare browsers
         shell: bash
         run: |
@@ -45,11 +51,11 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/nasypateli-studio-proof/source/lib" "$RUNNER_TEMP/nasypateli-studio-proof/source/api" "$RUNNER_TEMP/nasypateli-studio-proof/source/assets" "$RUNNER_TEMP/nasypateli-studio-proof/source/tests" "$RUNNER_TEMP/nasypateli-studio-proof/source/scripts"
-          cp lib/nasypateli-studio.mjs lib/nasypateli-identity.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/lib/"
-          cp api/nasypateli-live.js api/nasypateli-renderer.js "$RUNNER_TEMP/nasypateli-studio-proof/source/api/"
+          cp lib/nasypateli-studio.mjs lib/nasypateli-auto-live.mjs lib/nasypateli-identity.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/lib/"
+          cp api/nasypateli-live.js api/nasypateli-renderer.js api/nasypateli-ai.js "$RUNNER_TEMP/nasypateli-studio-proof/source/api/"
           cp assets/nasypateli-mark.webp assets/nasypateli-entry.css "$RUNNER_TEMP/nasypateli-studio-proof/source/assets/"
           cp nasypateli-login.html vercel.json "$RUNNER_TEMP/nasypateli-studio-proof/source/"
-          cp tests/nasypateli-{studio,auth,referrer}.test.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/tests/"
+          cp tests/nasypateli-{studio,auth,referrer,auto-live}.test.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/tests/"
           cp scripts/nasypateli-studio-check.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/scripts/"
       - uses: actions/upload-artifact@v4
         if: always()
