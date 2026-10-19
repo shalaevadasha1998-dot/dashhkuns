@@ -46,14 +46,14 @@ test('private transform preserves anonymous HTML and explicitly declares no clon
   assert.doesNotMatch(client,/fetch\(|XMLHttpRequest|sendBeacon|localStorage|indexedDB|BroadcastChannel/);
   assert.match(client,/view.*stage/);assert.match(client,/voiceOwnerConsent/);
 });
-test('password gate remains intact and CSP permits only local blob audio',()=>{
+test('password gate remains intact and CSP restricts network to same-origin, with local blob audio',()=>{
   const keys=['NASYPATELI_LIVE_PASSWORD','NASYPATELI_LIVE_SESSION_SECRET'];const old=keys.map(k=>process.env[k]);const secrets=keys.map(()=>randomBytes(40).toString('base64url'));keys.forEach((k,i)=>process.env[k]=secrets[i]);
   const serve=(method='GET',body={},cookie='')=>{const res={code:200,body:'',headers:{},setHeader(k,v){this.headers[k.toLowerCase()]=v;},status(n){this.code=n;return this;},send(v){this.body=v;},end(){}};handler({method,headers:{host:'example.test',origin:'https://example.test',cookie},body},res);return res;};
   try{
     const anonymous=serve();assert.doesNotMatch(anonymous.body,/id="voiceReferencePanel"/);
     const login=serve('POST',{action:'login',password:secrets[0]});assert.equal(login.code,303);
     const page=serve('GET',{},login.headers['set-cookie'].split(';')[0]);assert.match(page.body,/id="voiceReferencePanel"/);
-    assert.match(page.headers['content-security-policy'],/media-src blob:/);assert.match(page.headers['content-security-policy'],/connect-src 'none'/);
+    assert.match(page.headers['content-security-policy'],/media-src blob:/);assert.match(page.headers['content-security-policy'],/connect-src 'self'/);
     keys.forEach((_,i)=>assert.ok(!page.body.includes(secrets[i])));
   }finally{keys.forEach((k,i)=>old[i]===undefined?delete process.env[k]:process.env[k]=old[i]);}
 });
