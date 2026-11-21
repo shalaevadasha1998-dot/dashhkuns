@@ -13,7 +13,7 @@
   </div>
 
   <section class="contact-action-panel lead-panel reveal" id="project">
-    <form class="project-form lead-form" id="project-form" novalidate>
+    <form class="project-form lead-form" id="project-form" method="post" novalidate>
       <p class="kicker">01 заявка</p>
       <h2>три поля<br><span class="serif">дальше я сама</span></h2>
       <div class="field"><label for="lead-name">имя *</label><input id="lead-name" name="name" autocomplete="name" required></div>
@@ -62,7 +62,7 @@
       <p class="booking-empty" id="booking-empty" hidden>свободных окон на ближайшие две недели пока нет</p>
       <div class="booking-fetch-error" id="booking-fetch-error" hidden><p>календарь недоступен, попробуй снова или оставь заявку</p><button class="btn ghost booking-retry" id="booking-retry" type="button">обновить слоты</button></div>
     </div>
-    <form class="project-form booking-form" id="booking-form" novalidate hidden>
+    <form class="project-form booking-form" id="booking-form" method="post" novalidate hidden>
       <p class="booking-picked"><span>выбрано:</span> <strong id="booking-picked-date">выбери свободное время выше</strong></p>
       <input id="booking-start" name="start" type="hidden">
       <div class="field"><label for="booking-name">имя *</label><input id="booking-name" name="name" autocomplete="name" required maxlength="160"></div>
