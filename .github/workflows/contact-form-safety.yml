@@ -1,0 +1,23 @@
+name: Contact Form Privacy Gate
+
+on:
+  pull_request:
+    paths:
+      - 'contact.html'
+      - 'en/contact.html'
+      - 'scripts/check_contact_forms.py'
+      - '.github/workflows/contact-form-safety.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-form-methods:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Reject GET fallback for contact and booking forms
+        run: python3 scripts/check_contact_forms.py
