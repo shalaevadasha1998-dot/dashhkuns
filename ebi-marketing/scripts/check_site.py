@@ -59,7 +59,7 @@ def verify():
         for url in page.links:
             u = urlparse(url)
             if u.scheme or u.netloc: continue
-            if not u.path or u.path == "/": continue
+            if not u.path or u.path in ("/", ".", "./"): continue
             target = expected_file(u.path)
             if not target.is_file() and not (ROOT / u.path.lstrip("/")).is_file():
                 problems.append(f"{route}: missing linked page {u.path}")
