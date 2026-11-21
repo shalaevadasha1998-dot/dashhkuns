@@ -1,0 +1,36 @@
+.editorial-page .landing-hero h1{max-width:22ch;font-size:clamp(45px,6.2vw,88px)}
+.editorial-hero .landing-lead{max-width:64ch}
+.editorial-byline{display:flex;flex-wrap:wrap;gap:9px 20px;color:#6d5262;font-size:18px;margin-top:24px}
+.editorial-byline a{text-decoration:underline;text-underline-offset:4px}
+.editorial-contents{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:1040px;gap:12px 26px}
+.editorial-contents a{padding:4px 0;line-height:1.35}
+.editorial-block h2{max-width:30ch;margin-bottom:24px}
+.editorial-block p{max-width:76ch;margin:18px 0 0}
+.editorial-list{padding-left:1.25em;margin-top:25px;max-width:80ch}
+.editorial-list li{font-size:23px;line-height:1.4;margin:12px 0;padding-left:7px}
+.editorial-list li::marker{color:#b20b64}
+.table-scroll{overflow-x:auto;max-width:100%;margin-top:28px;outline-offset:5px}
+.table-scroll:focus-visible{outline:2px solid #b20b64}
+.table-scroll table{width:100%;border-collapse:collapse;min-width:540px;font-size:21px;line-height:1.35;text-align:left}
+.table-scroll th,.table-scroll td{padding:18px 22px 18px 0;border-bottom:1px solid #e4d9df;vertical-align:top;font-weight:300}
+.table-scroll th:last-child,.table-scroll td:last-child{padding-right:0}
+.table-scroll thead th{font-weight:400;color:#8f0753;border-top:1px solid #b99aaa}
+.table-scroll tbody th{font-weight:400;min-width:150px;width:26%;color:#33252e}
+.editorial-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px;margin:28px 0}
+.editorial-cards article{border-top:1px solid #d3b4c5;padding-top:24px;min-width:0}
+.editorial-cards h3{font-size:clamp(29px,3vw,40px);line-height:1.1;max-width:29ch;margin:14px 0 20px}
+.editorial-cards p:not(.eyebrow){font-size:22px;line-height:1.4;max-width:52ch}
+.editorial-cards .text-link{margin-top:20px;display:inline-block}
+.editorial-home{padding-top:55px;padding-bottom:55px}
+.editorial-home>.landing-section-heading>p:last-child{margin-top:20px}
+.editorial-checklist{background:#fff2fa}
+.editorial-checklist .copy-checklist{margin-top:20px;background:#ff309f;color:#28101d;white-space:normal}
+.copy-status{font-size:18px;min-height:1.4em;margin-top:14px}
+.editorial-more h2{margin-bottom:22px}
+.service-guide-links{margin-top:30px;padding-top:24px;border-top:1px solid #e4d9df}
+.service-guide-links h3{font-size:27px;margin-bottom:15px}
+.service-guide-links a{display:block;width:fit-content;max-width:100%;font-size:21px;line-height:1.35;margin:12px 0}
+.editorial-page .site-footer,.landing-page .site-footer{flex-wrap:wrap;gap:16px 24px}
+[hidden]{display:none!important}
+@media(max-width:760px){.editorial-cards,.editorial-contents{grid-template-columns:1fr}.editorial-cards{gap:30px}.editorial-block h2{font-size:35px}.editorial-list li{font-size:21px}.editorial-byline{font-size:17px}.table-scroll table{font-size:20px;min-width:490px}.editorial-page .landing-hero h1{font-size:clamp(42px,10vw,65px);max-width:24ch}.editorial-cards h3{font-size:34px}.editorial-home{padding-top:34px;padding-bottom:34px}.editorial-page .landing-contents{font-size:19px}.editorial-page .landing-lead{font-size:23px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
