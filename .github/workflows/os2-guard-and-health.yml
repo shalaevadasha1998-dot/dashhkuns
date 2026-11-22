@@ -1,11 +1,7 @@
 name: dashhkuns OS 2.0 · Security & Public Health
 
 on:
-  pull_request:
-    paths:
-      - 'os2/**'
-      - '.github/workflows/os2-guard-and-health.yml'
-      - '.github/dependabot.yml'
+  pull_request: {}
   schedule:
     - cron: '23 */6 * * *'
   workflow_dispatch:
