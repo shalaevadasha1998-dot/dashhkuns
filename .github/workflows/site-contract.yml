@@ -1,0 +1,32 @@
+name: dashhkuns public site contract
+
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'services.html'
+      - 'projects.html'
+      - 'about.html'
+      - 'contact.html'
+      - 'en/**'
+      - 'assets/**'
+      - 'styles*.css'
+      - 'scripts/site-contract.test.mjs'
+      - 'vercel.json'
+      - 'AGENTS.md'
+      - '.github/workflows/site-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-site-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/site-contract.test.mjs
