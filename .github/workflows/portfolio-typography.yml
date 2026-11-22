@@ -29,7 +29,7 @@ jobs:
         run: |
           python3 scripts/apply-portfolio-typography.py
           python3 scripts/ensure-portfolio-routes.py
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: install isolated browser test dependency
