@@ -57,7 +57,7 @@ jobs:
           cp nasypateli-login.html vercel.json "$RUNNER_TEMP/nasypateli-studio-proof/source/"
           cp tests/nasypateli-{studio,auth,referrer,auto-live}.test.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/tests/"
           cp scripts/nasypateli-studio-check.mjs "$RUNNER_TEMP/nasypateli-studio-proof/source/scripts/"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: nasypateli-studio-proof

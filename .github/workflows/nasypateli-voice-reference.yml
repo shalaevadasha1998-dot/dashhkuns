@@ -40,7 +40,7 @@ jobs:
           openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/voice.key" -out "$RUNNER_TEMP/voice.crt" 2>/dev/null
       - name: synthetic audio upload and fake-device browser capture
         run: node scripts/nasypateli-voice-check.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: nasypateli-own-voice-proof

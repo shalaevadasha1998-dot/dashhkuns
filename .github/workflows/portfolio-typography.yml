@@ -42,7 +42,7 @@ jobs:
         run: node scripts/qa-portfolio-typography.mjs
       - name: save screenshots and machine-readable report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: portfolio-typography-evidence
           path: typography-evidence/
@@ -70,7 +70,7 @@ jobs:
         run: python3 scripts/verify-public-typography.py
       - name: save public delivery report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: public-typography-report
           path: public-typography-report.json

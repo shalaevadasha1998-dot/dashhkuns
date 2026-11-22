@@ -53,7 +53,7 @@ jobs:
           openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' -keyout "$RUNNER_TEMP/local-test.key" -out "$RUNNER_TEMP/local-test.crt" 2>/dev/null
       - name: live browser navigation and isolated authenticated UI
         run: node scripts/nasypateli-browser-evidence.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: nasypateli-browser-evidence
