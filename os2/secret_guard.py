@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 ASSIGNMENT = re.compile(
-    r"""(?ix)(?:["']?[\w.-]*(?:secret|password|token|api[_-]?key|private[_-]?key|notify[_-]?key|service[_-]?role)[\w.-]*["']?)\s*[:=]\s*["']([A-Za-z0-9_./+=-]{24,})["']"""
+    r"""(?ix)(?:["']?[\w.-]*(?:secret|password|token|api[_-]?key|private[_-]?key|notify[_-]?key|service[_-]?role|key)[\w.-]*["']?)\s*[:=]\s*["']([A-Za-z0-9_./+=-]{24,})["']"""
 )
 KNOWN = re.compile(r"(?i)(?:ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{35,}|xox[baprs]-[A-Za-z0-9-]{18,}|sk-[A-Za-z0-9_-]{24,}|sb_secret_[A-Za-z0-9_-]{20,})")
 PRIVATE_KEY = re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")
