@@ -19,6 +19,10 @@ class SecretGuardTests(unittest.TestCase):
         patch = '+++ b/README.md\n-const API_KEY = "' + ("b" * 36) + '";\n+const note = "not a secret";\n'
         self.assertEqual([], scan_patch(patch))
 
+    def test_detects_bare_key_assignment(self):
+        patch = '+++ b/handler.js\n+const KEY = "' + ('c' * 40) + '";\n'
+        self.assertEqual([('handler.js', 'credential literal')], scan_patch(patch))
+
     def test_detects_private_key_header(self):
         self.assertEqual([("server/key.txt.md", "private key block")],
                          scan_patch("+++ b/server/key.txt.md\n+-----BEGIN PRIVATE KEY-----\n"))
