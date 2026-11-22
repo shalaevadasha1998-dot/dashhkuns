@@ -37,7 +37,7 @@ jobs:
         run: python scripts/wishlist-ideas-smoke.py
       - name: actual reservation race, private capability and cancellation
         run: python scripts/wishlist-reservation-smoke.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: wishlist-evidence
